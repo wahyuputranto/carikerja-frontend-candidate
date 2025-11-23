@@ -2,11 +2,9 @@
   <div class="min-h-screen">
     <NavBar />
     
-    <!-- Hero Section -->
     <section class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div class="max-w-7xl mx-auto">
         <div class="grid lg:grid-cols-2 gap-12 items-center">
-          <!-- Left Content -->
           <div class="space-y-8 animate-slide-up">
             <div class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full">
               <span class="text-sm font-semibold gradient-text">✨ Platform Pencarian Kerja #1 di Indonesia</span>
@@ -29,18 +27,12 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </router-link>
-              <router-link v-else to="/dashboard" class="btn btn-primary text-lg px-8 py-4">
-                Ke Dashboard
-                <svg class="w-5 h-5 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </router-link>
+              
               <router-link to="/jobs" class="btn btn-outline text-lg px-8 py-4">
                 Lihat Lowongan
               </router-link>
             </div>
 
-            <!-- Stats -->
             <div class="grid grid-cols-3 gap-6 pt-8">
               <div class="text-center">
                 <div class="text-3xl font-bold gradient-text">10K+</div>
@@ -57,7 +49,6 @@
             </div>
           </div>
 
-          <!-- Right Content - Illustration -->
           <div class="relative flex justify-center">
             <div class="relative z-10 floating w-4/5">
               <img 
@@ -67,7 +58,6 @@
               />
             </div>
 
-            <!-- Decorative Elements -->
             <div class="absolute -top-10 -right-10 w-72 h-72 bg-gradient-to-br from-primary-300 to-secondary-300 rounded-full blur-3xl opacity-20 animate-pulse-slow"></div>
             <div class="absolute -bottom-10 -left-10 w-72 h-72 bg-gradient-to-br from-accent-300 to-primary-300 rounded-full blur-3xl opacity-20 animate-pulse-slow" style="animation-delay: 1s;"></div>
           </div>
@@ -75,7 +65,6 @@
       </div>
     </section>
 
-    <!-- Features Section -->
     <section class="py-20 px-4 sm:px-6 lg:px-8 bg-white/50">
       <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16">
@@ -151,11 +140,9 @@
       </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-20 px-4 sm:px-6 lg:px-8">
+    <section v-if="!isAuthenticated" class="py-20 px-4 sm:px-6 lg:px-8">
       <div class="max-w-4xl mx-auto">
         <div class="glass rounded-3xl p-12 text-center relative overflow-hidden">
-          <!-- Background Decoration -->
           <div class="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-secondary-500/10 to-accent-500/10"></div>
           
           <div class="relative z-10">
@@ -165,16 +152,10 @@
             <p class="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
               Bergabunglah dengan ribuan kandidat lainnya yang sudah menemukan pekerjaan impian mereka
             </p>
-            <router-link v-if="!isAuthenticated" to="/register" class="btn btn-primary text-lg px-10 py-4 inline-flex items-center">
+            <router-link to="/register" class="btn btn-primary text-lg px-10 py-4 inline-flex items-center">
               Daftar Gratis Sekarang
               <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </router-link>
-            <router-link v-else to="/dashboard" class="btn btn-primary text-lg px-10 py-4 inline-flex items-center">
-              Ke Dashboard
-              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </router-link>
           </div>
@@ -182,7 +163,6 @@
       </div>
     </section>
 
-    <!-- Footer -->
     <footer class="bg-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
         <div class="grid md:grid-cols-4 gap-8 mb-8">
@@ -253,5 +233,6 @@ import NavBar from '@/components/layout/NavBar.vue'
 import heroIllustration from '@/assets/hero-illustration-v3.png'
 
 const authStore = useAuthStore()
+// storeToRefs memastikan 'isAuthenticated' tetap reaktif
 const { isAuthenticated } = storeToRefs(authStore)
 </script>

@@ -2,7 +2,6 @@
   <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
-        <!-- Logo placeholder -->
         <router-link to="/" class="flex items-center space-x-2 group">
           <div class="w-8 h-8 bg-gray-200 rounded-md flex items-center justify-center mr-2">
             <span class="text-sm text-gray-500">Logo</span>
@@ -10,7 +9,6 @@
           <span class="text-xl font-bold gradient-text font-display">CariKerja</span>
         </router-link>
 
-        <!-- Desktop navigation -->
         <div class="hidden md:flex items-center space-x-8">
           <router-link
             v-for="item in navigation"
@@ -23,7 +21,6 @@
           </router-link>
         </div>
 
-        <!-- Auth buttons -->
         <div class="hidden md:flex items-center space-x-4">
           <template v-if="!isAuthenticated">
             <router-link to="/login" class="text-slate-700 hover:text-primary-600 font-medium transition-colors">Masuk</router-link>
@@ -49,7 +46,6 @@
           </template>
         </div>
 
-        <!-- Mobile menu button -->
         <button @click="showMobileMenu = !showMobileMenu" class="md:hidden p-2 rounded-lg hover:bg-white/50 transition-colors">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path v-if="!showMobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -59,7 +55,6 @@
       </div>
     </div>
 
-    <!-- Mobile menu -->
     <transition name="slide-down">
       <div v-if="showMobileMenu" class="md:hidden border-t border-slate-200 bg-white/90 backdrop-blur-xl">
         <div class="px-4 py-4 space-y-3">
@@ -102,17 +97,31 @@ const showMobileMenu = ref(false);
 const showProfileMenu = ref(false);
 const profileMenu = ref(null);
 
-const navigation = [
-  { name: 'Beranda', path: '/' },
-  { name: 'Lowongan Kerja', path: '/jobs' },
-  { name: 'Dashboard', path: '/dashboard' },
-];
-
+// Ambil status auth dulu agar bisa dipakai di navigation
 const isAuthenticated = computed(() => authStore.isAuthenticated);
+
 const userName = computed(() => {
   if (!authStore.currentUser) return 'User';
   return authStore.currentUser.full_name || authStore.currentUser.email || 'User';
 });
+
+// --- BAGIAN YANG DIUBAH ---
+// Navigation sekarang menggunakan computed property
+const navigation = computed(() => {
+  // Menu dasar yang muncul untuk semua orang (publik)
+  const items = [
+    { name: 'Beranda', path: '/' },
+    { name: 'Lowongan Kerja', path: '/jobs' },
+  ];
+
+  // Jika user SUDAH login, tambahkan menu Dashboard
+  if (isAuthenticated.value) {
+    items.push({ name: 'Dashboard', path: '/dashboard' });
+  }
+
+  return items;
+});
+// ---------------------------
 
 const handleLogout = () => {
   authStore.logout();
