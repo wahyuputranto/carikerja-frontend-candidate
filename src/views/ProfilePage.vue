@@ -187,19 +187,18 @@
           </div>
         </div>
 
-      </div>
-    </div>
-  </div>
-</template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import NavBar from '@/components/layout/NavBar.vue'
 
 const authStore = useAuthStore()
-const { user, educations, experiences, skills, loading } = storeToRefs(authStore)
+const { currentUser, educations, experiences, skills, loading } = storeToRefs(authStore)
+
+// Alias currentUser as user for easier reference
+const user = currentUser
 
 // --- Basic Profile ---
 const form = ref({
@@ -249,8 +248,6 @@ const resetForm = () => {
 const saveProfile = async () => {
   if (!user.value) return
   
-  // Convert date back to ISO if needed, or send as YYYY-MM-DD depending on backend
-  // Assuming backend accepts YYYY-MM-DD or ISO
   const payload = {
       ...form.value,
       birth_date: form.value.birth_date ? new Date(form.value.birth_date).toISOString() : null

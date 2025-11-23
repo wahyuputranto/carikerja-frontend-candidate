@@ -77,16 +77,23 @@ const router = createRouter({
 
 // Navigation guards
 router.beforeEach((to, from, next) => {
+    console.log(`[ROUTER] Navigating from ${from.path} to ${to.path}`)
+
     const authStore = useAuthStore()
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
     const hideForAuth = to.matched.some(record => record.meta.hideForAuth)
     const isAuthenticated = authStore.isAuthenticated
 
+    console.log(`[ROUTER] requiresAuth: ${requiresAuth}, isAuthenticated: ${isAuthenticated}, token exists: ${!!authStore.token}`)
+
     if (requiresAuth && !isAuthenticated) {
+        console.log('[ROUTER] Redirecting to login - not authenticated')
         next({ name: 'login', query: { redirect: to.fullPath } })
     } else if (hideForAuth && isAuthenticated) {
+        console.log('[ROUTER] Redirecting to dashboard - already authenticated')
         next({ name: 'dashboard' })
     } else {
+        console.log('[ROUTER] Navigation allowed')
         next()
     }
 })

@@ -41,7 +41,14 @@ Register a new candidate
   "phone": "081234567890",
   "email": "candidate@example.com",
   "password": "password123",
-  "full_name": "John Doe"
+  "full_name": "John Doe",
+  "birth_date": "1990-01-15",
+  "birth_place": "Jakarta",
+  "address": "Jl. Sudirman No. 1",
+  "city": "Jakarta",
+  "province": "DKI Jakarta",
+  "postal_code": "12345",
+  "about_me": "Software Engineer with 5 years experience"
 }
 ```
 
@@ -50,6 +57,15 @@ Register a new candidate
 - `email`: required, valid email format
 - `password`: required, min 6 chars
 - `full_name`: required, min 3 chars
+- `birth_date`: optional, date string (YYYY-MM-DD format)
+- `birth_place`: optional, string
+- `address`: optional, string
+- `city`: optional, string
+- `province`: optional, string
+- `postal_code`: optional, string
+- `about_me`: optional, string
+
+**Note:** Profile fields (birth_date, birth_place, address, etc.) are optional. If provided during registration, a candidate profile will be automatically created.
 
 **Success Response (201):**
 ```json
