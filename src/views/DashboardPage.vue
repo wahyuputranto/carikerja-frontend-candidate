@@ -14,9 +14,11 @@
               <p class="text-slate-600">Siap untuk melanjutkan perjalanan karirmu hari ini?</p>
             </div>
             <div class="hidden md:block">
-              <div class="w-24 h-24 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center text-white text-4xl font-bold">
-                {{ userInitials }}
-              </div>
+              <img 
+                :src="userPhoto" 
+                alt="Profile Photo" 
+                class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+              />
             </div>
           </div>
         </div>
@@ -226,6 +228,11 @@ const authStore = useAuthStore()
 
 const userName = computed(() => {
   return authStore.user?.name || 'User'
+})
+
+const userPhoto = computed(() => {
+  // Use user's photo if available, otherwise use a default Unsplash image
+  return authStore.user?.photo || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
 })
 
 const userInitials = computed(() => {

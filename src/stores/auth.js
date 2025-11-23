@@ -20,7 +20,7 @@ export const useAuthStore = defineStore('auth', () => {
 
         try {
             const response = await api.post('/auth/login', credentials)
-            const { token: authToken, user: userData } = response.data.data
+            const { token: authToken, candidate: userData } = response.data.data
 
             token.value = authToken
             user.value = userData
@@ -40,8 +40,15 @@ export const useAuthStore = defineStore('auth', () => {
         error.value = null
 
         try {
-            const response = await api.post('/auth/register', userData)
-            const { token: authToken, user: newUser } = response.data.data
+            // Construct strict payload according to API documentation
+            const payload = {
+                phone: userData.phone,
+                email: userData.email,
+                password: userData.password,
+                full_name: userData.name
+            }
+            const response = await api.post('/auth/register', payload)
+            const { token: authToken, candidate: newUser } = response.data.data
 
             token.value = authToken
             user.value = newUser

@@ -42,16 +42,29 @@
         </div>
 
         <!-- Job Listings -->
-        <div class="grid lg:grid-cols-2 gap-6">
-          <div v-for="i in 8" :key="i" class="card-interactive">
+        <div v-if="loading" class="text-center py-12">
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary-500 border-t-transparent"></div>
+          <p class="mt-2 text-slate-600">Memuat lowongan...</p>
+        </div>
+
+        <div v-else-if="error" class="text-center py-12 text-red-600">
+          {{ error }}
+          <button @click="fetchJobs" class="block mx-auto mt-4 text-primary-600 hover:underline">Coba Lagi</button>
+        </div>
+
+        <div v-else class="grid lg:grid-cols-2 gap-6">
+          <div v-for="job in jobs" :key="job.id" class="card-interactive">
             <div class="flex items-start justify-between mb-4">
               <div class="flex items-center space-x-4">
-                <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex-shrink-0"></div>
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex-shrink-0 flex items-center justify-center text-white font-bold text-xl">
+                  {{ job.title.charAt(0) }}
+                </div>
                 <div>
-                  <h3 class="text-xl font-bold text-slate-900 mb-1">Frontend Developer</h3>
-                  <p class="text-slate-600">Tech Company Indonesia</p>
+                  <h3 class="text-xl font-bold text-slate-900 mb-1">{{ job.title }}</h3>
+                  <p class="text-slate-600">Client ID: {{ job.client_id.substring(0, 8) }}...</p>
                 </div>
               </div>
+              <!-- Bookmark button (optional feature) -->
               <button class="text-slate-400 hover:text-red-500 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -60,12 +73,12 @@
             </div>
 
             <div class="flex flex-wrap gap-2 mb-4">
-              <span class="badge badge-primary">Full-time</span>
-              <span class="badge badge-success">Remote</span>
+              <span class="badge badge-primary">Quota: {{ job.quota }}</span>
+              <span class="badge badge-success">{{ job.status }}</span>
             </div>
 
             <p class="text-slate-600 mb-4 line-clamp-2">
-              Kami mencari Frontend Developer yang passionate untuk bergabung dengan tim kami. Pengalaman dengan Vue.js dan modern web technologies sangat diutamakan.
+              {{ job.description }}
             </p>
 
             <div class="flex items-center justify-between text-sm text-slate-600 mb-4">
@@ -78,39 +91,21 @@
               </span>
               <span class="flex items-center">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Rp 8-12 Juta
-              </span>
-              <span class="flex items-center">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                2 hari lalu
+                {{ new Date(job.created_at).toLocaleDateString() }}
               </span>
             </div>
 
-            <router-link :to="`/jobs/${i}`" class="btn btn-primary w-full">
+            <router-link :to="`/jobs/${job.id}`" class="btn btn-primary w-full">
               Lihat Detail & Lamar
             </router-link>
           </div>
         </div>
 
-        <!-- Pagination -->
+        <!-- Pagination (Static for now) -->
         <div class="flex items-center justify-center mt-12 space-x-2">
-          <button class="px-4 py-2 rounded-lg border border-slate-200 hover:bg-white/50 transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button class="px-4 py-2 rounded-lg bg-gradient-to-r from-primary-500 to-secondary-500 text-white font-semibold">1</button>
-          <button class="px-4 py-2 rounded-lg border border-slate-200 hover:bg-white/50 transition-colors">2</button>
-          <button class="px-4 py-2 rounded-lg border border-slate-200 hover:bg-white/50 transition-colors">3</button>
-          <button class="px-4 py-2 rounded-lg border border-slate-200 hover:bg-white/50 transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+           <!-- ... pagination code ... -->
         </div>
       </div>
     </div>
@@ -118,5 +113,16 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useJobsStore } from '@/stores/jobs'
 import NavBar from '@/components/layout/NavBar.vue'
+
+const jobsStore = useJobsStore()
+const { jobs, loading, error } = storeToRefs(jobsStore)
+const { fetchJobs } = jobsStore
+
+onMounted(() => {
+  fetchJobs()
+})
 </script>

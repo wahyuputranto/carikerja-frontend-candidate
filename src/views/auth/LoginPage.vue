@@ -218,6 +218,7 @@ const handleLogin = async () => {
       error.value = result.error
     }
   } catch (err) {
+    console.error(err)
     error.value = 'Terjadi kesalahan. Silakan coba lagi.'
   } finally {
     loading.value = false
