@@ -1,0 +1,273 @@
+/* -------------------------------------------------
+   Base layer (plain CSS)
+------------------------------------------------- */
+:root {
+    /* Primary (Cyan) */
+    --primary-50: #ecfeff;
+    --primary-100: #cffafe;
+    --primary-300: #67e8f9;
+    --primary-500: #06b6d4;
+    --primary-600: #0891b2;
+    --primary-700: #0e7490;
+    --primary-500-rgb: 6, 182, 212;
+
+    /* Secondary (Blue) */
+    --secondary-500: #3b82f6;
+    --secondary-600: #2563eb;
+    --secondary-500-rgb: 59, 130, 246;
+
+    /* Accent (Orange) */
+    --accent-500: #f97316;
+    --accent-600: #ea580c;
+    --accent-500-rgb: 249, 115, 22;
+}
+
+@layer base {
+    * {
+        border-color: #e5e7eb;
+    }
+
+    body {
+        /* Lighter, fresher background */
+        background: linear-gradient(to bottom right, #ecfeff, #ffffff, #eff6ff);
+        color: #1e293b;
+        /* slate-900 */
+        font-family: 'Inter', system-ui, sans-serif;
+        min-height: 100vh;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+/* -------------------------------------------------
+   Components – plain CSS (no @apply)
+------------------------------------------------- */
+
+/* Glass morphism */
+.glass {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+}
+
+.glass-dark {
+    background-color: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    /* Slightly less rounded for a cleaner look */
+    font-weight: 600;
+    transition: all 200ms ease-in-out;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background-color: var(--primary-500);
+    background-image: linear-gradient(to bottom right, var(--primary-500), var(--primary-600));
+    color: #fff;
+    box-shadow: 0 4px 14px 0 rgba(var(--primary-500-rgb), 0.39);
+}
+
+.btn-primary:hover {
+    background-image: linear-gradient(to bottom right, var(--primary-600), var(--primary-700));
+    box-shadow: 0 6px 20px rgba(var(--primary-500-rgb), 0.23);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-500);
+    background-image: linear-gradient(to bottom right, var(--secondary-500), var(--secondary-600));
+    color: #fff;
+    box-shadow: 0 4px 14px 0 rgba(var(--secondary-500-rgb), 0.39);
+}
+
+.btn-secondary:hover {
+    background-image: linear-gradient(to bottom right, var(--secondary-600), var(--secondary-700));
+}
+
+.btn-accent {
+    background-color: var(--accent-500);
+    background-image: linear-gradient(to bottom right, var(--accent-500), var(--accent-600));
+    color: #fff;
+}
+
+.btn-outline {
+    border: 2px solid var(--primary-500);
+    color: var(--primary-600);
+    background: transparent;
+    box-shadow: none;
+}
+
+.btn-outline:hover {
+    background-color: var(--primary-50);
+}
+
+/* Card */
+.card {
+    background: #ffffff;
+    border: 1px solid #f1f5f9;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 300ms ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transform: translateY(-4px);
+    border-color: var(--primary-100);
+}
+
+.card-interactive {
+    cursor: pointer;
+}
+
+/* Input */
+.input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    transition: all 200ms;
+    outline: none;
+}
+
+.input:focus {
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+.input-error {
+    border-color: #ef4444;
+}
+
+.input-error:focus {
+    box-shadow: 0 0 0 3px #fee2e2;
+}
+
+/* Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+}
+
+.badge-primary {
+    background-color: var(--primary-50);
+    color: var(--primary-700);
+    border: 1px solid var(--primary-100);
+}
+
+.badge-success {
+    background-color: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #dcfce7;
+}
+
+.badge-warning {
+    background-color: #fefce8;
+    color: #a16207;
+    border: 1px solid #fef9c3;
+}
+
+.badge-error {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fee2e2;
+}
+
+/* Progress bar */
+.progress-bar {
+    width: 100%;
+    height: 0.5rem;
+    background: #f1f5f9;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary-500);
+    transition: all 0.5s ease-out;
+}
+
+/* Gradient text */
+.gradient-text {
+    background-image: linear-gradient(to right, #1e293b, #334155);
+    /* Darker, more professional text */
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Special gradient for hero title if needed */
+.gradient-text-hero {
+    background-image: linear-gradient(to right, var(--primary-600), var(--secondary-600));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+
+/* Animations */
+.floating {
+    animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.shimmer {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Utilities */
+.text-balance {
+    text-wrap: balance;
+}
