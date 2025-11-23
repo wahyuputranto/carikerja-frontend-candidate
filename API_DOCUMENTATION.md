@@ -355,6 +355,81 @@ Get full candidate profile including education, experience, and skills.
 }
 ```
 
+---
+
+### 6. Candidate Dashboard (Protected)
+
+#### GET /api/v1/applications
+Get list of job applications.
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "uuid",
+      "job_id": "uuid",
+      "candidate_id": "uuid",
+      "status": "APPLIED",
+      "applied_at": "2025-11-23T10:00:00Z",
+      "created_at": "2025-11-23T10:00:00Z",
+      "updated_at": "2025-11-23T10:00:00Z"
+    }
+  ]
+}
+```
+
+#### GET /api/v1/analytics/profile-views
+Get count of profile views.
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "views_count": 15
+  }
+}
+```
+
+#### GET /api/v1/jobs/recommendations
+Get job recommendations for the candidate.
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "uuid",
+      "title": "Backend Engineer",
+      "description": "...",
+      "status": "PUBLISHED",
+      "created_at": "..."
+    }
+  ]
+}
+```
+
+#### GET /api/v1/documents
+Get list of uploaded documents.
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "uuid",
+      "file_name": "cv.pdf",
+      "status": "VALID",
+      "created_at": "..."
+    }
+  ]
+}
+```
+
 #### PUT /api/v1/profile
 Update candidate profile details.
 

@@ -12,19 +12,25 @@
               <span class="text-sm font-semibold gradient-text">✨ Platform Pencarian Kerja #1 di Indonesia</span>
             </div>
             
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold font-display leading-tight">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold font-display leading-tight">
               Temukan
               <span class="gradient-text block">Karir Impianmu</span>
               Dimulai Dari Sini
             </h1>
             
-            <p class="text-xl text-slate-600 leading-relaxed">
+            <p class="text-lg text-slate-600 leading-relaxed">
               Ribuan lowongan kerja menanti. Daftar sekarang dan mulai perjalanan karirmu bersama perusahaan terbaik di Indonesia.
             </p>
             
             <div class="flex flex-col sm:flex-row gap-4">
-              <router-link to="/register" class="btn btn-primary text-lg px-8 py-4">
+              <router-link v-if="!isAuthenticated" to="/register" class="btn btn-primary text-lg px-8 py-4">
                 Mulai Sekarang
+                <svg class="w-5 h-5 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </router-link>
+              <router-link v-else to="/dashboard" class="btn btn-primary text-lg px-8 py-4">
+                Ke Dashboard
                 <svg class="w-5 h-5 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
@@ -52,63 +58,13 @@
           </div>
 
           <!-- Right Content - Illustration -->
-          <div class="relative">
-            <div class="relative z-10 floating">
-              <div class="glass rounded-3xl p-8 space-y-6">
-                <!-- Mock Job Card -->
-                <div class="bg-white rounded-2xl p-6 shadow-lg transform hover:scale-105 transition-transform duration-300">
-                  <div class="flex items-start justify-between mb-4">
-                    <div class="flex items-center space-x-3">
-                      <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl"></div>
-                      <div>
-                        <h3 class="font-semibold text-slate-900">Frontend Developer</h3>
-                        <p class="text-sm text-slate-600">Tech Company</p>
-                      </div>
-                    </div>
-                    <span class="badge badge-success">Remote</span>
-                  </div>
-                  <div class="flex items-center justify-between text-sm text-slate-600">
-                    <span>💰 Rp 8-12 Juta</span>
-                    <span>📍 Jakarta</span>
-                  </div>
-                </div>
-
-                <!-- Mock Job Card 2 -->
-                <div class="bg-white rounded-2xl p-6 shadow-lg transform hover:scale-105 transition-transform duration-300">
-                  <div class="flex items-start justify-between mb-4">
-                    <div class="flex items-center space-x-3">
-                      <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl"></div>
-                      <div>
-                        <h3 class="font-semibold text-slate-900">UI/UX Designer</h3>
-                        <p class="text-sm text-slate-600">Creative Agency</p>
-                      </div>
-                    </div>
-                    <span class="badge badge-primary">Full-time</span>
-                  </div>
-                  <div class="flex items-center justify-between text-sm text-slate-600">
-                    <span>💰 Rp 7-10 Juta</span>
-                    <span>📍 Bandung</span>
-                  </div>
-                </div>
-
-                <!-- Mock Job Card 3 -->
-                <div class="bg-white rounded-2xl p-6 shadow-lg transform hover:scale-105 transition-transform duration-300">
-                  <div class="flex items-start justify-between mb-4">
-                    <div class="flex items-center space-x-3">
-                      <div class="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl"></div>
-                      <div>
-                        <h3 class="font-semibold text-slate-900">Marketing Manager</h3>
-                        <p class="text-sm text-slate-600">E-commerce</p>
-                      </div>
-                    </div>
-                    <span class="badge badge-warning">Hybrid</span>
-                  </div>
-                  <div class="flex items-center justify-between text-sm text-slate-600">
-                    <span>💰 Rp 10-15 Juta</span>
-                    <span>📍 Surabaya</span>
-                  </div>
-                </div>
-              </div>
+          <div class="relative flex justify-center">
+            <div class="relative z-10 floating w-4/5">
+              <img 
+                :src="heroIllustration" 
+                alt="Ilustrasi Karir" 
+                class="w-full object-contain transform hover:scale-[1.02] transition-transform duration-500"
+              />
             </div>
 
             <!-- Decorative Elements -->
@@ -209,10 +165,16 @@
             <p class="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
               Bergabunglah dengan ribuan kandidat lainnya yang sudah menemukan pekerjaan impian mereka
             </p>
-            <router-link to="/register" class="btn btn-primary text-lg px-10 py-4 inline-flex items-center">
+            <router-link v-if="!isAuthenticated" to="/register" class="btn btn-primary text-lg px-10 py-4 inline-flex items-center">
               Daftar Gratis Sekarang
               <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </router-link>
+            <router-link v-else to="/dashboard" class="btn btn-primary text-lg px-10 py-4 inline-flex items-center">
+              Ke Dashboard
+              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </router-link>
           </div>
@@ -285,5 +247,11 @@
 </template>
 
 <script setup>
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/auth'
 import NavBar from '@/components/layout/NavBar.vue'
+import heroIllustration from '@/assets/hero-illustration-v3.png'
+
+const authStore = useAuthStore()
+const { isAuthenticated } = storeToRefs(authStore)
 </script>

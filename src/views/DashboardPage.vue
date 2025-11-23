@@ -88,22 +88,26 @@
                 </router-link>
               </div>
 
-              <div v-if="recentApplications.length > 0" class="space-y-4">
+              <div v-if="loadingDashboard" class="text-center py-8">
+                  <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary-500 border-t-transparent"></div>
+                  <p class="mt-2 text-slate-500">Memuat data...</p>
+              </div>
+              <div v-else-if="recentApplications.length > 0" class="space-y-4">
                 <div v-for="app in recentApplications" :key="app.id" class="p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 transition-colors">
-                  <!-- Application Item (Structure kept for future use) -->
                   <div class="flex items-start justify-between mb-3">
                     <div class="flex items-center space-x-3">
-                      <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl"></div>
+                      <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
+                        {{ app.job_title ? app.job_title.charAt(0) : 'J' }}
+                      </div>
                       <div>
-                        <h3 class="font-semibold text-slate-900">{{ app.position }}</h3>
-                        <p class="text-sm text-slate-600">{{ app.company }}</p>
+                        <h3 class="font-semibold text-slate-900">{{ app.job_title || 'Unknown Position' }}</h3>
+                        <p class="text-sm text-slate-600">{{ app.company_name || 'Unknown Company' }}</p>
                       </div>
                     </div>
-                    <span class="badge badge-warning">{{ app.status }}</span>
+                    <span class="badge" :class="getStatusBadgeClass(app.status)">{{ app.status }}</span>
                   </div>
                   <div class="flex items-center justify-between text-sm text-slate-600">
-                    <span>📅 {{ app.date }}</span>
-                    <span>💰 {{ app.salary }}</span>
+                    <span>📅 {{ formatDate(app.applied_at) }}</span>
                   </div>
                 </div>
               </div>
@@ -122,9 +126,25 @@
                 </router-link>
               </div>
 
-              <div v-if="recommendedJobs.length > 0" class="grid md:grid-cols-2 gap-4">
-                <div v-for="job in recommendedJobs" :key="job.id" class="p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 transition-all hover:shadow-lg cursor-pointer">
-                  <!-- Job Item -->
+              <div v-if="loadingDashboard" class="text-center py-8">
+                  <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary-500 border-t-transparent"></div>
+              </div>
+              <div v-else-if="recommendations.length > 0" class="grid md:grid-cols-2 gap-4">
+                <div v-for="job in recommendations" :key="job.id" class="p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 transition-all hover:shadow-lg cursor-pointer">
+                  <div class="flex items-start justify-between mb-3">
+                    <div class="flex items-center space-x-3">
+                      <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold">
+                        {{ job.title.charAt(0) }}
+                      </div>
+                      <div>
+                        <h3 class="font-semibold text-sm">{{ job.title }}</h3>
+                        <p class="text-xs text-slate-600 line-clamp-1">{{ job.description }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between text-xs text-slate-600">
+                    <span class="badge badge-success text-xs">{{ job.status }}</span>
+                  </div>
                 </div>
               </div>
               <div v-else class="text-center py-8 text-slate-500">
@@ -248,27 +268,28 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
+import { useDashboardStore } from '@/stores/dashboard'
+import { useDocumentsStore } from '@/stores/documents'
 import NavBar from '@/components/layout/NavBar.vue'
 
 const authStore = useAuthStore()
+const dashboardStore = useDashboardStore()
+const documentsStore = useDocumentsStore()
+
 const { currentUser, educations, experiences, skills } = storeToRefs(authStore)
-
-// Stats - Initialized to 0 as endpoints are not yet available
-const activeApplicationsCount = ref(0)
-const acceptedApplicationsCount = ref(0)
-const profileViewsCount = ref(0)
-
-// Lists - Empty for now
-const recentApplications = ref([])
-const recommendedJobs = ref([])
+const { applications, profileViews, recommendations, loading: loadingDashboard } = storeToRefs(dashboardStore)
+const { userDocuments } = storeToRefs(documentsStore)
 
 onMounted(async () => {
-    // Ensure we have the latest user data
     if (authStore.token) {
-        await authStore.fetchUser()
+        await Promise.all([
+            authStore.fetchUser(),
+            dashboardStore.fetchDashboardData(),
+            documentsStore.fetchUserDocuments()
+        ])
     }
 })
 
@@ -277,8 +298,23 @@ const userName = computed(() => {
 })
 
 const userPhoto = computed(() => {
-  // Use user's photo if available, otherwise use a default Unsplash image
   return currentUser.value?.photo || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+})
+
+// Stats
+const activeApplicationsCount = computed(() => {
+    return (applications.value || []).filter(app => app.status !== 'REJECTED' && app.status !== 'ACCEPTED').length
+})
+
+const acceptedApplicationsCount = computed(() => {
+    return (applications.value || []).filter(app => app.status === 'ACCEPTED').length
+})
+
+const profileViewsCount = computed(() => profileViews.value)
+
+// Lists
+const recentApplications = computed(() => {
+    return applications.value.slice(0, 3)
 })
 
 // Progress Logic
@@ -299,10 +335,8 @@ const isSkillsComplete = computed(() => {
     return skills.value && skills.value.length > 0
 })
 
-// For documents, we'll assume incomplete for now as we can't easily check without an API call
-// In a real app, we would fetch the user's documents
 const isDocumentsComplete = computed(() => {
-    return false 
+    return userDocuments.value && userDocuments.value.length > 0
 })
 
 const progressPercentage = computed(() => {
@@ -315,4 +349,23 @@ const progressPercentage = computed(() => {
     
     return (completed / 5) * 100
 })
+
+// Helpers
+const formatDate = (dateString) => {
+    if (!dateString) return '-'
+    return new Date(dateString).toLocaleDateString('id-ID', {
+        day: 'numeric', month: 'short', year: 'numeric'
+    })
+}
+
+const getStatusBadgeClass = (status) => {
+    switch (status) {
+        case 'APPLIED': return 'badge-info'
+        case 'REVIEW': return 'badge-warning'
+        case 'INTERVIEW': return 'badge-primary'
+        case 'ACCEPTED': return 'badge-success'
+        case 'REJECTED': return 'badge-error'
+        default: return 'badge-ghost'
+    }
+}
 </script>
