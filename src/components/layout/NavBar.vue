@@ -36,17 +36,12 @@
             </router-link>
           </template>
           <template v-else>
-            <router-link to="/dashboard" class="text-slate-700 hover:text-primary-600 font-medium transition-colors">
-              Dashboard
-            </router-link>
             <div class="relative" ref="profileMenu">
               <button 
                 @click="showProfileMenu = !showProfileMenu"
                 class="flex items-center space-x-2 p-2 rounded-xl hover:bg-white/50 transition-colors"
               >
-                <div class="w-8 h-8 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center text-white font-semibold">
-                  {{ userInitials }}
-                </div>
+                <span class="font-bold text-slate-800">{{ userName }}</span>
                 <svg class="w-4 h-4 text-slate-600" :class="{ 'rotate-180': showProfileMenu }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
@@ -107,9 +102,9 @@
             </router-link>
           </template>
           <template v-else>
-            <router-link to="/dashboard" @click="showMobileMenu = false" class="block px-4 py-2 rounded-lg text-slate-700 hover:bg-white/50 font-medium transition-colors">
-              Dashboard
-            </router-link>
+            <div class="px-4 py-2 text-sm font-semibold text-slate-500">
+              Halo, {{ userName }}
+            </div>
             <router-link to="/profile" @click="showMobileMenu = false" class="block px-4 py-2 rounded-lg text-slate-700 hover:bg-white/50 font-medium transition-colors">
               Profil Saya
             </router-link>
@@ -140,13 +135,13 @@ const profileMenu = ref(null)
 const navigation = [
   { name: 'Beranda', path: '/' },
   { name: 'Lowongan Kerja', path: '/jobs' },
+  { name: 'Dashboard', path: '/dashboard' },
 ]
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
-const userInitials = computed(() => {
-  if (!authStore.user) return 'U'
-  const name = authStore.user.full_name || authStore.user.email || 'User'
-  return name.charAt(0).toUpperCase()
+const userName = computed(() => {
+  if (!authStore.currentUser) return 'User'
+  return authStore.currentUser.full_name || authStore.currentUser.email || 'User'
 })
 
 const handleLogout = () => {

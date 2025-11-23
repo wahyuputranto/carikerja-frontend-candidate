@@ -33,7 +33,7 @@
                 </svg>
               </div>
             </div>
-            <div class="text-3xl font-bold gradient-text mb-1">12</div>
+            <div class="text-3xl font-bold gradient-text mb-1">{{ activeApplicationsCount }}</div>
             <div class="text-sm text-slate-600">Lamaran Aktif</div>
           </div>
 
@@ -45,7 +45,7 @@
                 </svg>
               </div>
             </div>
-            <div class="text-3xl font-bold gradient-text mb-1">5</div>
+            <div class="text-3xl font-bold gradient-text mb-1">{{ acceptedApplicationsCount }}</div>
             <div class="text-sm text-slate-600">Diterima Review</div>
           </div>
 
@@ -58,7 +58,7 @@
                 </svg>
               </div>
             </div>
-            <div class="text-3xl font-bold gradient-text mb-1">234</div>
+            <div class="text-3xl font-bold gradient-text mb-1">{{ profileViewsCount }}</div>
             <div class="text-sm text-slate-600">Profil Dilihat</div>
           </div>
 
@@ -70,7 +70,7 @@
                 </svg>
               </div>
             </div>
-            <div class="text-3xl font-bold gradient-text mb-1">89%</div>
+            <div class="text-3xl font-bold gradient-text mb-1">{{ progressPercentage }}%</div>
             <div class="text-sm text-slate-600">Profil Lengkap</div>
           </div>
         </div>
@@ -88,23 +88,28 @@
                 </router-link>
               </div>
 
-              <div class="space-y-4">
-                <div v-for="i in 3" :key="i" class="p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 transition-colors">
+              <div v-if="recentApplications.length > 0" class="space-y-4">
+                <div v-for="app in recentApplications" :key="app.id" class="p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 transition-colors">
+                  <!-- Application Item (Structure kept for future use) -->
                   <div class="flex items-start justify-between mb-3">
                     <div class="flex items-center space-x-3">
                       <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl"></div>
                       <div>
-                        <h3 class="font-semibold text-slate-900">Frontend Developer</h3>
-                        <p class="text-sm text-slate-600">Tech Company Indonesia</p>
+                        <h3 class="font-semibold text-slate-900">{{ app.position }}</h3>
+                        <p class="text-sm text-slate-600">{{ app.company }}</p>
                       </div>
                     </div>
-                    <span class="badge badge-warning">Pending</span>
+                    <span class="badge badge-warning">{{ app.status }}</span>
                   </div>
                   <div class="flex items-center justify-between text-sm text-slate-600">
-                    <span>📅 Dilamar 2 hari lalu</span>
-                    <span>💰 Rp 8-12 Juta</span>
+                    <span>📅 {{ app.date }}</span>
+                    <span>💰 {{ app.salary }}</span>
                   </div>
                 </div>
+              </div>
+              <div v-else class="text-center py-8 text-slate-500">
+                <p>Belum ada lamaran aktif.</p>
+                <router-link to="/jobs" class="text-primary-600 hover:underline mt-2 inline-block">Mulai cari kerja</router-link>
               </div>
             </div>
 
@@ -117,22 +122,13 @@
                 </router-link>
               </div>
 
-              <div class="grid md:grid-cols-2 gap-4">
-                <div v-for="i in 4" :key="i" class="p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 transition-all hover:shadow-lg cursor-pointer">
-                  <div class="flex items-start justify-between mb-3">
-                    <div class="flex items-center space-x-3">
-                      <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg"></div>
-                      <div>
-                        <h3 class="font-semibold text-sm">UI/UX Designer</h3>
-                        <p class="text-xs text-slate-600">Creative Studio</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="flex items-center justify-between text-xs text-slate-600">
-                    <span>📍 Jakarta</span>
-                    <span class="badge badge-success text-xs">Remote</span>
-                  </div>
+              <div v-if="recommendedJobs.length > 0" class="grid md:grid-cols-2 gap-4">
+                <div v-for="job in recommendedJobs" :key="job.id" class="p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 transition-all hover:shadow-lg cursor-pointer">
+                  <!-- Job Item -->
                 </div>
+              </div>
+              <div v-else class="text-center py-8 text-slate-500">
+                <p>Belum ada rekomendasi pekerjaan saat ini.</p>
               </div>
             </div>
           </div>
@@ -145,37 +141,69 @@
               <div class="mb-4">
                 <div class="flex items-center justify-between text-sm mb-2">
                   <span class="text-slate-600">Progress</span>
-                  <span class="font-semibold gradient-text">89%</span>
+                  <span class="font-semibold gradient-text">{{ progressPercentage }}%</span>
                 </div>
                 <div class="progress-bar">
-                  <div class="progress-fill" style="width: 89%"></div>
+                  <div class="progress-fill" :style="{ width: progressPercentage + '%' }"></div>
                 </div>
               </div>
               <div class="space-y-3">
+                <!-- Basic Info -->
                 <div class="flex items-center space-x-3 text-sm">
-                  <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="w-6 h-6 rounded-full flex items-center justify-center" :class="isBasicInfoComplete ? 'bg-green-100' : 'bg-yellow-100'">
+                    <svg v-if="isBasicInfoComplete" class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
+                    <span v-else class="text-yellow-600 font-bold text-xs">!</span>
                   </div>
                   <span class="text-slate-600">Informasi Dasar</span>
                 </div>
+
+                <!-- Education -->
                 <div class="flex items-center space-x-3 text-sm">
-                  <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="w-6 h-6 rounded-full flex items-center justify-center" :class="isEducationComplete ? 'bg-green-100' : 'bg-yellow-100'">
+                    <svg v-if="isEducationComplete" class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
+                    <span v-else class="text-yellow-600 font-bold text-xs">!</span>
                   </div>
                   <span class="text-slate-600">Pendidikan</span>
                 </div>
+
+                <!-- Experience -->
                 <div class="flex items-center space-x-3 text-sm">
-                  <div class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center">
-                    <span class="text-yellow-600 font-bold">!</span>
+                  <div class="w-6 h-6 rounded-full flex items-center justify-center" :class="isExperienceComplete ? 'bg-green-100' : 'bg-yellow-100'">
+                    <svg v-if="isExperienceComplete" class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span v-else class="text-yellow-600 font-bold text-xs">!</span>
                   </div>
-                  <span class="text-slate-600">Upload Dokumen</span>
+                  <span class="text-slate-600">Pengalaman Kerja</span>
+                </div>
+
+                <!-- Skills -->
+                <div class="flex items-center space-x-3 text-sm">
+                  <div class="w-6 h-6 rounded-full flex items-center justify-center" :class="isSkillsComplete ? 'bg-green-100' : 'bg-yellow-100'">
+                    <svg v-if="isSkillsComplete" class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span v-else class="text-yellow-600 font-bold text-xs">!</span>
+                  </div>
+                  <span class="text-slate-600">Keahlian</span>
+                </div>
+
+                <!-- Documents -->
+                <div class="flex items-center space-x-3 text-sm">
+                  <div class="w-6 h-6 rounded-full flex items-center justify-center" :class="isDocumentsComplete ? 'bg-green-100' : 'bg-yellow-100'">
+                    <svg v-if="isDocumentsComplete" class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span v-else class="text-yellow-600 font-bold text-xs">!</span>
+                  </div>
+                  <span class="text-slate-600">Dokumen</span>
                 </div>
               </div>
-              <router-link to="/upload-documents" class="btn btn-primary w-full mt-4">
+              <router-link to="/profile" class="btn btn-primary w-full mt-4">
                 Lengkapi Sekarang
               </router-link>
             </div>
@@ -220,24 +248,71 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import NavBar from '@/components/layout/NavBar.vue'
 
 const authStore = useAuthStore()
+const { currentUser, educations, experiences, skills } = storeToRefs(authStore)
+
+// Stats - Initialized to 0 as endpoints are not yet available
+const activeApplicationsCount = ref(0)
+const acceptedApplicationsCount = ref(0)
+const profileViewsCount = ref(0)
+
+// Lists - Empty for now
+const recentApplications = ref([])
+const recommendedJobs = ref([])
+
+onMounted(async () => {
+    // Ensure we have the latest user data
+    if (authStore.token) {
+        await authStore.fetchUser()
+    }
+})
 
 const userName = computed(() => {
-  return authStore.user?.full_name || 'User'
+  return currentUser.value?.full_name || 'User'
 })
 
 const userPhoto = computed(() => {
   // Use user's photo if available, otherwise use a default Unsplash image
-  return authStore.user?.photo || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+  return currentUser.value?.photo || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
 })
 
-const userInitials = computed(() => {
-  if (!authStore.user) return 'U'
-  const name = authStore.user.full_name || authStore.user.email || 'User'
-  return name.charAt(0).toUpperCase()
+// Progress Logic
+const isBasicInfoComplete = computed(() => {
+    const user = currentUser.value
+    return !!(user?.full_name && user?.email && user?.phone && user?.address)
+})
+
+const isEducationComplete = computed(() => {
+    return educations.value && educations.value.length > 0
+})
+
+const isExperienceComplete = computed(() => {
+    return experiences.value && experiences.value.length > 0
+})
+
+const isSkillsComplete = computed(() => {
+    return skills.value && skills.value.length > 0
+})
+
+// For documents, we'll assume incomplete for now as we can't easily check without an API call
+// In a real app, we would fetch the user's documents
+const isDocumentsComplete = computed(() => {
+    return false 
+})
+
+const progressPercentage = computed(() => {
+    let completed = 0
+    if (isBasicInfoComplete.value) completed++
+    if (isEducationComplete.value) completed++
+    if (isExperienceComplete.value) completed++
+    if (isSkillsComplete.value) completed++
+    if (isDocumentsComplete.value) completed++
+    
+    return (completed / 5) * 100
 })
 </script>

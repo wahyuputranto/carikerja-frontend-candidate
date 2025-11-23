@@ -114,7 +114,8 @@ export const useAuthStore = defineStore('auth', () => {
             console.log('[AUTH] Profile response received:', response.data)
             const data = response.data.data
 
-            // Handle case where profile might be null (user hasn't filled profile yet)
+            // New API structure includes candidate object
+            candidate.value = data.candidate || null
             user.value = data.profile || {}
             educations.value = data.educations || []
             experiences.value = data.experiences || []

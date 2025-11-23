@@ -73,11 +73,28 @@
           
           <div v-if="educations.length === 0" class="text-slate-500 text-center py-4">Belum ada data pendidikan.</div>
           <div v-else class="space-y-4">
-            <div v-for="edu in educations" :key="edu.id" class="p-4 border border-slate-200 rounded-xl">
-              <h3 class="font-bold text-lg">{{ edu.institution_name }}</h3>
-              <p class="text-slate-700">{{ edu.degree }} - {{ edu.major }}</p>
-              <p class="text-sm text-slate-500">{{ edu.start_year }} - {{ edu.is_current ? 'Sekarang' : edu.end_year }}</p>
-              <p v-if="edu.gpa" class="text-sm text-slate-500">IPK: {{ edu.gpa }}</p>
+            <div v-for="edu in educations" :key="edu.id" class="p-5 border border-slate-200 rounded-2xl hover:border-primary-300 transition-colors bg-slate-50/50">
+              <!-- Row 1: Institution and Years -->
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="font-bold text-lg text-slate-800">{{ edu.institution_name }}</h3>
+                <span class="text-slate-600 font-medium text-sm">
+                  {{ edu.start_year }} - {{ edu.is_current ? 'Sekarang' : edu.end_year }}
+                </span>
+              </div>
+
+              <!-- Divider -->
+              <div class="border-b border-slate-200 my-3"></div>
+
+              <!-- Row 2: Degree and GPA -->
+              <div class="flex justify-between items-center mb-1">
+                <p class="text-slate-700"><span class="font-semibold text-slate-500">Gelar :</span> {{ edu.degree }}</p>
+                <p v-if="edu.gpa" class="text-slate-700"><span class="font-semibold text-slate-500">IPK :</span> {{ edu.gpa }}</p>
+              </div>
+
+              <!-- Row 3: Major -->
+              <div>
+                <p class="text-slate-700"><span class="font-semibold text-slate-500">Jurusan :</span> {{ edu.major }}</p>
+              </div>
             </div>
           </div>
 
@@ -114,13 +131,27 @@
 
           <div v-if="experiences.length === 0" class="text-slate-500 text-center py-4">Belum ada data pengalaman.</div>
           <div v-else class="space-y-4">
-            <div v-for="exp in experiences" :key="exp.id" class="p-4 border border-slate-200 rounded-xl">
-              <h3 class="font-bold text-lg">{{ exp.position }}</h3>
-              <p class="text-slate-700">{{ exp.company_name }}</p>
-              <p class="text-sm text-slate-500">
-                {{ formatDate(exp.start_date) }} - {{ exp.is_current ? 'Sekarang' : (exp.end_date ? formatDate(exp.end_date) : '') }}
-              </p>
-              <p class="text-sm text-slate-600 mt-2">{{ exp.description }}</p>
+            <div v-for="exp in experiences" :key="exp.id" class="p-5 border border-slate-200 rounded-2xl hover:border-primary-300 transition-colors bg-slate-50/50">
+              <!-- Row 1: Company and Dates -->
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="font-bold text-lg text-slate-800">{{ exp.company_name }}</h3>
+                <span class="text-slate-600 font-medium text-sm">
+                  {{ formatDate(exp.start_date) }} - {{ exp.is_current ? 'Sekarang' : (exp.end_date ? formatDate(exp.end_date) : 'Sekarang') }}
+                </span>
+              </div>
+              
+              <!-- Divider -->
+              <div class="border-b border-slate-200 my-3"></div>
+
+              <!-- Row 2: Position -->
+              <div class="mb-2">
+                <p class="text-slate-700"><span class="font-semibold text-slate-500">Posisi :</span> {{ exp.position }}</p>
+              </div>
+
+              <!-- Row 3: Description -->
+              <div v-if="exp.description">
+                <p class="text-slate-700 whitespace-pre-line"><span class="font-semibold text-slate-500">Deskripsi :</span> {{ exp.description }}</p>
+              </div>
             </div>
           </div>
 
@@ -161,10 +192,18 @@
           </div>
 
           <div v-if="skills.length === 0" class="text-slate-500 text-center py-4">Belum ada data keahlian.</div>
-          <div v-else class="flex flex-wrap gap-2">
-            <span v-for="skill in skills" :key="skill.id" class="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">
-              {{ skill.skill_name }} ({{ skill.proficiency_level }})
-            </span>
+          <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <div v-for="skill in skills" :key="skill.id" class="flex items-center justify-between p-3 border border-slate-200 rounded-xl bg-slate-50/50 hover:border-primary-300 transition-colors">
+              <span class="font-medium text-slate-700">{{ skill.skill_name }}</span>
+              <span :class="{
+                'bg-emerald-100 text-emerald-700 border-emerald-200': skill.proficiency_level === 'Beginner',
+                'bg-blue-100 text-blue-700 border-blue-200': skill.proficiency_level === 'Intermediate',
+                'bg-indigo-100 text-indigo-700 border-indigo-200': skill.proficiency_level === 'Advanced',
+                'bg-purple-100 text-purple-700 border-purple-200': skill.proficiency_level === 'Expert'
+              }" class="px-2 py-0.5 text-xs rounded-md border font-medium">
+                {{ skill.proficiency_level }}
+              </span>
+            </div>
           </div>
 
           <!-- Add Skill Form -->
@@ -187,6 +226,10 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </div>
+</template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
