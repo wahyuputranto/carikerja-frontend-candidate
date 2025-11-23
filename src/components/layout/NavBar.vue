@@ -145,7 +145,7 @@ const navigation = [
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 const userInitials = computed(() => {
   if (!authStore.user) return 'U'
-  const name = authStore.user.name || authStore.user.email || 'User'
+  const name = authStore.user.full_name || authStore.user.email || 'User'
   return name.charAt(0).toUpperCase()
 })
 

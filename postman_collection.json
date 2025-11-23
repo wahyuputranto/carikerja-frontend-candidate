@@ -1,0 +1,419 @@
+{
+    "info": {
+        "name": "CariKerja Backend API",
+        "description": "API Collection for CariKerja Backend Golang Service",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Health Check",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/health",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "health"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"auth_token\", jsonData.data.token);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"phone\": \"081234567890\",\n    \"email\": \"candidate@example.com\",\n    \"password\": \"password123\",\n    \"full_name\": \"John Doe\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/auth/register",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "register"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"auth_token\", jsonData.data.token);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"phone\": \"081234567890\",\n    \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "login"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Master Data",
+            "item": [
+                {
+                    "name": "Get All Document Types",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/master/documents",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "master",
+                                "documents"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Mandatory Document Types",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/master/documents/mandatory",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "master",
+                                "documents",
+                                "mandatory"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Active Jobs",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/master/jobs",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "master",
+                                "jobs"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Upload",
+            "item": [
+                {
+                    "name": "Init Upload",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.environment.set(\"document_id\", jsonData.data.document_id);",
+                                    "    pm.environment.set(\"presigned_url\", jsonData.data.presigned_url);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"document_type_id\": \"{{document_type_id}}\",\n    \"file_name\": \"ktp.jpg\",\n    \"file_size\": 1024000,\n    \"mime_type\": \"image/jpeg\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/upload/init",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "upload",
+                                "init"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Complete Upload",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"document_id\": \"{{document_id}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/upload/complete",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "upload",
+                                "complete"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Profile",
+            "item": [
+                {
+                    "name": "Get Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/profile",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "profile"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Upsert Profile",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nik\": \"1234567890123456\",\n    \"birth_date\": \"1990-01-01T00:00:00Z\",\n    \"birth_place\": \"Jakarta\",\n    \"gender\": \"M\",\n    \"address\": \"Jl. Sudirman No. 1\",\n    \"city\": \"Jakarta\",\n    \"province\": \"DKI Jakarta\",\n    \"postal_code\": \"12345\",\n    \"last_education\": \"S1\",\n    \"about_me\": \"Software Engineer...\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/profile",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "profile"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Education",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"institution_name\": \"University of Indonesia\",\n    \"degree\": \"Bachelor\",\n    \"major\": \"Computer Science\",\n    \"start_year\": 2010,\n    \"end_year\": 2014,\n    \"is_current\": false,\n    \"gpa\": 3.8\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/profile/education",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "profile",
+                                "education"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Experience",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"company_name\": \"Tech Corp\",\n    \"position\": \"Senior Engineer\",\n    \"start_date\": \"2020-01-01T00:00:00Z\",\n    \"is_current\": true,\n    \"description\": \"Leading backend team\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/profile/experience",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "profile",
+                                "experience"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Skill",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"skill_name\": \"Golang\",\n    \"proficiency_level\": \"Expert\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/profile/skill",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "profile",
+                                "skill"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8080"
+        }
+    ]
+}

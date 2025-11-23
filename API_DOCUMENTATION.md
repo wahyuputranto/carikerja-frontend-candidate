@@ -281,6 +281,141 @@ Content-Type: application/json
 
 ---
 
+### 5. Profile (Protected)
+
+#### GET /api/v1/profile
+Get full candidate profile including education, experience, and skills.
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "profile": {
+      "id": "uuid",
+      "candidate_id": "uuid",
+      "nik": "1234567890123456",
+      "birth_date": "1990-01-01T00:00:00Z",
+      "gender": "M",
+      "address": "Jl. Sudirman No. 1",
+      "city": "Jakarta",
+      "province": "DKI Jakarta",
+      "postal_code": "12345",
+      "last_education": "S1",
+      "about_me": "Software Engineer with 5 years experience",
+      "photo_url": "http://...",
+      "cv_url": "http://..."
+    },
+    "educations": [
+      {
+        "id": "uuid",
+        "institution_name": "University of Indonesia",
+        "degree": "Bachelor",
+        "major": "Computer Science",
+        "start_year": 2010,
+        "end_year": 2014,
+        "is_current": false,
+        "gpa": 3.8
+      }
+    ],
+    "experiences": [
+      {
+        "id": "uuid",
+        "company_name": "Tech Corp",
+        "position": "Senior Engineer",
+        "start_date": "2020-01-01T00:00:00Z",
+        "is_current": true,
+        "description": "Leading backend team"
+      }
+    ],
+    "skills": [
+      {
+        "id": "uuid",
+        "skill_name": "Golang",
+        "proficiency_level": "Expert"
+      }
+    ]
+  }
+}
+```
+
+#### PUT /api/v1/profile
+Update candidate profile details.
+
+**Request Body:**
+```json
+{
+  "nik": "1234567890123456",
+  "birth_date": "1990-01-01T00:00:00Z",
+  "birth_place": "Jakarta",
+  "gender": "M",
+  "address": "Jl. Sudirman No. 1",
+  "city": "Jakarta",
+  "province": "DKI Jakarta",
+  "postal_code": "12345",
+  "last_education": "S1",
+  "about_me": "Software Engineer..."
+}
+```
+
+#### POST /api/v1/profile/education
+Add education history.
+
+**Request Body:**
+```json
+{
+  "institution_name": "University of Indonesia",
+  "degree": "Bachelor",
+  "major": "Computer Science",
+  "start_year": 2010,
+  "end_year": 2014,
+  "is_current": false,
+  "gpa": 3.8
+}
+```
+
+#### PUT /api/v1/profile/education/:id
+Update education history.
+
+#### DELETE /api/v1/profile/education/:id
+Delete education history.
+
+#### POST /api/v1/profile/experience
+Add work experience.
+
+**Request Body:**
+```json
+{
+  "company_name": "Tech Corp",
+  "position": "Senior Engineer",
+  "start_date": "2020-01-01T00:00:00Z",
+  "is_current": true,
+  "description": "Leading backend team"
+}
+```
+
+#### PUT /api/v1/profile/experience/:id
+Update work experience.
+
+#### DELETE /api/v1/profile/experience/:id
+Delete work experience.
+
+#### POST /api/v1/profile/skill
+Add skill.
+
+**Request Body:**
+```json
+{
+  "skill_name": "Golang",
+  "proficiency_level": "Expert"
+}
+```
+
+#### DELETE /api/v1/profile/skill/:id
+Delete skill.
+
+---
+
 ## Error Codes
 
 | Status Code | Description |

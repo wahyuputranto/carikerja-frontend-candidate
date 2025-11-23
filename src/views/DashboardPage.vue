@@ -227,7 +227,7 @@ import NavBar from '@/components/layout/NavBar.vue'
 const authStore = useAuthStore()
 
 const userName = computed(() => {
-  return authStore.user?.name || 'User'
+  return authStore.user?.full_name || 'User'
 })
 
 const userPhoto = computed(() => {
@@ -237,7 +237,7 @@ const userPhoto = computed(() => {
 
 const userInitials = computed(() => {
   if (!authStore.user) return 'U'
-  const name = authStore.user.name || authStore.user.email || 'User'
+  const name = authStore.user.full_name || authStore.user.email || 'User'
   return name.charAt(0).toUpperCase()
 })
 </script>
