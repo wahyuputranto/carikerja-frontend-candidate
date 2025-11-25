@@ -4,6 +4,7 @@ import router from './router'
 import App from './App.vue'
 import './tailwind.css';
 import './custom.css';
+import 'flowbite';
 
 const app = createApp(App)
 const pinia = createPinia()
