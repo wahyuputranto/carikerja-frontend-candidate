@@ -158,20 +158,48 @@
                   <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary-500 border-t-transparent"></div>
               </div>
               <div v-else-if="recommendations.length > 0" class="grid md:grid-cols-2 gap-4">
-                <div v-for="job in recommendations" :key="job.id" class="p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 transition-all hover:shadow-lg cursor-pointer">
-                  <div class="flex items-start justify-between mb-3">
-                    <div class="flex items-center space-x-3">
-                      <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold">
-                        {{ job.title.charAt(0) }}
+                <div 
+                  v-for="job in recommendations" 
+                  :key="job.id" 
+                  @click="$router.push(`/jobs/${job.id}`)"
+                  class="group p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 hover:shadow-md transition-all cursor-pointer flex flex-col h-full"
+                >
+                  <div class="flex items-start space-x-3 mb-3">
+                    <!-- Company Icon -->
+                    <div class="w-12 h-12 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden bg-white border border-slate-200 shadow-sm group-hover:border-primary-200 transition-colors">
+                      <img 
+                        v-if="job.company?.logo_url" 
+                        :src="job.company.logo_url" 
+                        :alt="job.company.name" 
+                        class="w-full h-full object-contain p-1.5" 
+                      />
+                      <div v-else class="w-full h-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
                       </div>
-                      <div>
-                        <h3 class="font-semibold text-sm">{{ job.title }}</h3>
-                        <p class="text-xs text-slate-600 line-clamp-1">{{ job.description }}</p>
+                    </div>
+                    
+                    <!-- Job Info -->
+                    <div class="flex-1 min-w-0">
+                      <h3 class="font-bold text-slate-900 text-sm line-clamp-1 group-hover:text-primary-600 transition-colors">{{ job.title }}</h3>
+                      <p class="text-xs text-slate-600 font-medium mb-0.5">{{ job.company?.name || 'Perusahaan Rahasia' }}</p>
+                      <div class="flex items-center text-xs text-slate-500">
+                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        {{ job.location?.name || 'Jakarta' }}
                       </div>
                     </div>
                   </div>
-                  <div class="flex items-center justify-between text-xs text-slate-600">
-                    <span class="badge badge-success text-xs">{{ job.status }}</span>
+                  
+                  <!-- Footer -->
+                  <div class="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between">
+                    <span class="badge badge-success text-[10px] px-2 py-0.5">{{ job.status }}</span>
+                    <span class="text-[10px] text-slate-400">
+                      {{ new Date(job.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) }}
+                    </span>
                   </div>
                 </div>
               </div>
