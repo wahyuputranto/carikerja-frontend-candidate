@@ -46,6 +46,29 @@ export const useDashboardStore = defineStore('dashboard', () => {
         }
     }
 
+    async function applyJob(applicationData) {
+        loading.value = true
+        error.value = null
+        try {
+            const response = await api.post('/applications', applicationData)
+            if (response.data.success) {
+                // Refresh applications list
+                const appsRes = await api.get('/applications')
+                if (appsRes.data.success) {
+                    applications.value = appsRes.data.data || []
+                }
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('Error applying for job:', err)
+            const errorMessage = err.response?.data?.error || err.response?.data?.message || 'Gagal melamar pekerjaan.'
+            error.value = errorMessage
+            return { success: false, error: errorMessage }
+        } finally {
+            loading.value = false
+        }
+    }
+
     return {
         tasks,
         applications,
@@ -53,6 +76,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
         recommendations,
         loading,
         error,
-        fetchDashboardData
+        fetchDashboardData,
+        applyJob
     }
 })

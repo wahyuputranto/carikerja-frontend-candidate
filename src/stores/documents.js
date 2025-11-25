@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import api from '@/services/api'
 import axios from 'axios'
 
@@ -8,6 +8,10 @@ export const useDocumentsStore = defineStore('documents', () => {
     const userDocuments = ref([])
     const loading = ref(false)
     const error = ref(null)
+
+    const mandatoryDocuments = computed(() => {
+        return documentTypes.value.filter(doc => doc.is_mandatory)
+    })
 
     async function fetchDocumentTypes() {
         loading.value = true
@@ -86,6 +90,7 @@ export const useDocumentsStore = defineStore('documents', () => {
     return {
         documentTypes,
         userDocuments,
+        mandatoryDocuments,
         loading,
         error,
         fetchDocumentTypes,

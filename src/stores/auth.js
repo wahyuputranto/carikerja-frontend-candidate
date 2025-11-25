@@ -173,6 +173,34 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    async function updateEducation(id, educationData) {
+        console.log('[AUTH] Updating education:', id, educationData)
+        try {
+            const response = await api.put(`/profile/education/${id}`, educationData)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Update education error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal memperbarui pendidikan' }
+        }
+    }
+
+    async function deleteEducation(id) {
+        console.log('[AUTH] Deleting education:', id)
+        try {
+            const response = await api.delete(`/profile/education/${id}`)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Delete education error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal menghapus pendidikan' }
+        }
+    }
+
     // Experience Actions
     async function addExperience(experienceData) {
         console.log('[AUTH] Adding experience:', experienceData)
@@ -188,6 +216,34 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    async function updateExperience(id, experienceData) {
+        console.log('[AUTH] Updating experience:', id, experienceData)
+        try {
+            const response = await api.put(`/profile/experience/${id}`, experienceData)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Update experience error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal memperbarui pengalaman' }
+        }
+    }
+
+    async function deleteExperience(id) {
+        console.log('[AUTH] Deleting experience:', id)
+        try {
+            const response = await api.delete(`/profile/experience/${id}`)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Delete experience error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal menghapus pengalaman' }
+        }
+    }
+
     // Skill Actions
     async function addSkill(skillData) {
         console.log('[AUTH] Adding skill:', skillData)
@@ -200,6 +256,20 @@ export const useAuthStore = defineStore('auth', () => {
         } catch (err) {
             console.error('[AUTH] Add skill error:', err.response?.data)
             return { success: false, error: err.response?.data?.message || 'Gagal menambah keahlian' }
+        }
+    }
+
+    async function deleteSkill(id) {
+        console.log('[AUTH] Deleting skill:', id)
+        try {
+            const response = await api.delete(`/profile/skill/${id}`)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Delete skill error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal menghapus keahlian' }
         }
     }
 
@@ -241,8 +311,13 @@ export const useAuthStore = defineStore('auth', () => {
         fetchUser,
         updateProfile,
         addEducation,
+        updateEducation,
+        deleteEducation,
         addExperience,
+        updateExperience,
+        deleteExperience,
         addSkill,
+        deleteSkill,
         logout
     }
 })
