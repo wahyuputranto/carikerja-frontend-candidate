@@ -3,9 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <router-link to="/" class="flex items-center space-x-2 group">
-          <div class="w-8 h-8 bg-gray-200 rounded-md flex items-center justify-center mr-2">
-            <span class="text-sm text-gray-500">Logo</span>
-          </div>
+          <img :src="logo" alt="CariKerja Logo" class="w-10 h-10 object-contain" />
           <span class="text-xl font-bold gradient-text font-display">CariKerja</span>
         </router-link>
 
@@ -88,6 +86,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+import logo from '@/assets/logo.png';
 
 const router = useRouter();
 const route = useRoute();
@@ -105,7 +104,6 @@ const userName = computed(() => {
   return authStore.currentUser.full_name || authStore.currentUser.email || 'User';
 });
 
-// --- BAGIAN YANG DIUBAH ---
 // Navigation sekarang menggunakan computed property
 const navigation = computed(() => {
   // Menu dasar yang muncul untuk semua orang (publik)
@@ -121,7 +119,6 @@ const navigation = computed(() => {
 
   return items;
 });
-// ---------------------------
 
 const handleLogout = () => {
   authStore.logout();

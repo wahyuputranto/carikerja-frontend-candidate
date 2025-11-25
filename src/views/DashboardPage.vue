@@ -17,7 +17,7 @@
               <img 
                 :src="userPhoto" 
                 alt="Profile Photo" 
-                class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+                class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
               />
             </div>
           </div>
@@ -86,7 +86,12 @@
                 <span class="bg-orange-200 text-orange-800 text-xs font-bold px-2 py-1 rounded-full">{{ tasks.length }}</span>
               </div>
               <div class="space-y-3">
-                <div v-for="(task, index) in tasks" :key="index" class="p-4 bg-white rounded-xl border border-orange-100 flex items-center justify-between shadow-sm">
+                <div 
+                  v-for="(task, index) in tasks" 
+                  :key="index" 
+                  @click="$router.push(`/upload-documents?focus=${task.document_type.slug}`)"
+                  class="p-4 bg-white rounded-xl border border-orange-100 flex items-center justify-between shadow-sm cursor-pointer hover:border-orange-300 transition-all hover:shadow-md"
+                >
                   <div class="flex items-start space-x-3">
                     <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
                         <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,9 +104,9 @@
                       <p v-if="task.notes" class="text-xs text-red-500 mt-1 font-medium">Note: {{ task.notes }}</p>
                     </div>
                   </div>
-                  <router-link to="/upload-documents" class="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
+                  <button class="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
                     Upload
-                  </router-link>
+                  </button>
                 </div>
               </div>
             </div>
@@ -168,16 +173,10 @@
                     <!-- Company Icon -->
                     <div class="w-12 h-12 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden bg-white border border-slate-200 shadow-sm group-hover:border-primary-200 transition-colors">
                       <img 
-                        v-if="job.company?.logo_url" 
-                        :src="job.company.logo_url" 
-                        :alt="job.company.name" 
+                        :src="job.company?.logo_url || defaultCompanyLogo" 
+                        :alt="job.company?.name || 'Company Logo'" 
                         class="w-full h-full object-contain p-1.5" 
                       />
-                      <div v-else class="w-full h-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                      </div>
                     </div>
                     
                     <!-- Job Info -->
@@ -331,6 +330,9 @@ import { useDashboardStore } from '@/stores/dashboard'
 import { useDocumentsStore } from '@/stores/documents'
 import NavBar from '@/components/layout/NavBar.vue'
 
+import defaultCompanyLogo from '@/assets/default-company-logo.png'
+import defaultAvatar from '@/assets/default-avatar.png'
+
 const authStore = useAuthStore()
 const dashboardStore = useDashboardStore()
 const documentsStore = useDocumentsStore()
@@ -354,7 +356,7 @@ const userName = computed(() => {
 })
 
 const userPhoto = computed(() => {
-  return currentUser.value?.photo || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+  return currentUser.value?.photo || defaultAvatar
 })
 
 // Stats

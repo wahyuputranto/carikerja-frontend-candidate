@@ -30,7 +30,13 @@
         </div>
 
         <div v-else class="space-y-6">
-          <div v-for="docType in documentTypes" :key="docType.id" class="card">
+          <div 
+            v-for="docType in documentTypes" 
+            :key="docType.id" 
+            :id="`doc-${docType.slug}`"
+            class="card transition-all duration-500"
+            :class="{ 'ring-2 ring-primary-500 ring-offset-4': focusedDoc === docType.slug }"
+          >
             <div class="flex items-start justify-between mb-4">
               <div class="flex items-center space-x-3">
                 <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
@@ -66,12 +72,6 @@
                   <p class="text-sm text-green-700">Terupload</p>
                 </div>
               </div>
-              <!-- Remove button (optional, logic needed to delete from server) -->
-              <!-- <button @click="removeDocument(docType.id)" class="text-red-600 hover:text-red-700">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button> -->
             </div>
 
             <!-- Empty State -->
@@ -101,7 +101,6 @@
           <router-link to="/dashboard" class="btn btn-outline">
             Kembali ke Dashboard
           </router-link>
-          <!-- Submit button logic might change as uploads are now immediate -->
           <router-link to="/dashboard" class="btn btn-primary">
             Selesai
           </router-link>
@@ -112,20 +111,37 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
 import { useDocumentsStore } from '@/stores/documents'
 import NavBar from '@/components/layout/NavBar.vue'
 
+const route = useRoute()
 const documentsStore = useDocumentsStore()
 const { documentTypes, loading } = storeToRefs(documentsStore)
 const { fetchDocumentTypes, uploadDocument } = documentsStore
 
 const uploading = ref({})
-const uploadedDocs = ref({}) // Local state to track successful uploads for UI feedback
+const uploadedDocs = ref({})
+const focusedDoc = ref(null)
 
-onMounted(() => {
-  fetchDocumentTypes()
+onMounted(async () => {
+  await fetchDocumentTypes()
+  
+  // Check for focus param
+  const focusSlug = route.query.focus
+  if (focusSlug) {
+    focusedDoc.value = focusSlug
+    await nextTick()
+    // Add small delay to ensure DOM is ready
+    setTimeout(() => {
+      const element = document.getElementById(`doc-${focusSlug}`)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    }, 500)
+  }
 })
 
 const totalDocs = computed(() => documentTypes.value.length)

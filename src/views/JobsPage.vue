@@ -104,16 +104,10 @@
                 <!-- Company Logo/Icon -->
                 <div class="w-14 h-14 rounded-xl flex-shrink-0 flex items-center justify-center overflow-hidden bg-white border-2 border-slate-200 shadow-sm">
                   <img 
-                    v-if="job.company?.logo_url" 
-                    :src="job.company.logo_url" 
-                    :alt="job.company.name" 
+                    :src="job.company?.logo_url || defaultCompanyLogo" 
+                    :alt="job.company?.name || 'Company Logo'" 
                     class="w-full h-full object-contain p-2" 
                   />
-                  <div v-else class="w-full h-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
                 </div>
                 
                 <!-- Job Title & Company -->
@@ -200,6 +194,8 @@ import { storeToRefs } from 'pinia'
 import { useJobsStore } from '@/stores/jobs'
 import { useMasterStore } from '@/stores/master'
 import NavBar from '@/components/layout/NavBar.vue'
+
+import defaultCompanyLogo from '@/assets/default-company-logo.png'
 
 const jobsStore = useJobsStore()
 const { jobs, loading, error } = storeToRefs(jobsStore)

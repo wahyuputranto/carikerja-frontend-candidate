@@ -37,9 +37,8 @@
               <!-- Company Info -->
               <div class="card">
                 <div class="flex items-center space-x-4 mb-6">
-                  <div class="w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl overflow-hidden flex items-center justify-center">
-                    <img v-if="job.company?.logo_url" :src="job.company.logo_url" :alt="job.company.name" class="w-full h-full object-cover" />
-                    <span v-else class="text-white font-bold text-2xl">{{ job.title.charAt(0) }}</span>
+                  <div class="w-20 h-20 bg-white border-2 border-slate-200 rounded-2xl overflow-hidden flex items-center justify-center p-2 shadow-sm">
+                    <img :src="job.company?.logo_url || defaultCompanyLogo" :alt="job.company?.name || 'Company Logo'" class="w-full h-full object-contain" />
                   </div>
                   <div>
                     <h2 class="text-2xl font-bold">{{ job.company?.name || 'Perusahaan Rahasia' }}</h2>
@@ -145,6 +144,8 @@ import { storeToRefs } from 'pinia'
 import { useJobsStore } from '@/stores/jobs'
 import { useAuthStore } from '@/stores/auth'
 import NavBar from '@/components/layout/NavBar.vue'
+
+import defaultCompanyLogo from '@/assets/default-company-logo.png'
 
 const route = useRoute()
 const router = useRouter()
