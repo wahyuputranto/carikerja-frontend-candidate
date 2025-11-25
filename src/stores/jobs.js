@@ -17,7 +17,7 @@ export const useJobsStore = defineStore('jobs', () => {
             }
         } catch (err) {
             console.error('Error fetching jobs:', err)
-            error.value = 'Gagal memuat lowongan pekerjaan.'
+            error.value = err.response?.data?.message || err.message || 'Gagal memuat lowongan pekerjaan.'
         } finally {
             loading.value = false
         }

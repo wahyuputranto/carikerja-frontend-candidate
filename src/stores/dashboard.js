@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import api from '@/services/api'
 
 export const useDashboardStore = defineStore('dashboard', () => {
+    const tasks = ref([])
     const applications = ref([])
     const profileViews = ref(0)
     const recommendations = ref([])
@@ -14,10 +15,11 @@ export const useDashboardStore = defineStore('dashboard', () => {
         error.value = null
         try {
             // Fetch all dashboard data in parallel
-            const [appsRes, viewsRes, recsRes] = await Promise.all([
+            const [appsRes, viewsRes, recsRes, tasksRes] = await Promise.all([
                 api.get('/applications'),
                 api.get('/analytics/profile-views'),
-                api.get('/jobs/recommendations')
+                api.get('/jobs/recommendations'),
+                api.get('/tasks')
             ])
 
             if (appsRes.data.success) {
@@ -32,15 +34,20 @@ export const useDashboardStore = defineStore('dashboard', () => {
                 recommendations.value = recsRes.data.data || []
             }
 
+            if (tasksRes.data.success) {
+                tasks.value = tasksRes.data.data || []
+            }
+
         } catch (err) {
             console.error('Error fetching dashboard data:', err)
-            error.value = 'Gagal memuat data dashboard.'
+            error.value = err.response?.data?.message || err.message || 'Gagal memuat data dashboard.'
         } finally {
             loading.value = false
         }
     }
 
     return {
+        tasks,
         applications,
         profileViews,
         recommendations,

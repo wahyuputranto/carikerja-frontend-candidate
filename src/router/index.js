@@ -39,6 +39,12 @@ const routes = [
         meta: { requiresAuth: false }
     },
     {
+        path: '/apply/:id',
+        name: 'apply-job',
+        component: () => import('@/views/ApplyJobPage.vue'),
+        meta: { requiresAuth: true }
+    },
+    {
         path: '/profile',
         name: 'profile',
         component: () => import('@/views/ProfilePage.vue'),

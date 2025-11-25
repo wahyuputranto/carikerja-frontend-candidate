@@ -14,30 +14,75 @@
 
         <!-- Search & Filter -->
         <div class="glass rounded-2xl p-6 mb-8">
-          <div class="grid md:grid-cols-4 gap-4">
-            <div class="md:col-span-2">
+          <div class="grid md:grid-cols-12 gap-4">
+            <!-- Search Input -->
+            <div class="md:col-span-5">
               <input
+                v-model="searchQuery"
                 type="text"
-                placeholder="Cari posisi, perusahaan..."
+                placeholder="Cari posisi, perusahaan, atau lokasi..."
                 class="input"
               />
             </div>
-            <div>
-              <select class="input">
+            
+            <!-- Location Filter -->
+            <div class="md:col-span-3">
+              <select
+                v-model="selectedLocation"
+                class="input"
+              >
                 <option value="">Semua Lokasi</option>
-                <option value="jakarta">Jakarta</option>
-                <option value="bandung">Bandung</option>
-                <option value="surabaya">Surabaya</option>
+                <option 
+                  v-for="location in cityLocations" 
+                  :key="location.id" 
+                  :value="location.id"
+                >
+                  {{ location.name }}
+                </option>
               </select>
             </div>
-            <div>
-              <button class="btn btn-primary w-full">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            
+            <!-- Category Filter -->
+            <div class="md:col-span-3">
+              <select
+                v-model="selectedCategory"
+                class="input"
+              >
+                <option value="">Semua Kategori</option>
+                <option 
+                  v-for="category in categories" 
+                  :key="category.id" 
+                  :value="category.id"
+                >
+                  {{ category.name }}
+                </option>
+              </select>
+            </div>
+            
+            <!-- Search Button -->
+            <div class="md:col-span-1">
+              <button class="btn btn-primary w-full h-full">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                Cari
               </button>
             </div>
+          </div>
+          
+          <!-- Filter Summary -->
+          <div v-if="searchQuery || selectedLocation || selectedCategory" class="mt-4 flex items-center justify-between text-sm">
+            <p class="text-slate-600">
+              Menampilkan <span class="font-semibold text-emerald-600">{{ filteredJobs.length }}</span> lowongan
+              <span v-if="searchQuery"> untuk "<span class="font-semibold">{{ searchQuery }}</span>"</span>
+              <span v-if="selectedLocation"> di <span class="font-semibold">{{ getLocationName(selectedLocation) }}</span></span>
+              <span v-if="selectedCategory"> kategori <span class="font-semibold">{{ getCategoryName(selectedCategory) }}</span></span>
+            </p>
+            <button 
+              @click="resetFilters" 
+              class="text-slate-500 hover:text-slate-700 underline"
+            >
+              Reset Filter
+            </button>
           </div>
         </div>
 
@@ -53,59 +98,96 @@
         </div>
 
         <div v-else class="grid lg:grid-cols-2 gap-6">
-          <div v-for="job in jobs" :key="job.id" class="card-interactive">
+          <div v-for="job in paginatedJobs" :key="job.id" class="card-interactive flex flex-col h-full">
             <div class="flex items-start justify-between mb-4">
-              <div class="flex items-center space-x-4">
-                <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex-shrink-0 flex items-center justify-center text-white font-bold text-xl">
-                  {{ job.title.charAt(0) }}
+              <div class="flex items-center space-x-4 flex-1 min-w-0">
+                <!-- Company Logo/Icon -->
+                <div class="w-14 h-14 rounded-xl flex-shrink-0 flex items-center justify-center overflow-hidden bg-white border-2 border-slate-200 shadow-sm">
+                  <img 
+                    v-if="job.company?.logo_url" 
+                    :src="job.company.logo_url" 
+                    :alt="job.company.name" 
+                    class="w-full h-full object-contain p-2" 
+                  />
+                  <div v-else class="w-full h-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
                 </div>
-                <div>
-                  <h3 class="text-xl font-bold text-slate-900 mb-1">{{ job.title }}</h3>
-                  <p class="text-slate-600">Client ID: {{ job.client_id.substring(0, 8) }}...</p>
+                
+                <!-- Job Title & Company -->
+                <div class="flex-1 min-w-0">
+                  <h3 class="text-lg font-bold text-slate-900 mb-1 line-clamp-1">{{ job.title }}</h3>
+                  <p class="text-sm text-slate-600 font-medium">{{ job.company?.name || 'Perusahaan Rahasia' }}</p>
                 </div>
               </div>
-              <!-- Bookmark button (optional feature) -->
-              <button class="text-slate-400 hover:text-red-500 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              
+              <!-- Category Badge -->
+              <span class="bg-emerald-50 text-emerald-700 text-xs font-semibold px-3 py-1.5 rounded-lg border border-emerald-200 whitespace-nowrap ml-3 flex-shrink-0">
+                {{ job.category?.name || 'Umum' }}
+              </span>
+            </div>
+
+            <div class="flex flex-wrap gap-y-2 text-sm text-slate-600 mb-4">
+              <span class="flex items-center mr-4" v-if="job.salary_min && job.salary_max">
+                <svg class="w-4 h-4 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-              </button>
-            </div>
-
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="badge badge-primary">Quota: {{ job.quota }}</span>
-              <span class="badge badge-success">{{ job.status }}</span>
-            </div>
-
-            <p class="text-slate-600 mb-4 line-clamp-2">
-              {{ job.description }}
-            </p>
-
-            <div class="flex items-center justify-between text-sm text-slate-600 mb-4">
-              <span class="flex items-center">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {{ formatSalary(job.salary_min) }} - {{ formatSalary(job.salary_max) }}
+              </span>
+              <span class="flex items-center mr-4" v-if="job.location?.name">
+                <svg class="w-4 h-4 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                Jakarta
+                {{ job.location.name }}
               </span>
               <span class="flex items-center">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                {{ new Date(job.created_at).toLocaleDateString() }}
+                Deadline: {{ new Date(job.deadline).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) }}
               </span>
             </div>
 
-            <router-link :to="`/jobs/${job.id}`" class="btn btn-primary w-full">
-              Lihat Detail & Lamar
-            </router-link>
+            <p class="text-slate-600 mb-4 line-clamp-3">{{ job.description }}</p>
+
+            <div class="mt-auto pt-4 border-t border-slate-100 flex justify-between items-center">
+              <span class="text-xs text-slate-500">Diposting {{ new Date(job.created_at).toLocaleDateString('id-ID') }}</span>
+              <router-link :to="`/jobs/${job.id}`" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                Lamar Sekarang
+              </router-link>
+            </div>
           </div>
         </div>
 
-        <!-- Pagination (Static for now) -->
-        <div class="flex items-center justify-center mt-12 space-x-2">
-           <!-- ... pagination code ... -->
+        <!-- Pagination Controls -->
+        <div v-if="totalPages > 1" class="flex justify-center mt-8 space-x-2">
+          <button 
+            @click="prevPage" 
+            :disabled="currentPage === 1"
+            class="px-4 py-2 border border-slate-300 rounded-md text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Previous
+          </button>
+          
+          <button 
+            v-for="page in totalPages" 
+            :key="page" 
+            @click="goToPage(page)"
+            :class="['px-4 py-2 border rounded-md', currentPage === page ? 'bg-emerald-600 text-white border-emerald-600' : 'border-slate-300 text-slate-600 hover:bg-slate-50']"
+          >
+            {{ page }}
+          </button>
+
+          <button 
+            @click="nextPage" 
+            :disabled="currentPage === totalPages"
+            class="px-4 py-2 border border-slate-300 rounded-md text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>
@@ -113,16 +195,116 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useJobsStore } from '@/stores/jobs'
+import { useMasterStore } from '@/stores/master'
 import NavBar from '@/components/layout/NavBar.vue'
 
 const jobsStore = useJobsStore()
 const { jobs, loading, error } = storeToRefs(jobsStore)
 const { fetchJobs } = jobsStore
 
-onMounted(() => {
-  fetchJobs()
+const masterStore = useMasterStore()
+const { locations, categories } = storeToRefs(masterStore)
+
+const searchQuery = ref('')
+const selectedLocation = ref('')
+const selectedCategory = ref('')
+const currentPage = ref(1)
+const itemsPerPage = 6
+
+onMounted(async () => {
+  await Promise.all([
+    fetchJobs(),
+    masterStore.fetchAll()
+  ])
 })
+
+// Reset to page 1 when filters change
+watch([searchQuery, selectedLocation, selectedCategory], () => {
+  currentPage.value = 1
+})
+
+// Filter locations to only show CITY type (not COUNTRY or PROVINCE)
+const cityLocations = computed(() => {
+  return locations.value.filter(loc => loc.type === 'CITY')
+})
+
+const filteredJobs = computed(() => {
+  return jobs.value.filter(job => {
+    // Search filter
+    const searchLower = searchQuery.value.toLowerCase()
+    const matchesSearch = !searchQuery.value || 
+      job.title.toLowerCase().includes(searchLower) ||
+      (job.description && job.description.toLowerCase().includes(searchLower)) ||
+      (job.company?.name?.toLowerCase().includes(searchLower)) ||
+      (job.location?.name?.toLowerCase().includes(searchLower))
+    
+    // Location filter
+    const matchesLocation = !selectedLocation.value || 
+      job.location?.id === selectedLocation.value
+    
+    // Category filter
+    const matchesCategory = !selectedCategory.value || 
+      job.category?.id === selectedCategory.value
+    
+    return matchesSearch && matchesLocation && matchesCategory
+  })
+})
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredJobs.value.length / itemsPerPage)
+})
+
+const paginatedJobs = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredJobs.value.slice(start, end)
+})
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+}
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+}
+
+const goToPage = (page) => {
+  currentPage.value = page
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+const formatSalary = (value) => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(value)
+}
+
+const resetFilters = () => {
+  searchQuery.value = ''
+  selectedLocation.value = ''
+  selectedCategory.value = ''
+  currentPage.value = 1
+}
+
+const getLocationName = (locationId) => {
+  const location = locations.value.find(loc => loc.id === locationId)
+  return location?.name || ''
+}
+
+const getCategoryName = (categoryId) => {
+  const category = categories.value.find(cat => cat.id === categoryId)
+  return category?.name || ''
+}
 </script>

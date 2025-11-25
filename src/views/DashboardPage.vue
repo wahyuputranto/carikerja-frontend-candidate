@@ -79,6 +79,33 @@
         <div class="grid lg:grid-cols-3 gap-8">
           <!-- Left Column -->
           <div class="lg:col-span-2 space-y-8">
+            <!-- Tasks Section -->
+            <div v-if="tasks && tasks.length > 0" class="card bg-orange-50 border-orange-200">
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold font-display text-orange-800">Perlu Tindakan</h2>
+                <span class="bg-orange-200 text-orange-800 text-xs font-bold px-2 py-1 rounded-full">{{ tasks.length }}</span>
+              </div>
+              <div class="space-y-3">
+                <div v-for="(task, index) in tasks" :key="index" class="p-4 bg-white rounded-xl border border-orange-100 flex items-center justify-between shadow-sm">
+                  <div class="flex items-start space-x-3">
+                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-slate-900">{{ task.document_type.name }}</h3>
+                      <p class="text-sm text-slate-600">Untuk lamaran: {{ task.job_title }}</p>
+                      <p v-if="task.notes" class="text-xs text-red-500 mt-1 font-medium">Note: {{ task.notes }}</p>
+                    </div>
+                  </div>
+                  <router-link to="/upload-documents" class="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
+                    Upload
+                  </router-link>
+                </div>
+              </div>
+            </div>
+
             <!-- Recent Applications -->
             <div class="card">
               <div class="flex items-center justify-between mb-6">
@@ -93,21 +120,22 @@
                   <p class="mt-2 text-slate-500">Memuat data...</p>
               </div>
               <div v-else-if="recentApplications.length > 0" class="space-y-4">
-                <div v-for="app in recentApplications" :key="app.id" class="p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 transition-colors">
+                <div v-for="app in recentApplications" :key="app.application.id" class="p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 transition-colors">
                   <div class="flex items-start justify-between mb-3">
                     <div class="flex items-center space-x-3">
                       <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                        {{ app.job_title ? app.job_title.charAt(0) : 'J' }}
+                        {{ app.application.job?.title ? app.application.job.title.charAt(0) : 'J' }}
                       </div>
                       <div>
-                        <h3 class="font-semibold text-slate-900">{{ app.job_title || 'Unknown Position' }}</h3>
-                        <p class="text-sm text-slate-600">{{ app.company_name || 'Unknown Company' }}</p>
+                        <h3 class="font-semibold text-slate-900">{{ app.application.job?.title || 'Unknown Position' }}</h3>
+                        <p class="text-sm text-slate-600">{{ app.application.job?.company_name || 'Unknown Company' }}</p>
                       </div>
                     </div>
-                    <span class="badge" :class="getStatusBadgeClass(app.status)">{{ app.status }}</span>
+                    <span class="badge" :class="getStatusBadgeClass(app.application.status)">{{ app.application.status }}</span>
                   </div>
                   <div class="flex items-center justify-between text-sm text-slate-600">
-                    <span>📅 {{ formatDate(app.applied_at) }}</span>
+                    <span>📅 {{ formatDate(app.application.applied_at) }}</span>
+                    <span class="text-xs text-slate-500">{{ app.latest_status }}</span>
                   </div>
                 </div>
               </div>
@@ -280,7 +308,7 @@ const dashboardStore = useDashboardStore()
 const documentsStore = useDocumentsStore()
 
 const { currentUser, educations, experiences, skills } = storeToRefs(authStore)
-const { applications, profileViews, recommendations, loading: loadingDashboard } = storeToRefs(dashboardStore)
+const { applications, profileViews, recommendations, tasks, loading: loadingDashboard } = storeToRefs(dashboardStore)
 const { userDocuments } = storeToRefs(documentsStore)
 
 onMounted(async () => {
@@ -303,11 +331,14 @@ const userPhoto = computed(() => {
 
 // Stats
 const activeApplicationsCount = computed(() => {
-    return (applications.value || []).filter(app => app.status !== 'REJECTED' && app.status !== 'ACCEPTED').length
+    return (applications.value || []).filter(app => {
+        const status = app.application?.status
+        return status !== 'REJECTED' && status !== 'ACCEPTED'
+    }).length
 })
 
 const acceptedApplicationsCount = computed(() => {
-    return (applications.value || []).filter(app => app.status === 'ACCEPTED').length
+    return (applications.value || []).filter(app => app.application?.status === 'ACCEPTED').length
 })
 
 const profileViewsCount = computed(() => profileViews.value)

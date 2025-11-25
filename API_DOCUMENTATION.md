@@ -152,15 +152,13 @@ Get all active document types (cached for 1 hour)
   "message": "Document types retrieved successfully",
   "data": [
     {
-      "id": "uuid",
+      "id": 1,
       "name": "KTP",
       "slug": "ktp",
-      "description": "Kartu Tanda Penduduk",
       "is_mandatory": true,
       "allowed_mimetypes": "image/jpeg,image/png",
-      "max_file_size": 5242880,
       "chunkable": false,
-      "is_active": true,
+      "stage": "REGISTRATION",
       "created_at": "2025-11-23T10:00:00Z",
       "updated_at": "2025-11-23T10:00:00Z"
     }
@@ -195,14 +193,83 @@ Get all active job postings (cached for 5 minutes)
   "data": [
     {
       "id": "uuid",
-      "client_id": "uuid",
-      "title": "Software Engineer",
-      "description": "Job description...",
-      "requirements": "Requirements...",
-      "quota": 5,
+      "title": "Frontend Developer",
+      "slug": "frontend-developer",
+      "description": "...",
+      "requirements": "...",
+      "salary_min": 10000000,
+      "salary_max": 15000000,
+      "quota": 2,
+      "deadline": "2026-01-01T00:00:00Z",
       "status": "PUBLISHED",
-      "published_at": "2025-11-23T10:00:00Z",
       "created_at": "2025-11-23T09:00:00Z",
+      "location": {
+        "id": 7,
+        "name": "Jakarta Selatan",
+        "province": "DKI Jakarta"
+      },
+      "category": {
+        "id": 5,
+        "name": "Information Technology"
+      },
+      "company": {
+        "id": "uuid",
+        "name": "PT Teknologi Maju",
+        "logo_url": null
+      }
+    }
+  ]
+}
+```
+
+---
+
+#### GET /api/v1/master/job-categories
+Get all job categories (cached for 24 hours)
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Job categories retrieved successfully",
+  "data": [
+    {
+      "id": 1,
+      "name": "Software Engineering",
+      "slug": "software-engineering",
+      "description": "Building and maintaining software systems.",
+      "created_at": "2025-11-23T10:00:00Z",
+      "updated_at": "2025-11-23T10:00:00Z"
+    }
+  ]
+}
+```
+
+---
+
+#### GET /api/v1/master/locations
+Get all locations (cached for 24 hours)
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Locations retrieved successfully",
+  "data": [
+    {
+      "id": 1,
+      "parent_id": null,
+      "name": "Indonesia",
+      "type": "COUNTRY",
+      "created_at": "2025-11-23T10:00:00Z",
+      "updated_at": "2025-11-23T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "parent_id": 1,
+      "name": "DKI Jakarta",
+      "type": "PROVINCE",
+      "created_at": "2025-11-23T10:00:00Z",
       "updated_at": "2025-11-23T10:00:00Z"
     }
   ]
@@ -212,6 +279,7 @@ Get all active job postings (cached for 5 minutes)
 ---
 
 ### 4. Upload (Protected)
+
 
 #### POST /api/v1/upload/init
 Initialize document upload and get presigned URL
@@ -225,7 +293,7 @@ Content-Type: application/json
 **Request Body:**
 ```json
 {
-  "document_type_id": "uuid",
+  "document_type_id": 1,
   "file_name": "ktp.jpg",
   "file_size": 1024000,
   "mime_type": "image/jpeg"
@@ -307,6 +375,13 @@ Get full candidate profile including education, experience, and skills.
 {
   "success": true,
   "data": {
+    "candidate": {
+        "id": "c1a7b3e8-5b1f-4f7e-8c3a-9b4a2d1c0e9f",
+        "phone": "081234567890",
+        "email": "candidate@example.com",
+        "full_name": "John Doe",
+        "hiring_status": "AVAILABLE"
+    },
     "profile": {
       "id": "uuid",
       "candidate_id": "uuid",
@@ -360,7 +435,7 @@ Get full candidate profile including education, experience, and skills.
 ### 6. Candidate Dashboard (Protected)
 
 #### GET /api/v1/applications
-Get list of job applications.
+Get list of job applications with their status and timeline.
 
 **Success Response (200):**
 ```json
@@ -368,13 +443,136 @@ Get list of job applications.
   "success": true,
   "data": [
     {
-      "id": "uuid",
-      "job_id": "uuid",
-      "candidate_id": "uuid",
-      "status": "APPLIED",
-      "applied_at": "2025-11-23T10:00:00Z",
-      "created_at": "2025-11-23T10:00:00Z",
-      "updated_at": "2025-11-23T10:00:00Z"
+      "application": {
+        "id": "uuid-of-application",
+        "job_id": "uuid-of-job",
+        "candidate_id": "uuid-of-candidate",
+        "applied_at": "2025-11-23T10:00:00Z",
+        "created_at": "2025-11-23T10:00:00Z",
+        "updated_at": "2025-11-28T11:00:00Z",
+        "reviewed_at": null,
+        "reviewed_by": null,
+        "rejection_reason": null,
+        "revision_notes": null,
+        "current_step": 10,
+        "status": "PROCESSING_VISA",
+        "job": {
+          "id": "uuid-of-job",
+          "client_profile_id": "uuid",
+          "title": "Software Engineer",
+          "slug": "software-engineer",
+          "description": "Job description...",
+          "requirements": "Requirements...",
+          "job_category_id": 1,
+          "location_id": 1,
+          "salary_min": 10000000,
+          "salary_max": 15000000,
+          "quota": 5,
+          "deadline": "2026-01-01T00:00:00Z",
+          "status": "PUBLISHED",
+          "created_at": "2025-11-20T09:00:00Z",
+          "updated_at": "2025-11-20T09:00:00Z"
+        }
+      },
+      "latest_status": "You are in the Visa process.",
+      "timeline": [
+        { "step": 1, "name": "Application Submitted", "status": "COMPLETED" },
+        { "step": 2, "name": "Application Review", "status": "COMPLETED" },
+        { "step": 3, "name": "Interview Scheduling", "status": "COMPLETED" },
+        { "step": 4, "name": "Interview", "status": "COMPLETED" },
+        { "step": 5, "name": "Interview Feedback", "status": "COMPLETED" },
+        { "step": 6, "name": "Offering", "status": "COMPLETED" },
+        { "step": 7, "name": "Offer Acceptance", "status": "COMPLETED" },
+        { "step": 8, "name": "Hired", "status": "COMPLETED" },
+        { "step": 9, "name": "Document Submission", "status": "COMPLETED" },
+        { "step": 10, "name": "Visa Processing", "status": "IN_PROGRESS" },
+        { "step": 11, "name": "Flight Scheduling", "status": "PENDING" },
+        { "step": 12, "name": "Deployed", "status": "PENDING" }
+      ]
+    }
+  ]
+}
+```
+
+#### POST /api/v1/applications
+Apply for a job.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "job_id": "uuid-of-job",
+  "cover_letter": "I am very interested in this position...",
+  "notes": "I can start immediately."
+}
+```
+**Note:** `cover_letter` and `notes` are not currently saved to the database.
+
+**Success Response (201):**
+```json
+{
+  "success": true,
+  "message": "Successfully applied for the job.",
+  "data": null
+}
+```
+
+**Error Response (500):**
+```json
+{
+  "success": false,
+  "message": "Failed to apply for job",
+  "error": "you have already applied for this job"
+}
+```
+
+#### GET /api/v1/tasks
+Get a list of pending tasks for the candidate, such as required document uploads.
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "Tasks retrieved successfully",
+  "data": [
+    {
+      "application_id": "uuid-of-application",
+      "job_title": "Software Engineer",
+      "document_type": {
+        "id": 3,
+        "name": "Medical Check Up Result",
+        "slug": "mcu",
+        "is_mandatory": true,
+        "allowed_mimetypes": "application/pdf,image/jpeg",
+        "chunkable": false,
+        "stage": "POST_HIRING",
+        "created_at": "2025-11-23T10:00:00Z",
+        "updated_at": "2025-11-23T10:00:00Z"
+      },
+      "status": "PENDING_UPLOAD",
+      "notes": null
+    },
+    {
+      "application_id": "uuid-of-application",
+      "job_title": "Software Engineer",
+      "document_type": {
+        "id": 4,
+        "name": "Passport",
+        "slug": "passport",
+        "is_mandatory": true,
+        "allowed_mimetypes": "application/pdf,image/jpeg",
+        "chunkable": false,
+        "stage": "POST_HIRING",
+        "created_at": "2025-11-23T10:00:00Z",
+        "updated_at": "2025-11-23T10:00:00Z"
+      },
+      "status": "REJECTED",
+      "notes": "Passport photo is blurry, please re-upload."
     }
   ]
 }
@@ -432,6 +630,7 @@ Get list of uploaded documents.
 
 #### PUT /api/v1/profile
 Update candidate profile details.
+
 
 **Request Body:**
 ```json
