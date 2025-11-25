@@ -128,8 +128,12 @@
                 <div v-for="app in recentApplications" :key="app.application.id" class="p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 transition-colors">
                   <div class="flex items-start justify-between mb-3">
                     <div class="flex items-center space-x-3">
-                      <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                        {{ app.application.job?.title ? app.application.job.title.charAt(0) : 'J' }}
+                      <div class="w-12 h-12 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden bg-white border border-slate-200 shadow-sm">
+                        <img 
+                          :src="app.application.job?.company?.logo_url || defaultCompanyLogo" 
+                          :alt="app.application.job?.company?.name || 'Company Logo'" 
+                          class="w-full h-full object-contain p-1.5" 
+                        />
                       </div>
                       <div>
                         <h3 class="font-semibold text-slate-900">{{ app.application.job?.title || 'Unknown Position' }}</h3>
@@ -341,92 +345,73 @@ const { currentUser, educations, experiences, skills } = storeToRefs(authStore)
 const { applications, profileViews, recommendations, tasks, loading: loadingDashboard } = storeToRefs(dashboardStore)
 const { userDocuments } = storeToRefs(documentsStore)
 
-onMounted(async () => {
-    if (authStore.token) {
-        await Promise.all([
-            authStore.fetchUser(),
-            dashboardStore.fetchDashboardData(),
-            documentsStore.fetchUserDocuments()
-        ])
-    }
-})
-
-const userName = computed(() => {
-  return currentUser.value?.full_name || 'User'
-})
-
+const userName = computed(() => currentUser.value?.full_name || 'User')
 const userPhoto = computed(() => {
   return currentUser.value?.photo || defaultAvatar
 })
 
-// Stats
+// Computed stats
 const activeApplicationsCount = computed(() => {
-    return (applications.value || []).filter(app => {
-        const status = app.application?.status
-        return status !== 'REJECTED' && status !== 'ACCEPTED'
-    }).length
+  return applications.value ? applications.value.filter(app => app.application.status !== 'REJECTED' && app.application.status !== 'HIRED').length : 0
 })
 
 const acceptedApplicationsCount = computed(() => {
-    return (applications.value || []).filter(app => app.application?.status === 'ACCEPTED').length
+  return applications.value ? applications.value.filter(app => app.application.status === 'HIRED' || app.application.status === 'OFFERING').length : 0
 })
 
-const profileViewsCount = computed(() => profileViews.value)
+const profileViewsCount = computed(() => profileViews.value || 0)
 
-// Lists
-const recentApplications = computed(() => {
-    return applications.value.slice(0, 3)
-})
-
-// Progress Logic
+// Profile completion logic
 const isBasicInfoComplete = computed(() => {
-    const user = currentUser.value
-    return !!(user?.full_name && user?.email && user?.phone && user?.address)
+  const u = currentUser.value
+  return !!(u?.full_name && u?.phone && u?.email && u?.address)
 })
 
-const isEducationComplete = computed(() => {
-    return educations.value && educations.value.length > 0
-})
-
-const isExperienceComplete = computed(() => {
-    return experiences.value && experiences.value.length > 0
-})
-
-const isSkillsComplete = computed(() => {
-    return skills.value && skills.value.length > 0
-})
-
-const isDocumentsComplete = computed(() => {
-    return userDocuments.value && userDocuments.value.length > 0
-})
+const isEducationComplete = computed(() => educations.value && educations.value.length > 0)
+const isExperienceComplete = computed(() => experiences.value && experiences.value.length > 0)
+const isSkillsComplete = computed(() => skills.value && skills.value.length > 0)
+const isDocumentsComplete = computed(() => userDocuments.value && userDocuments.value.length > 0)
 
 const progressPercentage = computed(() => {
-    let completed = 0
-    if (isBasicInfoComplete.value) completed++
-    if (isEducationComplete.value) completed++
-    if (isExperienceComplete.value) completed++
-    if (isSkillsComplete.value) completed++
-    if (isDocumentsComplete.value) completed++
-    
-    return (completed / 5) * 100
+  let score = 0
+  if (isBasicInfoComplete.value) score += 20
+  if (isEducationComplete.value) score += 20
+  if (isExperienceComplete.value) score += 20
+  if (isSkillsComplete.value) score += 20
+  if (isDocumentsComplete.value) score += 20
+  return score
 })
 
-// Helpers
-const formatDate = (dateString) => {
-    if (!dateString) return '-'
-    return new Date(dateString).toLocaleDateString('id-ID', {
-        day: 'numeric', month: 'short', year: 'numeric'
-    })
-}
+// Recent applications (limit to 3)
+const recentApplications = computed(() => {
+  return applications.value ? applications.value.slice(0, 3) : []
+})
 
 const getStatusBadgeClass = (status) => {
-    switch (status) {
-        case 'APPLIED': return 'badge-info'
-        case 'REVIEW': return 'badge-warning'
-        case 'INTERVIEW': return 'badge-primary'
-        case 'ACCEPTED': return 'badge-success'
-        case 'REJECTED': return 'badge-error'
-        default: return 'badge-ghost'
-    }
+  switch (status) {
+    case 'APPLIED': return 'badge-primary'
+    case 'REVIEWING': return 'badge-warning'
+    case 'INTERVIEW': return 'badge-info'
+    case 'HIRED': return 'badge-success'
+    case 'REJECTED': return 'badge-error'
+    default: return 'badge-ghost'
+  }
 }
+
+const formatDate = (dateString) => {
+  if (!dateString) return '-'
+  return new Date(dateString).toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  })
+}
+
+onMounted(async () => {
+  await Promise.all([
+    authStore.fetchUser(),
+    dashboardStore.fetchDashboardData(),
+    documentsStore.fetchUserDocuments()
+  ])
+})
 </script>
