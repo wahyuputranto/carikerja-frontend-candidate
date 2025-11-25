@@ -1,193 +1,194 @@
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen bg-slate-50">
     <NavBar />
     
-    <div class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+    <div class="pt-8 pb-16 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
-        <!-- Welcome Section -->
-        <div class="glass rounded-3xl p-8 mb-8 bg-gradient-to-r from-primary-500/10 to-secondary-500/10">
-          <div class="flex items-center justify-between">
-            <div>
-              <h1 class="text-3xl font-bold font-display mb-2">
-                Selamat Datang, <span class="gradient-text">{{ userName }}</span>! 👋
-              </h1>
-              <p class="text-slate-600">Siap untuk melanjutkan perjalanan karirmu hari ini?</p>
-            </div>
-            <div class="hidden md:block">
-              <img 
-                :src="userPhoto" 
-                alt="Profile Photo" 
-                class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick Stats -->
-        <div class="grid md:grid-cols-4 gap-6 mb-8">
-          <div class="card">
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        
+        <!-- Stats Row -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <!-- Active Applications -->
+          <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-all group">
+            <div class="flex items-center space-x-4">
+              <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
+              <div>
+                <div class="text-3xl font-bold text-slate-900">{{ activeApplicationsCount }}</div>
+                <div class="text-sm text-slate-500 font-medium">Lamaran Aktif</div>
+              </div>
             </div>
-            <div class="text-3xl font-bold gradient-text mb-1">{{ activeApplicationsCount }}</div>
-            <div class="text-sm text-slate-600">Lamaran Aktif</div>
           </div>
 
-          <div class="card">
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <!-- Accepted/Review -->
+          <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-all group">
+            <div class="flex items-center space-x-4">
+              <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
+              <div>
+                <div class="text-3xl font-bold text-slate-900">{{ acceptedApplicationsCount }}</div>
+                <div class="text-sm text-slate-500 font-medium">Diterima Review</div>
+              </div>
             </div>
-            <div class="text-3xl font-bold gradient-text mb-1">{{ acceptedApplicationsCount }}</div>
-            <div class="text-sm text-slate-600">Diterima Review</div>
           </div>
 
-          <div class="card">
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <!-- Profile Views -->
+          <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-all group">
+            <div class="flex items-center space-x-4">
+              <div class="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
               </div>
+              <div>
+                <div class="text-3xl font-bold text-slate-900">{{ profileViewsCount }}</div>
+                <div class="text-sm text-slate-500 font-medium">Profil Dilihat</div>
+              </div>
             </div>
-            <div class="text-3xl font-bold gradient-text mb-1">{{ profileViewsCount }}</div>
-            <div class="text-sm text-slate-600">Profil Dilihat</div>
           </div>
 
-          <div class="card">
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <!-- Profile Completion -->
+          <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-all group">
+            <div class="flex items-center space-x-4">
+              <div class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
+              <div>
+                <div class="text-3xl font-bold text-slate-900">{{ progressPercentage }}%</div>
+                <div class="text-sm text-slate-500 font-medium">Profil Lengkap</div>
+              </div>
             </div>
-            <div class="text-3xl font-bold gradient-text mb-1">{{ progressPercentage }}%</div>
-            <div class="text-sm text-slate-600">Profil Lengkap</div>
           </div>
         </div>
 
         <!-- Main Content Grid -->
         <div class="grid lg:grid-cols-3 gap-8">
-          <!-- Left Column -->
+          <!-- Left Column (Main) -->
           <div class="lg:col-span-2 space-y-8">
-            <!-- Tasks Section -->
-            <div v-if="tasks && tasks.length > 0" class="card bg-orange-50 border-orange-200">
-              <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-bold font-display text-orange-800">Perlu Tindakan</h2>
-                <span class="bg-orange-200 text-orange-800 text-xs font-bold px-2 py-1 rounded-full">{{ tasks.length }}</span>
+            
+            <!-- Tasks / Action Needed -->
+            <div v-if="tasks && tasks.length > 0" class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-lg font-bold text-slate-800">Perlu Tindakan</h2>
+                <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2.5 py-1 rounded-full">{{ tasks.length }}</span>
               </div>
               <div class="space-y-3">
                 <div 
                   v-for="(task, index) in tasks" 
                   :key="index" 
                   @click="$router.push(`/upload-documents?focus=${task.document_type.slug}`)"
-                  class="p-4 bg-white rounded-xl border border-orange-100 flex items-center justify-between shadow-sm cursor-pointer hover:border-orange-300 transition-all hover:shadow-md"
+                  class="p-4 rounded-xl border border-orange-100 bg-orange-50/50 flex items-start space-x-4 cursor-pointer hover:bg-orange-50 transition-colors"
                 >
-                  <div class="flex items-start space-x-3">
-                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                    </div>
-                    <div>
-                      <h3 class="font-semibold text-slate-900">{{ task.document_type.name }}</h3>
-                      <p class="text-sm text-slate-600">Untuk lamaran: {{ task.job_title }}</p>
-                      <p v-if="task.notes" class="text-xs text-red-500 mt-1 font-medium">Note: {{ task.notes }}</p>
-                    </div>
+                  <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                    <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
                   </div>
-                  <button class="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
-                    Upload
-                  </button>
+                  <div class="flex-1">
+                    <h3 class="font-semibold text-slate-900 text-sm">{{ task.document_type.name }}</h3>
+                    <p class="text-xs text-slate-500 mt-0.5">Untuk lamaran: <span class="font-medium">{{ task.job_title }}</span></p>
+                    <p v-if="task.notes" class="text-xs text-red-500 mt-1">Note: {{ task.notes }}</p>
+                  </div>
+                  <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
                 </div>
               </div>
             </div>
 
             <!-- Recent Applications -->
-            <div class="card">
+            <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
               <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold font-display">Lamaran Terbaru</h2>
-                <router-link to="/applications" class="text-primary-600 hover:text-primary-700 font-medium text-sm">
+                <h2 class="text-lg font-bold text-slate-800">Lamaran Terbaru</h2>
+                <router-link to="/applications" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
                   Lihat Semua →
                 </router-link>
               </div>
 
-              <div v-if="loadingDashboard" class="text-center py-8">
-                  <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary-500 border-t-transparent"></div>
-                  <p class="mt-2 text-slate-500">Memuat data...</p>
+              <div v-if="loadingDashboard" class="flex justify-center py-8">
+                  <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
               </div>
               <div v-else-if="recentApplications.length > 0" class="space-y-4">
-                <div v-for="app in recentApplications" :key="app.application.id" class="p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 transition-colors">
-                  <div class="flex items-start justify-between mb-3">
-                    <div class="flex items-center space-x-3">
-                      <div class="w-12 h-12 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden bg-white border border-slate-200 shadow-sm">
-                        <img 
-                          :src="app.application.job?.company?.logo_url || defaultCompanyLogo" 
-                          :alt="app.application.job?.company?.name || 'Company Logo'" 
-                          class="w-full h-full object-contain p-1.5" 
-                        />
-                      </div>
-                      <div>
-                        <h3 class="font-semibold text-slate-900">{{ app.application.job?.title || 'Unknown Position' }}</h3>
-                        <p class="text-sm text-slate-600">{{ app.application.job?.company_name || 'Unknown Company' }}</p>
+                <div 
+                  v-for="app in recentApplications" 
+                  :key="app.application.id" 
+                  @click="$router.push({ path: '/applications', query: { id: app.application.id } })"
+                  class="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-primary-100 hover:bg-slate-50 transition-all bg-white cursor-pointer"
+                >
+                  <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-lg border border-slate-100 p-2 flex items-center justify-center bg-white">
+                      <img 
+                        :src="app.application.job?.company?.logo_url || defaultCompanyLogo" 
+                        :alt="app.application.job?.company?.name" 
+                        class="w-full h-full object-contain" 
+                      />
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-slate-900 text-sm">{{ app.application.job?.title || 'Unknown Position' }}</h3>
+                      <p class="text-xs text-slate-500">{{ app.application.job?.company_name || 'Unknown Company' }}</p>
+                      <div class="flex items-center mt-1 text-xs text-slate-400">
+                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {{ formatDate(app.application.applied_at) }}
                       </div>
                     </div>
-                    <span class="badge" :class="getStatusBadgeClass(app.application.status)">{{ app.application.status }}</span>
                   </div>
-                  <div class="flex items-center justify-between text-sm text-slate-600">
-                    <span>📅 {{ formatDate(app.application.applied_at) }}</span>
-                    <span class="text-xs text-slate-500">{{ app.latest_status }}</span>
-                  </div>
+                  <span class="badge text-xs px-3 py-1 rounded-full font-medium" :class="getStatusBadgeClass(app.application.status)">
+                    {{ app.application.status }}
+                  </span>
                 </div>
               </div>
-              <div v-else class="text-center py-8 text-slate-500">
-                <p>Belum ada lamaran aktif.</p>
-                <router-link to="/jobs" class="text-primary-600 hover:underline mt-2 inline-block">Mulai cari kerja</router-link>
+              <div v-else class="text-center py-10">
+                <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+                <p class="text-slate-500 text-sm">Belum ada lamaran aktif.</p>
+                <router-link to="/jobs" class="text-primary-600 hover:text-primary-700 text-sm font-medium mt-2 inline-block">Mulai cari kerja</router-link>
               </div>
             </div>
 
             <!-- Recommended Jobs -->
-            <div class="card">
+            <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
               <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold font-display">Rekomendasi Untukmu</h2>
-                <router-link to="/jobs" class="text-primary-600 hover:text-primary-700 font-medium text-sm">
+                <h2 class="text-lg font-bold text-slate-800">Rekomendasi Untukmu</h2>
+                <router-link to="/jobs" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
                   Lihat Semua →
                 </router-link>
               </div>
 
-              <div v-if="loadingDashboard" class="text-center py-8">
-                  <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary-500 border-t-transparent"></div>
+              <div v-if="loadingDashboard" class="flex justify-center py-8">
+                  <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
               </div>
               <div v-else-if="recommendations.length > 0" class="grid md:grid-cols-2 gap-4">
                 <div 
                   v-for="job in recommendations" 
                   :key="job.id" 
                   @click="$router.push(`/jobs/${job.id}`)"
-                  class="group p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-300 hover:shadow-md transition-all cursor-pointer flex flex-col h-full"
+                  class="group p-4 rounded-xl border border-slate-100 hover:border-primary-200 hover:shadow-md transition-all cursor-pointer bg-white flex flex-col h-full"
                 >
                   <div class="flex items-start space-x-3 mb-3">
-                    <!-- Company Icon -->
-                    <div class="w-12 h-12 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden bg-white border border-slate-200 shadow-sm group-hover:border-primary-200 transition-colors">
+                    <div class="w-10 h-10 rounded-lg border border-slate-100 p-1.5 flex items-center justify-center bg-white group-hover:border-primary-100 transition-colors">
                       <img 
                         :src="job.company?.logo_url || defaultCompanyLogo" 
-                        :alt="job.company?.name || 'Company Logo'" 
-                        class="w-full h-full object-contain p-1.5" 
+                        :alt="job.company?.name" 
+                        class="w-full h-full object-contain" 
                       />
                     </div>
-                    
-                    <!-- Job Info -->
                     <div class="flex-1 min-w-0">
                       <h3 class="font-bold text-slate-900 text-sm line-clamp-1 group-hover:text-primary-600 transition-colors">{{ job.title }}</h3>
-                      <p class="text-xs text-slate-600 font-medium mb-0.5">{{ job.company?.name || 'Perusahaan Rahasia' }}</p>
-                      <div class="flex items-center text-xs text-slate-500">
+                      <p class="text-xs text-slate-500 mb-1">{{ job.company?.name }}</p>
+                      <div class="flex items-center text-xs text-slate-400">
                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -196,129 +197,152 @@
                       </div>
                     </div>
                   </div>
-                  
-                  <!-- Footer -->
-                  <div class="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <span class="badge badge-success text-[10px] px-2 py-0.5">{{ job.status }}</span>
+                  <div class="mt-auto pt-3 border-t border-slate-50 flex items-center justify-between">
+                    <span class="bg-green-50 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-medium">{{ job.job_type }}</span>
                     <span class="text-[10px] text-slate-400">
                       {{ new Date(job.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) }}
                     </span>
                   </div>
                 </div>
               </div>
-              <div v-else class="text-center py-8 text-slate-500">
-                <p>Belum ada rekomendasi pekerjaan saat ini.</p>
+              <div v-else class="text-center py-10">
+                 <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <p class="text-slate-500 text-sm">Belum ada rekomendasi pekerjaan.</p>
               </div>
             </div>
           </div>
 
-          <!-- Right Column -->
-          <div class="space-y-8">
+          <!-- Right Column (Sidebar) -->
+          <div class="space-y-6">
+            
+            <!-- Profile Card -->
+            <div class="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm text-center">
+              <div class="relative inline-block mb-4">
+                <img 
+                  :src="userPhoto" 
+                  alt="Profile" 
+                  class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md mx-auto"
+                />
+              </div>
+              <h3 class="text-lg font-bold text-slate-900">{{ userName }}</h3>
+              <p class="text-sm text-slate-500">{{ currentUser?.email }}</p>
+            </div>
+
             <!-- Profile Completion -->
-            <div class="card">
-              <h3 class="text-lg font-bold mb-4">Lengkapi Profilmu</h3>
-              <div class="mb-4">
-                <div class="flex items-center justify-between text-sm mb-2">
-                  <span class="text-slate-600">Progress</span>
-                  <span class="font-semibold gradient-text">{{ progressPercentage }}%</span>
+            <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-base font-bold text-slate-800">Lengkapi Profilmu</h3>
+                <span class="text-sm font-bold text-primary-600">{{ progressPercentage }}%</span>
+              </div>
+              
+              <div class="w-full bg-slate-100 rounded-full h-2.5 mb-6">
+                <div class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" :style="{ width: progressPercentage + '%' }"></div>
+              </div>
+
+              <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                  <div class="flex-shrink-0">
+                    <div v-if="isBasicInfoComplete" class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                      <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div v-else class="w-6 h-6 rounded-full bg-slate-100 border border-slate-200"></div>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700">Informasi Dasar</span>
                 </div>
-                <div class="progress-bar">
-                  <div class="progress-fill" :style="{ width: progressPercentage + '%' }"></div>
+
+                <div class="flex items-center space-x-3">
+                  <div class="flex-shrink-0">
+                    <div v-if="isEducationComplete" class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                      <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div v-else class="w-6 h-6 rounded-full bg-slate-100 border border-slate-200"></div>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700">Pendidikan</span>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                  <div class="flex-shrink-0">
+                    <div v-if="isExperienceComplete" class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                      <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div v-else class="w-6 h-6 rounded-full bg-slate-100 border border-slate-200"></div>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700">Pengalaman Kerja</span>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                  <div class="flex-shrink-0">
+                    <div v-if="isSkillsComplete" class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                      <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div v-else class="w-6 h-6 rounded-full bg-slate-100 border border-slate-200"></div>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700">Keahlian</span>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                  <div class="flex-shrink-0">
+                    <div v-if="isDocumentsComplete" class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                      <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div v-else class="w-6 h-6 rounded-full bg-slate-100 border border-slate-200"></div>
+                  </div>
+                  <span class="text-sm font-medium text-slate-700">Dokumen</span>
                 </div>
               </div>
-              <div class="space-y-3">
-                <!-- Basic Info -->
-                <div class="flex items-center space-x-3 text-sm">
-                  <div class="w-6 h-6 rounded-full flex items-center justify-center" :class="isBasicInfoComplete ? 'bg-green-100' : 'bg-yellow-100'">
-                    <svg v-if="isBasicInfoComplete" class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span v-else class="text-yellow-600 font-bold text-xs">!</span>
-                  </div>
-                  <span class="text-slate-600">Informasi Dasar</span>
-                </div>
 
-                <!-- Education -->
-                <div class="flex items-center space-x-3 text-sm">
-                  <div class="w-6 h-6 rounded-full flex items-center justify-center" :class="isEducationComplete ? 'bg-green-100' : 'bg-yellow-100'">
-                    <svg v-if="isEducationComplete" class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span v-else class="text-yellow-600 font-bold text-xs">!</span>
-                  </div>
-                  <span class="text-slate-600">Pendidikan</span>
-                </div>
-
-                <!-- Experience -->
-                <div class="flex items-center space-x-3 text-sm">
-                  <div class="w-6 h-6 rounded-full flex items-center justify-center" :class="isExperienceComplete ? 'bg-green-100' : 'bg-yellow-100'">
-                    <svg v-if="isExperienceComplete" class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span v-else class="text-yellow-600 font-bold text-xs">!</span>
-                  </div>
-                  <span class="text-slate-600">Pengalaman Kerja</span>
-                </div>
-
-                <!-- Skills -->
-                <div class="flex items-center space-x-3 text-sm">
-                  <div class="w-6 h-6 rounded-full flex items-center justify-center" :class="isSkillsComplete ? 'bg-green-100' : 'bg-yellow-100'">
-                    <svg v-if="isSkillsComplete" class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span v-else class="text-yellow-600 font-bold text-xs">!</span>
-                  </div>
-                  <span class="text-slate-600">Keahlian</span>
-                </div>
-
-                <!-- Documents -->
-                <div class="flex items-center space-x-3 text-sm">
-                  <div class="w-6 h-6 rounded-full flex items-center justify-center" :class="isDocumentsComplete ? 'bg-green-100' : 'bg-yellow-100'">
-                    <svg v-if="isDocumentsComplete" class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span v-else class="text-yellow-600 font-bold text-xs">!</span>
-                  </div>
-                  <span class="text-slate-600">Dokumen</span>
-                </div>
-              </div>
-              <router-link to="/profile" class="btn btn-primary w-full mt-4">
+              <router-link to="/profile" class="btn btn-primary w-full mt-6 py-2.5 text-sm">
                 Lengkapi Sekarang
               </router-link>
             </div>
 
             <!-- Quick Actions -->
-            <div class="card">
-              <h3 class="text-lg font-bold mb-4">Aksi Cepat</h3>
+            <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+              <h3 class="text-sm font-bold text-slate-800 mb-4">Aksi Cepat</h3>
               <div class="space-y-3">
-                <router-link to="/jobs" class="flex items-center space-x-3 p-3 bg-white rounded-xl hover:bg-primary-50 transition-colors border border-slate-200">
-                  <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <router-link to="/jobs" class="flex items-center space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors group">
+                  <div class="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all">
+                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </div>
-                  <span class="font-medium text-slate-700">Cari Lowongan</span>
+                  <span class="text-sm font-medium text-slate-700">Cari Lowongan</span>
                 </router-link>
 
-                <router-link to="/profile" class="flex items-center space-x-3 p-3 bg-white rounded-xl hover:bg-primary-50 transition-colors border border-slate-200">
-                  <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <router-link to="/profile" class="flex items-center space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors group">
+                  <div class="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all">
+                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                   </div>
-                  <span class="font-medium text-slate-700">Edit Profil</span>
+                  <span class="text-sm font-medium text-slate-700">Edit Profil</span>
                 </router-link>
 
-                <router-link to="/upload-documents" class="flex items-center space-x-3 p-3 bg-white rounded-xl hover:bg-primary-50 transition-colors border border-slate-200">
-                  <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <router-link to="/upload-documents" class="flex items-center space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors group">
+                  <div class="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all">
+                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
                   </div>
-                  <span class="font-medium text-slate-700">Upload Dokumen</span>
+                  <span class="text-sm font-medium text-slate-700">Upload Dokumen</span>
                 </router-link>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -389,12 +413,12 @@ const recentApplications = computed(() => {
 
 const getStatusBadgeClass = (status) => {
   switch (status) {
-    case 'APPLIED': return 'badge-primary'
-    case 'REVIEWING': return 'badge-warning'
-    case 'INTERVIEW': return 'badge-info'
-    case 'HIRED': return 'badge-success'
-    case 'REJECTED': return 'badge-error'
-    default: return 'badge-ghost'
+    case 'APPLIED': return 'bg-blue-50 text-blue-700 border border-blue-100'
+    case 'REVIEWING': return 'bg-yellow-50 text-yellow-700 border border-yellow-100'
+    case 'INTERVIEW': return 'bg-purple-50 text-purple-700 border border-purple-100'
+    case 'HIRED': return 'bg-green-50 text-green-700 border border-green-100'
+    case 'REJECTED': return 'bg-red-50 text-red-700 border border-red-100'
+    default: return 'bg-slate-50 text-slate-600 border border-slate-100'
   }
 }
 

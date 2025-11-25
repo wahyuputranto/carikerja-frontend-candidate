@@ -4,21 +4,29 @@
     
     <div class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
       <div class="max-w-6xl mx-auto">
-        <h1 class="text-4xl font-bold font-display mb-8">
-          <span class="gradient-text">Lamaran Saya</span>
-        </h1>
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-4xl font-bold font-display">
+            <span class="gradient-text">Lamaran Saya</span>
+            </h1>
+            <button v-if="isDetailView" @click="clearFilter" class="text-slate-600 hover:text-primary-600 font-medium flex items-center">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Kembali ke Daftar
+            </button>
+        </div>
 
-        <!-- Filter Tabs -->
-        <div class="flex space-x-2 mb-8 overflow-x-auto">
+        <!-- Filter Tabs (Hidden in Detail View) -->
+        <div v-if="!isDetailView" class="flex space-x-2 mb-8 overflow-x-auto">
           <button 
             v-for="tab in tabs" 
             :key="tab.value"
             @click="activeTab = tab.value"
-            class="px-6 py-3 rounded-xl font-semibold whitespace-nowrap transition-all"
-            :class="activeTab === tab.value ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-lg' : 'bg-white/50 text-slate-600 hover:bg-white'"
+            class="px-6 py-3 rounded-xl font-semibold whitespace-nowrap transition-all border"
+            :class="activeTab === tab.value ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'"
           >
             {{ tab.label }}
-            <span class="ml-2 px-2 py-0.5 rounded-full text-xs" :class="activeTab === tab.value ? 'bg-white/20' : 'bg-slate-200'">
+            <span class="ml-2 px-2 py-0.5 rounded-full text-xs" :class="activeTab === tab.value ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'">
               {{ tab.count }}
             </span>
           </button>
@@ -76,9 +84,9 @@
 
               <div class="flex flex-col items-end space-y-3">
                 <span class="badge" :class="getStatusBadgeClass(app.application.status)">{{ app.application.status }}</span>
-                <button class="text-primary-600 hover:text-primary-700 font-medium text-sm">
-                  Lihat Detail →
-                </button>
+                <router-link :to="`/jobs/${app.application.job?.id}`" class="text-primary-600 hover:text-primary-700 font-medium text-sm">
+                  Lihat Detail Lowongan →
+                </router-link>
               </div>
             </div>
 
@@ -135,10 +143,13 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useDashboardStore } from '@/stores/dashboard'
 import NavBar from '@/components/layout/NavBar.vue'
 
+const route = useRoute()
+const router = useRouter()
 const dashboardStore = useDashboardStore()
 const { applications, loading } = storeToRefs(dashboardStore)
 
@@ -148,7 +159,13 @@ onMounted(() => {
     dashboardStore.fetchDashboardData()
 })
 
+const isDetailView = computed(() => !!route.query.id)
+
 const filteredApplications = computed(() => {
+    if (route.query.id) {
+        return applications.value.filter(app => app.application.id == route.query.id)
+    }
+
     if (activeTab.value === 'all') return applications.value
     
     return applications.value.filter(app => {
@@ -161,6 +178,10 @@ const filteredApplications = computed(() => {
         return true
     })
 })
+
+const clearFilter = () => {
+    router.push({ path: '/applications' })
+}
 
 const tabs = computed(() => [
   { label: 'Semua', value: 'all', count: applications.value.length },
