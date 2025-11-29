@@ -26,6 +26,7 @@
             <router-link to="/register" class="btn btn-primary">Daftar Sekarang</router-link>
           </template>
           <template v-else>
+            <NotificationBell />
             <div class="relative" ref="profileMenu">
               <button @click="showProfileMenu = !showProfileMenu" class="flex items-center space-x-3 p-2 rounded-xl hover:bg-white/50 transition-colors">
                 <img :src="userPhoto" alt="User Photo" class="w-8 h-8 rounded-full object-cover border border-slate-200" />
@@ -92,6 +93,7 @@
 import { ref, computed, onMounted, onUnmounted, h } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+import NotificationBell from '@/components/NotificationBell.vue';
 import logo from '@/assets/logo.png';
 import defaultAvatar from '@/assets/default-avatar.png';
 

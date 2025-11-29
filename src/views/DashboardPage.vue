@@ -292,16 +292,27 @@
                   <span class="text-sm font-medium text-slate-700">Keahlian</span>
                 </div>
 
-                <div class="flex items-center space-x-3">
+                <div v-for="docType in mandatoryDocTypes" :key="docType.id" class="flex items-center space-x-3">
                   <div class="flex-shrink-0">
-                    <div v-if="isDocumentsComplete" class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
-                      <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                      </svg>
+                    <!-- VALID (Approved) -->
+                    <div v-if="getDocStatus(docType.id) === 'VALID'" class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center" title="Disetujui">
+                      <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                     </div>
-                    <div v-else class="w-6 h-6 rounded-full bg-slate-100 border border-slate-200"></div>
+                    
+                    <!-- INVALID (Rejected) -->
+                    <div v-else-if="getDocStatus(docType.id) === 'INVALID'" class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center" title="Ditolak">
+                      <svg class="w-3.5 h-3.5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </div>
+
+                    <!-- PENDING/UPLOADED -->
+                    <div v-else-if="getDocStatus(docType.id) === 'PENDING' || getDocStatus(docType.id) === 'UPLOADED'" class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center" title="Menunggu Verifikasi">
+                      <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+
+                    <!-- MISSING -->
+                    <div v-else class="w-6 h-6 rounded-full bg-slate-100 border border-slate-200" title="Belum Diupload"></div>
                   </div>
-                  <span class="text-sm font-medium text-slate-700">Dokumen</span>
+                  <span class="text-sm font-medium text-slate-700">Dokumen {{ docType.name }}</span>
                 </div>
               </div>
 
@@ -367,7 +378,7 @@ const documentsStore = useDocumentsStore()
 
 const { currentUser, educations, experiences, skills } = storeToRefs(authStore)
 const { applications, profileViews, recommendations, tasks, loading: loadingDashboard } = storeToRefs(dashboardStore)
-const { userDocuments } = storeToRefs(documentsStore)
+const { documentTypes, userDocuments } = storeToRefs(documentsStore)
 
 const userName = computed(() => currentUser.value?.full_name || 'User')
 const userPhoto = computed(() => {
@@ -394,16 +405,50 @@ const isBasicInfoComplete = computed(() => {
 const isEducationComplete = computed(() => educations.value && educations.value.length > 0)
 const isExperienceComplete = computed(() => experiences.value && experiences.value.length > 0)
 const isSkillsComplete = computed(() => skills.value && skills.value.length > 0)
-const isDocumentsComplete = computed(() => userDocuments.value && userDocuments.value.length > 0)
+
+const mandatoryDocTypes = computed(() => {
+  return documentTypes.value ? documentTypes.value.filter(d => d.is_mandatory) : []
+})
+
+const getDocStatus = (typeId) => {
+  if (!userDocuments.value) return 'MISSING'
+  // Since userDocuments is ordered DESC by backend, find() gets the latest one
+  const doc = userDocuments.value.find(d => d.document_type_id === typeId)
+  if (!doc) return 'MISSING'
+  return doc.status
+}
+
+const isDocComplete = (typeId) => {
+  const status = getDocStatus(typeId)
+  return status === 'VALID'
+}
 
 const progressPercentage = computed(() => {
-  let score = 0
-  if (isBasicInfoComplete.value) score += 20
-  if (isEducationComplete.value) score += 20
-  if (isExperienceComplete.value) score += 20
-  if (isSkillsComplete.value) score += 20
-  if (isDocumentsComplete.value) score += 20
-  return score
+  let completedItems = 0
+  let totalItems = 4 // Basic, Edu, Exp, Skills
+
+  if (isBasicInfoComplete.value) completedItems++
+  if (isEducationComplete.value) completedItems++
+  if (isExperienceComplete.value) completedItems++
+  if (isSkillsComplete.value) completedItems++
+
+  // Add mandatory docs to calculation
+  if (mandatoryDocTypes.value.length > 0) {
+    totalItems += mandatoryDocTypes.value.length
+    mandatoryDocTypes.value.forEach(docType => {
+      if (isDocComplete(docType.id)) {
+        completedItems++
+      }
+    })
+  } else {
+    // Fallback if doc types not loaded yet but we have user docs
+    if (userDocuments.value && userDocuments.value.length > 0) {
+       // Just a temporary state
+    }
+  }
+
+  if (totalItems === 0) return 0
+  return Math.round((completedItems / totalItems) * 100)
 })
 
 // Recent applications (limit to 3)
@@ -435,7 +480,8 @@ onMounted(async () => {
   await Promise.all([
     authStore.fetchUser(),
     dashboardStore.fetchDashboardData(),
-    documentsStore.fetchUserDocuments()
+    documentsStore.fetchUserDocuments(),
+    documentsStore.fetchDocumentTypes()
   ])
 })
 </script>

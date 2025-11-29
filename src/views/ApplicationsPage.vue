@@ -114,11 +114,42 @@
               </div>
             </div>
             
-            <div class="mt-4 bg-blue-50 p-3 rounded-lg text-sm text-blue-800 flex items-start">
-                <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="mt-4 bg-blue-50 p-4 rounded-lg text-sm text-blue-800 flex items-start">
+                <svg class="w-5 h-5 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>{{ app.latest_status }}</span>
+                <div class="flex-1 space-y-2">
+                    <p class="font-medium">{{ app.latest_status }}</p>
+                    
+                    <!-- Interview Details -->
+                    <div v-if="app.application.status === 'INTERVIEW'" class="mt-2 space-y-1 bg-white/50 p-3 rounded border border-blue-100">
+                        <p v-if="app.application.interview_date" class="flex items-center">
+                            <span class="font-semibold w-24">Waktu:</span>
+                            {{ formatDateTime(app.application.interview_date) }}
+                        </p>
+                        <p v-if="app.application.interview_location" class="flex items-center">
+                            <span class="font-semibold w-24">Lokasi/Link:</span>
+                            <span v-if="isUrl(app.application.interview_location)">
+                                <a :href="app.application.interview_location" target="_blank" class="underline hover:text-blue-600">Join Meeting</a>
+                            </span>
+                            <span v-else>{{ app.application.interview_location }}</span>
+                        </p>
+                        <p v-if="app.application.interview_notes">
+                            <span class="font-semibold block mb-1">Catatan Interview:</span>
+                            {{ app.application.interview_notes }}
+                        </p>
+                    </div>
+
+                    <!-- Admin Notes (General) -->
+                    <div v-if="app.application.admin_notes" class="mt-2">
+                        <span class="font-semibold">Catatan Admin:</span> {{ app.application.admin_notes }}
+                    </div>
+
+                     <!-- Rejection Reason -->
+                     <div v-if="app.application.status === 'REJECTED' && app.application.rejection_reason" class="mt-2 text-red-700">
+                        <span class="font-semibold">Alasan Penolakan:</span> {{ app.application.rejection_reason }}
+                    </div>
+                </div>
             </div>
           </div>
         </div>
@@ -196,6 +227,24 @@ const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('id-ID', {
         day: 'numeric', month: 'short', year: 'numeric'
     })
+}
+
+const formatDateTime = (dateString) => {
+    if (!dateString) return '-'
+    return new Date(dateString).toLocaleDateString('id-ID', {
+        day: 'numeric', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+    })
+}
+
+const isUrl = (string) => {
+    if (!string) return false;
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
+    }
 }
 
 const formatSalary = (min, max) => {

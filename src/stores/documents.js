@@ -87,6 +87,19 @@ export const useDocumentsStore = defineStore('documents', () => {
         }
     }
 
+    async function downloadDocument(documentId) {
+        try {
+            const response = await api.get(`/documents/${documentId}/download`)
+            if (response.data.success) {
+                return { success: true, url: response.data.data.url }
+            }
+            return { success: false, error: 'Gagal mendapatkan URL dokumen' }
+        } catch (err) {
+            console.error('Download error:', err)
+            return { success: false, error: err.message || 'Terjadi kesalahan saat download' }
+        }
+    }
+
     return {
         documentTypes,
         userDocuments,
@@ -95,6 +108,7 @@ export const useDocumentsStore = defineStore('documents', () => {
         error,
         fetchDocumentTypes,
         fetchUserDocuments,
-        uploadDocument
+        uploadDocument,
+        downloadDocument
     }
 })

@@ -60,16 +60,68 @@
             </div>
 
             <!-- Uploaded State -->
-            <div v-else-if="uploadedDocs[docType.id]" class="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center justify-between">
+            <!-- Uploaded State -->
+            <div v-else-if="uploadedDocs[docType.id]" 
+              class="border rounded-xl p-4 flex items-center justify-between transition-colors"
+              :class="{
+                'bg-green-50 border-green-200': uploadedDocs[docType.id].status === 'VALID',
+                'bg-red-50 border-red-200': uploadedDocs[docType.id].status === 'INVALID',
+                'bg-blue-50 border-blue-200': uploadedDocs[docType.id].status === 'PENDING' || uploadedDocs[docType.id].status === 'UPLOADED'
+              }"
+            >
               <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+                  :class="{
+                    'bg-green-100': uploadedDocs[docType.id].status === 'VALID',
+                    'bg-red-100': uploadedDocs[docType.id].status === 'INVALID',
+                    'bg-blue-100': uploadedDocs[docType.id].status === 'PENDING' || uploadedDocs[docType.id].status === 'UPLOADED'
+                  }"
+                >
+                  <svg v-if="uploadedDocs[docType.id].status === 'VALID'" class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                  <svg v-else-if="uploadedDocs[docType.id].status === 'INVALID'" class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                  <svg v-else class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
                 <div>
-                  <p class="font-medium text-green-900">{{ uploadedDocs[docType.id].name }}</p>
-                  <p class="text-sm text-green-700">Terupload</p>
+                  <p class="font-medium"
+                    :class="{
+                      'text-green-900': uploadedDocs[docType.id].status === 'VALID',
+                      'text-red-900': uploadedDocs[docType.id].status === 'INVALID',
+                      'text-blue-900': uploadedDocs[docType.id].status === 'PENDING' || uploadedDocs[docType.id].status === 'UPLOADED'
+                    }"
+                  >{{ uploadedDocs[docType.id].name }}</p>
+                  <p class="text-sm"
+                    :class="{
+                      'text-green-700': uploadedDocs[docType.id].status === 'VALID',
+                      'text-red-700': uploadedDocs[docType.id].status === 'INVALID',
+                      'text-blue-700': uploadedDocs[docType.id].status === 'PENDING' || uploadedDocs[docType.id].status === 'UPLOADED'
+                    }"
+                  >
+                    {{ 
+                      uploadedDocs[docType.id].status === 'VALID' ? 'Disetujui' : 
+                      uploadedDocs[docType.id].status === 'INVALID' ? 'Ditolak' : 
+                      'Menunggu Verifikasi' 
+                    }}
+                  </p>
+                  <p v-if="uploadedDocs[docType.id].status === 'INVALID' && uploadedDocs[docType.id].rejection_note" class="text-xs text-red-600 mt-1 font-medium">
+                    Alasan: {{ uploadedDocs[docType.id].rejection_note }}
+                  </p>
+                </div>
+              </div>
+              <div class="flex flex-col space-y-2">
+                <button @click="viewDocument(uploadedDocs[docType.id].id)" class="btn btn-sm btn-outline bg-white hover:bg-slate-50">
+                  Lihat
+                </button>
+                <div v-if="uploadedDocs[docType.id].status === 'INVALID'">
+                   <input 
+                    type="file" 
+                    class="hidden" 
+                    :id="`reupload-${docType.id}`" 
+                    :accept="docType.allowed_mimetypes" 
+                    @change="handleFileUpload(docType, $event)"
+                  >
+                  <label :for="`reupload-${docType.id}`" class="btn btn-sm btn-primary cursor-pointer w-full text-center block">
+                    Upload Ulang
+                  </label>
                 </div>
               </div>
             </div>
@@ -119,15 +171,36 @@ import NavBar from '@/components/layout/NavBar.vue'
 
 const route = useRoute()
 const documentsStore = useDocumentsStore()
-const { documentTypes, loading } = storeToRefs(documentsStore)
-const { fetchDocumentTypes, uploadDocument } = documentsStore
+const { documentTypes, userDocuments, loading } = storeToRefs(documentsStore)
+const { fetchDocumentTypes, fetchUserDocuments, uploadDocument, downloadDocument } = documentsStore
 
 const uploading = ref({})
-const uploadedDocs = ref({})
+// Map userDocuments array to object keyed by document_type_id
+// Map userDocuments array to object keyed by document_type_id
+const uploadedDocs = computed(() => {
+  const docs = {}
+  if (userDocuments.value && Array.isArray(userDocuments.value)) {
+    userDocuments.value.forEach(doc => {
+      if (!docs[doc.document_type_id]) {
+        docs[doc.document_type_id] = {
+          name: doc.file_name,
+          id: doc.id,
+          status: doc.status,
+          rejection_note: doc.rejection_note
+        }
+      }
+    })
+  }
+  return docs
+})
+
 const focusedDoc = ref(null)
 
 onMounted(async () => {
-  await fetchDocumentTypes()
+  await Promise.all([
+    fetchDocumentTypes(),
+    fetchUserDocuments()
+  ])
   
   // Check for focus param
   const focusSlug = route.query.focus
@@ -173,18 +246,22 @@ const handleFileUpload = async (docType, event) => {
 
   try {
     const result = await uploadDocument(file, docType.id)
-    if (result.success) {
-      uploadedDocs.value[docType.id] = {
-        name: file.name,
-        id: result.document_id
-      }
-    } else {
+    if (!result.success) {
       alert(result.error)
     }
   } catch (err) {
     alert('Gagal mengupload dokumen')
   } finally {
     uploading.value[docType.id] = false
+  }
+}
+
+const viewDocument = async (docId) => {
+  const result = await downloadDocument(docId)
+  if (result.success) {
+    window.open(result.url, '_blank')
+  } else {
+    alert(result.error)
   }
 }
 </script>
