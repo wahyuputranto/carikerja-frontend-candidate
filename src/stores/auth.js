@@ -158,6 +158,28 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    async function uploadProfilePhoto(formData) {
+        console.log('[AUTH] Uploading profile photo')
+        loading.value = true
+        error.value = null
+        try {
+            const response = await api.post('/profile/photo', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+
+            console.log('[AUTH] Photo uploaded successfully:', response.data)
+            return { success: true, data: response.data }
+        } catch (err) {
+            console.error('[AUTH] Upload photo error:', err)
+            error.value = err.response?.data?.message || 'Gagal mengupload foto'
+            return { success: false, error: error.value }
+        } finally {
+            loading.value = false
+        }
+    }
+
     // Education Actions
     async function addEducation(educationData) {
         console.log('[AUTH] Adding education:', educationData)
@@ -310,6 +332,7 @@ export const useAuthStore = defineStore('auth', () => {
         register,
         fetchUser,
         updateProfile,
+        uploadProfilePhoto,
         addEducation,
         updateEducation,
         deleteEducation,

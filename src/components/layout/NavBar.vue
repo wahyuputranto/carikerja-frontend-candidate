@@ -2,11 +2,13 @@
   <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
         <router-link to="/" class="flex items-center space-x-2 group">
           <img :src="logo" alt="CariKerja Logo" class="w-10 h-10 object-contain" />
           <span class="text-xl font-bold gradient-text font-display">CariKerja</span>
         </router-link>
 
+        <!-- Desktop Navigation -->
         <div class="hidden md:flex items-center space-x-8">
           <router-link
             v-for="item in navigation"
@@ -20,6 +22,7 @@
           </router-link>
         </div>
 
+        <!-- Desktop Right Side (Auth/Profile) -->
         <div class="hidden md:flex items-center space-x-4">
           <template v-if="!isAuthenticated">
             <router-link to="/login" class="text-slate-700 hover:text-primary-600 font-medium transition-colors">Masuk</router-link>
@@ -47,15 +50,20 @@
           </template>
         </div>
 
-        <button @click="showMobileMenu = !showMobileMenu" class="md:hidden p-2 rounded-lg hover:bg-white/50 transition-colors">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path v-if="!showMobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
+        <!-- Mobile: Notification Bell & Hamburger Menu -->
+        <div class="md:hidden flex items-center space-x-3">
+          <NotificationBell v-if="isAuthenticated" />
+          <button @click="showMobileMenu = !showMobileMenu" class="p-2 rounded-lg hover:bg-white/50 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path v-if="!showMobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
 
+    <!-- Mobile Menu Content -->
     <transition name="slide-down">
       <div v-if="showMobileMenu" class="md:hidden border-t border-slate-200 bg-white/90 backdrop-blur-xl">
         <div class="px-4 py-4 space-y-3">
@@ -64,23 +72,37 @@
             :key="item.name"
             :to="item.path"
             @click="showMobileMenu = false"
-            class="flex items-center space-x-3 px-4 py-2 rounded-lg text-slate-700 hover:bg-gray-100 font-medium transition-colors"
-            :class="{ 'text-primary-600 font-semibold': isActive(item.path) }"
+            class="flex items-center space-x-3 py-2 rounded-r-lg font-medium transition-colors"
+            :class="isActive(item.path) ? 'bg-primary-50 text-primary-600 font-bold border-l-4 border-primary-600 pl-3' : 'text-slate-600 hover:bg-slate-50 px-4'"
           >
             <component :is="item.icon" class="w-5 h-5" />
             <span>{{ item.name }}</span>
           </router-link>
           <template v-if="!isAuthenticated">
-            <router-link to="/login" @click="showMobileMenu = false" class="block px-4 py-2 rounded-lg text-slate-700 hover:bg-gray-100 font-medium transition-colors">Masuk</router-link>
+            <router-link to="/login" @click="showMobileMenu = false" class="block px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-50 font-medium transition-colors">Masuk</router-link>
             <router-link to="/register" @click="showMobileMenu = false" class="btn btn-primary w-full text-center">Daftar Sekarang</router-link>
           </template>
           <template v-else>
-            <div class="px-4 py-2 flex items-center space-x-3">
+            <div class="px-4 py-2 flex items-center space-x-3 mt-2 border-t border-slate-100 pt-4">
                <img :src="userPhoto" alt="User Photo" class="w-8 h-8 rounded-full object-cover border border-slate-200" />
                <div class="text-sm font-semibold text-slate-500">Halo, {{ userName }}</div>
             </div>
-            <router-link to="/profile" @click="showMobileMenu = false" class="block px-4 py-2 rounded-lg text-slate-700 hover:bg-gray-100 font-medium transition-colors">Profil Saya</router-link>
-            <router-link to="/applications" @click="showMobileMenu = false" class="block px-4 py-2 rounded-lg text-slate-700 hover:bg-gray-100 font-medium transition-colors">Lamaran Saya</router-link>
+            <router-link 
+              to="/profile" 
+              @click="showMobileMenu = false" 
+              class="block py-2 rounded-r-lg font-medium transition-colors"
+              :class="isActive('/profile') ? 'bg-primary-50 text-primary-600 font-bold border-l-4 border-primary-600 pl-3' : 'text-slate-600 hover:bg-slate-50 px-4'"
+            >
+              Profil Saya
+            </router-link>
+            <router-link 
+              to="/applications" 
+              @click="showMobileMenu = false" 
+              class="block py-2 rounded-r-lg font-medium transition-colors"
+              :class="isActive('/applications') ? 'bg-primary-50 text-primary-600 font-bold border-l-4 border-primary-600 pl-3' : 'text-slate-600 hover:bg-slate-50 px-4'"
+            >
+              Lamaran Saya
+            </router-link>
             <button @click="handleLogout" class="block w-full text-left px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 font-medium transition-colors">Keluar</button>
           </template>
         </div>
@@ -114,7 +136,7 @@ const userName = computed(() => {
 });
 
 const userPhoto = computed(() => {
-  return authStore.currentUser?.photo || defaultAvatar;
+  return authStore.currentUser?.photo_url || defaultAvatar;
 });
 
 // Icon Components (Simple SVG Wrappers)

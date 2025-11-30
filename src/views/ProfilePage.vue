@@ -2,17 +2,47 @@
   <div class="min-h-screen">
     <NavBar />
     
-    <div class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto space-y-8">
-        <h1 class="text-4xl font-bold font-display">
+    <div class="pt-20 md:pt-24 pb-12 md:pb-16 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto space-y-6 md:space-y-8">
+        <h1 class="text-2xl md:text-4xl font-bold font-display">
           <span class="gradient-text">Profil Saya</span>
         </h1>
 
         <!-- Basic Profile Section -->
-        <div class="glass rounded-3xl p-8">
-          <h2 class="text-2xl font-bold mb-6">Informasi Dasar</h2>
-          <div class="space-y-6">
-            <div class="grid md:grid-cols-2 gap-6">
+        <div class="glass rounded-3xl p-5 md:p-8">
+          <h2 class="text-lg md:text-2xl font-bold mb-4 md:mb-6">Informasi Dasar</h2>
+          
+          <!-- Photo Upload Section -->
+          <div class="mb-6 md:mb-8 flex flex-col items-center">
+            <div class="relative group">
+              <img 
+                :src="photoPreview || currentUser?.photo_url || defaultAvatar" 
+                alt="Profile Photo" 
+                class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-primary-200 shadow-lg"
+              />
+              <div class="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <label for="photo-upload" class="cursor-pointer text-white text-sm font-medium flex flex-col items-center">
+                  <svg class="w-6 h-6 md:w-8 md:h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  <span class="text-xs md:text-sm">Ubah Foto</span>
+                </label>
+                <input 
+                  id="photo-upload" 
+                  type="file" 
+                  accept="image/*" 
+                  @change="handlePhotoUpload" 
+                  class="hidden"
+                />
+              </div>
+            </div>
+            <p class="text-xs md:text-sm text-slate-500 mt-3">Klik foto untuk mengubah</p>
+            <p v-if="photoFile" class="text-xs text-primary-600 mt-1">{{ photoFile.name }}</p>
+          </div>
+
+          <div class="space-y-5 md:space-y-6">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-6">
               <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap</label>
                 <input type="text" v-model="form.full_name" class="input" />
@@ -23,7 +53,7 @@
               </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-6">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-6">
               <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-2">Nomor Telepon</label>
                 <input type="tel" v-model="form.phone" class="input" />
@@ -39,7 +69,7 @@
               <textarea v-model="form.address" rows="3" class="input resize-none"></textarea>
             </div>
 
-             <div class="grid md:grid-cols-2 gap-6">
+             <div class="grid md:grid-cols-2 gap-4 md:gap-6">
               <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-2">Kota</label>
                 <input type="text" v-model="form.city" class="input" />
@@ -55,29 +85,29 @@
                 <textarea v-model="form.about_me" rows="3" class="input resize-none" placeholder="Ceritakan sedikit tentang diri Anda..."></textarea>
             </div>
 
-            <div class="flex justify-end space-x-4">
-              <button class="btn btn-outline" @click="resetForm">Reset</button>
-              <button class="btn btn-primary" @click="saveProfile" :disabled="loading">
-                {{ loading ? 'Menyimpan...' : 'Simpan Perubahan' }}
+            <div class="flex justify-end gap-3">
+              <button class="btn btn-sm md:btn-md btn-outline" @click="resetForm">Reset</button>
+              <button class="btn btn-sm md:btn-md btn-primary" @click="saveProfile" :disabled="loading || uploadingPhoto">
+                {{ loading || uploadingPhoto ? 'Menyimpan...' : 'Simpan Perubahan' }}
               </button>
             </div>
           </div>
         </div>
 
         <!-- Education Section -->
-        <div class="glass rounded-3xl p-8">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold">Pendidikan</h2>
+        <div class="glass rounded-3xl p-5 md:p-8">
+          <div class="flex items-center justify-between mb-4 md:mb-6">
+            <h2 class="text-lg md:text-2xl font-bold">Pendidikan</h2>
             <button @click="showAddEducation = true" class="btn btn-sm btn-outline">+ Tambah</button>
           </div>
           
           <div v-if="educations.length === 0" class="text-slate-500 text-center py-4">Belum ada data pendidikan.</div>
           <div v-else class="space-y-4">
-            <div v-for="edu in educations" :key="edu.id" class="p-5 border border-slate-200 rounded-2xl hover:border-primary-300 transition-colors bg-slate-50/50">
+            <div v-for="edu in educations" :key="edu.id" class="p-4 md:p-5 border border-slate-200 rounded-2xl hover:border-primary-300 transition-colors bg-slate-50/50">
               <!-- Row 1: Institution and Years -->
-              <div class="flex justify-between items-start mb-2">
-                <h3 class="font-bold text-lg text-slate-800">{{ edu.institution_name }}</h3>
-                <span class="text-slate-600 font-medium text-sm">
+              <div class="flex flex-col sm:flex-row justify-between items-start mb-2 gap-1 sm:gap-0">
+                <h3 class="font-bold text-base md:text-lg text-slate-800">{{ edu.institution_name }}</h3>
+                <span class="text-slate-600 font-medium text-xs md:text-sm">
                   {{ edu.start_year }} - {{ edu.is_current ? 'Sekarang' : edu.end_year }}
                 </span>
               </div>
@@ -86,14 +116,14 @@
               <div class="border-b border-slate-200 my-3"></div>
 
               <!-- Row 2: Degree and GPA -->
-              <div class="flex justify-between items-center mb-1">
-                <p class="text-slate-700"><span class="font-semibold text-slate-500">Gelar :</span> {{ edu.degree }}</p>
-                <p v-if="edu.gpa" class="text-slate-700"><span class="font-semibold text-slate-500">IPK :</span> {{ edu.gpa }}</p>
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-1 gap-1 sm:gap-0">
+                <p class="text-slate-700 text-sm md:text-base"><span class="font-semibold text-slate-500">Gelar :</span> {{ edu.degree }}</p>
+                <p v-if="edu.gpa" class="text-slate-700 text-sm md:text-base"><span class="font-semibold text-slate-500">IPK :</span> {{ edu.gpa }}</p>
               </div>
 
               <!-- Row 3: Major -->
               <div>
-                <p class="text-slate-700"><span class="font-semibold text-slate-500">Jurusan :</span> {{ edu.major }}</p>
+                <p class="text-slate-700 text-sm md:text-base"><span class="font-semibold text-slate-500">Jurusan :</span> {{ edu.major }}</p>
               </div>
             </div>
           </div>
@@ -103,7 +133,7 @@
             <h3 class="font-bold mb-4">Tambah Pendidikan</h3>
             <div class="space-y-4">
               <input v-model="eduForm.institution_name" placeholder="Nama Institusi" class="input" />
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <input v-model="eduForm.degree" placeholder="Gelar (mis: S1)" class="input" />
                 <input v-model="eduForm.major" placeholder="Jurusan" class="input" />
               </div>
@@ -123,19 +153,19 @@
         </div>
 
         <!-- Experience Section -->
-        <div class="glass rounded-3xl p-8">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold">Pengalaman Kerja</h2>
+        <div class="glass rounded-3xl p-5 md:p-8">
+          <div class="flex items-center justify-between mb-4 md:mb-6">
+            <h2 class="text-lg md:text-2xl font-bold">Pengalaman Kerja</h2>
             <button @click="showAddExperience = true" class="btn btn-sm btn-outline">+ Tambah</button>
           </div>
 
           <div v-if="experiences.length === 0" class="text-slate-500 text-center py-4">Belum ada data pengalaman.</div>
           <div v-else class="space-y-4">
-            <div v-for="exp in experiences" :key="exp.id" class="p-5 border border-slate-200 rounded-2xl hover:border-primary-300 transition-colors bg-slate-50/50">
+            <div v-for="exp in experiences" :key="exp.id" class="p-4 md:p-5 border border-slate-200 rounded-2xl hover:border-primary-300 transition-colors bg-slate-50/50">
               <!-- Row 1: Company and Dates -->
-              <div class="flex justify-between items-start mb-2">
-                <h3 class="font-bold text-lg text-slate-800">{{ exp.company_name }}</h3>
-                <span class="text-slate-600 font-medium text-sm">
+              <div class="flex flex-col sm:flex-row justify-between items-start mb-2 gap-1 sm:gap-0">
+                <h3 class="font-bold text-base md:text-lg text-slate-800">{{ exp.company_name }}</h3>
+                <span class="text-slate-600 font-medium text-xs md:text-sm">
                   {{ formatDate(exp.start_date) }} - {{ exp.is_current ? 'Sekarang' : (exp.end_date ? formatDate(exp.end_date) : 'Sekarang') }}
                 </span>
               </div>
@@ -145,12 +175,12 @@
 
               <!-- Row 2: Position -->
               <div class="mb-2">
-                <p class="text-slate-700"><span class="font-semibold text-slate-500">Posisi :</span> {{ exp.position }}</p>
+                <p class="text-slate-700 text-sm md:text-base"><span class="font-semibold text-slate-500">Posisi :</span> {{ exp.position }}</p>
               </div>
 
               <!-- Row 3: Description -->
               <div v-if="exp.description">
-                <p class="text-slate-700 whitespace-pre-line"><span class="font-semibold text-slate-500">Deskripsi :</span> {{ exp.description }}</p>
+                <p class="text-slate-700 whitespace-pre-line text-sm md:text-base"><span class="font-semibold text-slate-500">Deskripsi :</span> {{ exp.description }}</p>
               </div>
             </div>
           </div>
@@ -161,7 +191,7 @@
             <div class="space-y-4">
               <input v-model="expForm.company_name" placeholder="Nama Perusahaan" class="input" />
               <input v-model="expForm.position" placeholder="Posisi" class="input" />
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label class="text-xs text-slate-500">Mulai</label>
                   <input v-model="expForm.start_date" type="date" class="input" />
@@ -185,16 +215,16 @@
         </div>
 
         <!-- Skills Section -->
-        <div class="glass rounded-3xl p-8">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold">Keahlian</h2>
+        <div class="glass rounded-3xl p-5 md:p-8">
+          <div class="flex items-center justify-between mb-4 md:mb-6">
+            <h2 class="text-lg md:text-2xl font-bold">Keahlian</h2>
             <button @click="showAddSkill = true" class="btn btn-sm btn-outline">+ Tambah</button>
           </div>
 
           <div v-if="skills.length === 0" class="text-slate-500 text-center py-4">Belum ada data keahlian.</div>
           <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             <div v-for="skill in skills" :key="skill.id" class="flex items-center justify-between p-3 border border-slate-200 rounded-xl bg-slate-50/50 hover:border-primary-300 transition-colors">
-              <span class="font-medium text-slate-700">{{ skill.skill_name }}</span>
+              <span class="font-medium text-slate-700 text-sm md:text-base">{{ skill.skill_name }}</span>
               <span :class="{
                 'bg-emerald-100 text-emerald-700 border-emerald-200': skill.proficiency_level === 'Beginner',
                 'bg-blue-100 text-blue-700 border-blue-200': skill.proficiency_level === 'Intermediate',
@@ -236,12 +266,77 @@ import { ref, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import NavBar from '@/components/layout/NavBar.vue'
+import defaultAvatar from '@/assets/default-avatar.png'
 
 const authStore = useAuthStore()
 const { currentUser, educations, experiences, skills, loading } = storeToRefs(authStore)
 
 // Alias currentUser as user for easier reference
 const user = currentUser
+
+// --- Photo Upload ---
+const photoFile = ref(null)
+const photoPreview = ref(null)
+const uploadingPhoto = ref(false)
+
+const handlePhotoUpload = async (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+
+  // Validate file type
+  if (!file.type.startsWith('image/')) {
+    alert('File harus berupa gambar!')
+    return
+  }
+
+  // Validate file size (max 2MB)
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Ukuran file maksimal 2MB!')
+    return
+  }
+
+  photoFile.value = file
+
+  // Create preview
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    photoPreview.value = e.target.result
+  }
+  reader.readAsDataURL(file)
+
+  // Upload immediately
+  await uploadPhoto()
+}
+
+const uploadPhoto = async () => {
+  if (!photoFile.value) return
+
+  uploadingPhoto.value = true
+  
+  const formData = new FormData()
+  formData.append('photo', photoFile.value)
+
+  try {
+    const result = await authStore.uploadProfilePhoto(formData)
+    if (result.success) {
+      alert('Foto profil berhasil diperbarui!')
+      photoFile.value = null
+      // Preview will be updated from the server response
+      await authStore.fetchUser()
+    } else {
+      alert(result.error || 'Gagal mengupload foto')
+      photoPreview.value = null
+      photoFile.value = null
+    }
+  } catch (error) {
+    console.error('Error uploading photo:', error)
+    alert('Gagal mengupload foto')
+    photoPreview.value = null
+    photoFile.value = null
+  } finally {
+    uploadingPhoto.value = false
+  }
+}
 
 // --- Basic Profile ---
 const form = ref({
@@ -286,6 +381,8 @@ watch(user, () => {
 
 const resetForm = () => {
   initForm()
+  photoPreview.value = null
+  photoFile.value = null
 }
 
 const saveProfile = async () => {
