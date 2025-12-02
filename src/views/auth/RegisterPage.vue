@@ -22,38 +22,6 @@
           <p class="text-slate-600">Mulai perjalanan karirmu bersama kami</p>
         </div>
 
-        <!-- Progress Steps -->
-        <div class="mb-8">
-          <div class="flex items-center justify-between mb-4">
-            <div 
-              v-for="(step, index) in steps" 
-              :key="index"
-              class="flex items-center"
-              :class="{ 'flex-1': index < steps.length - 1 }"
-            >
-              <div class="flex flex-col items-center">
-                <div 
-                  class="w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all duration-300"
-                  :class="currentStep > index ? 'bg-gradient-to-br from-primary-500 to-secondary-500 text-white' : currentStep === index ? 'bg-gradient-to-br from-primary-500 to-secondary-500 text-white ring-4 ring-primary-100' : 'bg-slate-200 text-slate-500'"
-                >
-                  <svg v-if="currentStep > index" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span v-else>{{ index + 1 }}</span>
-                </div>
-                <span class="text-xs mt-2 font-medium" :class="currentStep >= index ? 'text-primary-600' : 'text-slate-400'">
-                  {{ step }}
-                </span>
-              </div>
-              <div 
-                v-if="index < steps.length - 1" 
-                class="flex-1 h-1 mx-2 rounded-full transition-all duration-300"
-                :class="currentStep > index ? 'bg-gradient-to-r from-primary-500 to-secondary-500' : 'bg-slate-200'"
-              ></div>
-            </div>
-          </div>
-        </div>
-
         <!-- Error Alert -->
         <div v-if="error" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start space-x-3 animate-slide-down">
           <svg class="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,10 +37,10 @@
           </button>
         </div>
 
-        <!-- Form Steps -->
+        <!-- Form -->
         <form @submit.prevent="handleSubmit">
-          <!-- Step 1: Account Info -->
-          <div v-show="currentStep === 0" class="space-y-6 animate-fade-in">
+          <div class="space-y-6 animate-fade-in">
+            <!-- Account Info -->
             <div class="grid md:grid-cols-2 gap-6">
               <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-2">
@@ -164,141 +132,25 @@
               />
               <p v-if="errors.password_confirmation" class="mt-1 text-sm text-red-600">{{ errors.password_confirmation }}</p>
             </div>
-          </div>
 
-          <!-- Step 2: Personal Info -->
-          <div v-show="currentStep === 1" class="space-y-6 animate-fade-in">
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Tanggal Lahir *
-                </label>
-                <input
-                  v-model="form.birth_date"
-                  type="date"
-                  class="input"
-                  :class="{ 'input-error': errors.birth_date }"
-                  required
-                />
-                <p v-if="errors.birth_date" class="mt-1 text-sm text-red-600">{{ errors.birth_date }}</p>
-              </div>
+            <!-- Preferences Info -->
 
-              <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Jenis Kelamin *
-                </label>
-                <select
-                  v-model="form.gender"
-                  class="input"
-                  :class="{ 'input-error': errors.gender }"
-                  required
-                >
-                  <option value="">Pilih jenis kelamin</option>
-                  <option value="male">Laki-laki</option>
-                  <option value="female">Perempuan</option>
-                </select>
-                <p v-if="errors.gender" class="mt-1 text-sm text-red-600">{{ errors.gender }}</p>
-              </div>
-            </div>
 
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-2">
-                Alamat Lengkap *
-              </label>
-              <textarea
-                v-model="form.address"
-                rows="3"
-                placeholder="Jl. Contoh No. 123, RT/RW 01/02"
-                class="input resize-none"
-                :class="{ 'input-error': errors.address }"
-                required
-              ></textarea>
-              <p v-if="errors.address" class="mt-1 text-sm text-red-600">{{ errors.address }}</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-6">
-              <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Kota *
-                </label>
-                <input
-                  v-model="form.city"
-                  type="text"
-                  placeholder="Jakarta"
-                  class="input"
-                  :class="{ 'input-error': errors.city }"
-                  required
-                />
-                <p v-if="errors.city" class="mt-1 text-sm text-red-600">{{ errors.city }}</p>
-              </div>
-
-              <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                  Provinsi *
-                </label>
-                <input
-                  v-model="form.province"
-                  type="text"
-                  placeholder="DKI Jakarta"
-                  class="input"
-                  :class="{ 'input-error': errors.province }"
-                  required
-                />
-                <p v-if="errors.province" class="mt-1 text-sm text-red-600">{{ errors.province }}</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Step 3: Preferences -->
-          <div v-show="currentStep === 2" class="space-y-6 animate-fade-in">
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-2">
-                Pendidikan Terakhir *
+                Minat Kategori Pekerjaan
               </label>
               <select
-                v-model="form.education"
+                v-model="form.interested_job_category_id"
                 class="input"
-                :class="{ 'input-error': errors.education }"
-                required
+                :class="{ 'input-error': errors.interested_job_category_id }"
               >
-                <option value="">Pilih pendidikan</option>
-                <option value="sma">SMA/SMK</option>
-                <option value="d3">D3</option>
-                <option value="s1">S1</option>
-                <option value="s2">S2</option>
-                <option value="s3">S3</option>
+                <option value="">Pilih kategori</option>
+                <option v-for="category in masterStore.categories" :key="category.id" :value="category.id">
+                  {{ category.name }}
+                </option>
               </select>
-              <p v-if="errors.education" class="mt-1 text-sm text-red-600">{{ errors.education }}</p>
-            </div>
-
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-2">
-                Keahlian (Pisahkan dengan koma)
-              </label>
-              <input
-                v-model="form.skills"
-                type="text"
-                placeholder="JavaScript, Vue.js, Node.js"
-                class="input"
-              />
-              <p class="mt-1 text-sm text-slate-500">Contoh: JavaScript, Vue.js, Node.js</p>
-            </div>
-
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-2">
-                Pengalaman Kerja
-              </label>
-              <select
-                v-model="form.experience"
-                class="input"
-              >
-                <option value="">Pilih pengalaman</option>
-                <option value="fresh">Fresh Graduate</option>
-                <option value="1">1 Tahun</option>
-                <option value="2">2 Tahun</option>
-                <option value="3">3 Tahun</option>
-                <option value="5">5+ Tahun</option>
-              </select>
+              <p v-if="errors.interested_job_category_id" class="mt-1 text-sm text-red-600">{{ errors.interested_job_category_id }}</p>
             </div>
 
             <div>
@@ -316,40 +168,15 @@
             </div>
           </div>
 
-          <!-- Navigation Buttons -->
-          <div class="flex items-center justify-between mt-8 pt-6 border-t border-slate-200">
+          <!-- Submit Button -->
+          <div class="mt-8 pt-6 border-t border-slate-200">
             <button
-              v-if="currentStep > 0"
-              type="button"
-              @click="currentStep--"
-              class="btn btn-outline"
-            >
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-              </svg>
-              Kembali
-            </button>
-            <div v-else></div>
-
-            <button
-              v-if="currentStep < steps.length - 1"
-              type="button"
-              @click="nextStep"
-              class="btn btn-primary"
-            >
-              Lanjut
-              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-            <button
-              v-else
               type="submit"
               :disabled="loading"
-              class="btn btn-primary"
+              class="btn btn-primary w-full"
             >
               <span v-if="!loading">Daftar Sekarang</span>
-              <span v-else class="flex items-center">
+              <span v-else class="flex items-center justify-center">
                 <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -373,15 +200,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useMasterStore } from '@/stores/master'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const masterStore = useMasterStore()
 
-const steps = ['Akun', 'Biodata', 'Preferensi']
-const currentStep = ref(0)
 const showPassword = ref(false)
 const loading = ref(false)
 const error = ref(null)
@@ -398,49 +225,53 @@ const form = ref({
   address: '',
   city: '',
   province: '',
-  education: '',
-  skills: '',
-  experience: '',
+  interested_job_category_id: '',
   agree_terms: false
 })
 
-const validateStep = () => {
+// Location Logic
+const provinces = computed(() => {
+    const indonesia = masterStore.locations.find(l => l.type === 'COUNTRY' && l.name === 'Indonesia')
+    if (!indonesia) return []
+    return masterStore.locations.filter(l => l.type === 'PROVINCE' && l.parent_id === indonesia.id)
+})
+
+const cities = computed(() => {
+    const selectedProvince = provinces.value.find(p => p.name === form.value.province)
+    if (!selectedProvince) return []
+    return masterStore.locations.filter(l => l.parent_id === selectedProvince.id && l.type === 'CITY')
+})
+
+const handleProvinceChange = () => {
+    form.value.city = ''
+}
+
+onMounted(() => {
+  masterStore.fetchAll()
+})
+
+const validateForm = () => {
   errors.value = {}
   
-  if (currentStep.value === 0) {
-    if (!form.value.name) errors.value.name = 'Nama wajib diisi'
-    if (!form.value.email) errors.value.email = 'Email wajib diisi'
-    if (!form.value.phone) errors.value.phone = 'Nomor telepon wajib diisi'
-    if (!form.value.password) errors.value.password = 'Password wajib diisi'
-    if (form.value.password.length < 8) errors.value.password = 'Password minimal 8 karakter'
-    if (form.value.password !== form.value.password_confirmation) {
-      errors.value.password_confirmation = 'Password tidak cocok'
-    }
-  } else if (currentStep.value === 1) {
-    if (!form.value.birth_date) errors.value.birth_date = 'Tanggal lahir wajib diisi'
-    if (!form.value.gender) errors.value.gender = 'Jenis kelamin wajib dipilih'
-    if (!form.value.address) errors.value.address = 'Alamat wajib diisi'
-    if (!form.value.city) errors.value.city = 'Kota wajib diisi'
-    if (!form.value.province) errors.value.province = 'Provinsi wajib diisi'
-  } else if (currentStep.value === 2) {
-    if (!form.value.education) errors.value.education = 'Pendidikan wajib dipilih'
-    if (!form.value.agree_terms) {
-      error.value = 'Anda harus menyetujui syarat & ketentuan'
-      return false
-    }
+  if (!form.value.name) errors.value.name = 'Nama wajib diisi'
+  if (!form.value.email) errors.value.email = 'Email wajib diisi'
+  if (!form.value.phone) errors.value.phone = 'Nomor telepon wajib diisi'
+  if (!form.value.password) errors.value.password = 'Password wajib diisi'
+  if (form.value.password.length < 8) errors.value.password = 'Password minimal 8 karakter'
+  if (form.value.password !== form.value.password_confirmation) {
+    errors.value.password_confirmation = 'Password tidak cocok'
+  }
+  if (!form.value.interested_job_category_id) errors.value.interested_job_category_id = 'Kategori pekerjaan wajib dipilih'
+  if (!form.value.agree_terms) {
+    error.value = 'Anda harus menyetujui syarat & ketentuan'
+    return false
   }
   
   return Object.keys(errors.value).length === 0
 }
 
-const nextStep = () => {
-  if (validateStep()) {
-    currentStep.value++
-  }
-}
-
 const handleSubmit = async () => {
-  if (!validateStep()) return
+  if (!validateForm()) return
   
   loading.value = true
   error.value = null

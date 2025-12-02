@@ -16,6 +16,11 @@ export const useAuthStore = defineStore('auth', () => {
     const educations = ref([])
     const experiences = ref([])
     const skills = ref([])
+    const personalDetail = ref(null)
+    const emergencyContacts = ref([])
+    const languages = ref([])
+    const passports = ref([])
+    const nonFormalEducations = ref([])
 
     // Getters
     const isAuthenticated = computed(() => !!token.value)
@@ -69,15 +74,9 @@ export const useAuthStore = defineStore('auth', () => {
                 phone: userData.phone,
                 email: userData.email,
                 password: userData.password,
+                name: userData.name,
                 full_name: userData.name,
-                // Optional profile fields
-                ...(userData.birth_date && { birth_date: userData.birth_date }),
-                ...(userData.birth_place && { birth_place: userData.birth_place }),
-                ...(userData.address && { address: userData.address }),
-                ...(userData.city && { city: userData.city }),
-                ...(userData.province && { province: userData.province }),
-                ...(userData.postal_code && { postal_code: userData.postal_code }),
-                ...(userData.about_me && { about_me: userData.about_me })
+                ...(userData.interested_job_category_id && { interested_job_category_id: parseInt(userData.interested_job_category_id) })
             }
 
             console.log('[AUTH] Registration payload:', payload)
@@ -92,7 +91,20 @@ export const useAuthStore = defineStore('auth', () => {
             return { success: true }
         } catch (err) {
             console.error('[AUTH] Registration failed:', err.response?.data)
-            error.value = err.response?.data?.message || 'Registration failed'
+            // Prioritize specific error message from backend
+            const responseData = err.response?.data
+            if (responseData?.error) {
+                // Translate common errors if needed, or just show them
+                if (responseData.error === 'phone number already registered') {
+                    error.value = 'Nomor telepon sudah terdaftar. Silakan gunakan nomor lain atau masuk ke akun Anda.'
+                } else if (responseData.error === 'email already registered') {
+                    error.value = 'Email sudah terdaftar. Silakan gunakan email lain atau masuk ke akun Anda.'
+                } else {
+                    error.value = responseData.error
+                }
+            } else {
+                error.value = responseData?.message || 'Registration failed'
+            }
             return { success: false, error: error.value }
         } finally {
             loading.value = false
@@ -120,6 +132,12 @@ export const useAuthStore = defineStore('auth', () => {
             educations.value = data.educations || []
             experiences.value = data.experiences || []
             skills.value = data.skills || []
+            personalDetail.value = data.personal_detail || {}
+            emergencyContacts.value = data.emergency_contacts || []
+            languages.value = data.languages || []
+            passports.value = data.passports || []
+            nonFormalEducations.value = data.non_formal_educations || []
+
             console.log('[AUTH] User data updated successfully')
         } catch (err) {
             console.error('[AUTH] Fetch user error:', err.response?.status, err.response?.data)
@@ -295,6 +313,165 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    // Personal Detail Actions
+    async function updatePersonalDetail(detailData) {
+        console.log('[AUTH] Updating personal detail:', detailData)
+        try {
+            const response = await api.put('/profile/personal-detail', detailData)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Update personal detail error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal memperbarui detail pribadi' }
+        }
+    }
+
+    // Emergency Contact Actions
+    async function addEmergencyContact(contactData) {
+        console.log('[AUTH] Adding emergency contact:', contactData)
+        try {
+            const response = await api.post('/profile/emergency-contact', contactData)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Add emergency contact error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal menambah kontak darurat' }
+        }
+    }
+
+    async function deleteEmergencyContact(id) {
+        console.log('[AUTH] Deleting emergency contact:', id)
+        try {
+            const response = await api.delete(`/profile/emergency-contact/${id}`)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Delete emergency contact error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal menghapus kontak darurat' }
+        }
+    }
+
+    async function updateEmergencyContact(id, contactData) {
+        console.log('[AUTH] Updating emergency contact:', id, contactData)
+        try {
+            const response = await api.put(`/profile/emergency-contact/${id}`, contactData)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Update emergency contact error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal memperbarui kontak darurat' }
+        }
+    }
+
+    // Language Actions
+    async function addLanguage(languageData) {
+        console.log('[AUTH] Adding language:', languageData)
+        try {
+            const response = await api.post('/profile/language', languageData)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Add language error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal menambah bahasa' }
+        }
+    }
+
+    async function deleteLanguage(id) {
+        console.log('[AUTH] Deleting language:', id)
+        try {
+            const response = await api.delete(`/profile/language/${id}`)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Delete language error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal menghapus bahasa' }
+        }
+    }
+
+    // Passport Actions
+    async function addPassport(passportData) {
+        console.log('[AUTH] Adding passport:', passportData)
+        try {
+            const response = await api.post('/profile/passport', passportData)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Add passport error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal menambah paspor' }
+        }
+    }
+
+    async function deletePassport(id) {
+        console.log('[AUTH] Deleting passport:', id)
+        try {
+            const response = await api.delete(`/profile/passport/${id}`)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Delete passport error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal menghapus paspor' }
+        }
+    }
+
+    async function updatePassport(id, passportData) {
+        console.log('[AUTH] Updating passport:', id, passportData)
+        try {
+            const response = await api.put(`/profile/passport/${id}`, passportData)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Update passport error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal memperbarui paspor' }
+        }
+    }
+
+    // Non-Formal Education Actions
+    async function addNonFormalEducation(educationData) {
+        console.log('[AUTH] Adding non-formal education:', educationData)
+        try {
+            const response = await api.post('/profile/non-formal-education', educationData)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Add non-formal education error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal menambah pendidikan non-formal' }
+        }
+    }
+
+    async function deleteNonFormalEducation(id) {
+        console.log('[AUTH] Deleting non-formal education:', id)
+        try {
+            const response = await api.delete(`/profile/non-formal-education/${id}`)
+            if (response.data.success) {
+                await fetchUser()
+                return { success: true }
+            }
+        } catch (err) {
+            console.error('[AUTH] Delete non-formal education error:', err.response?.data)
+            return { success: false, error: err.response?.data?.message || 'Gagal menghapus pendidikan non-formal' }
+        }
+    }
+
     function logout() {
         console.log('[AUTH] Logging out...')
         candidate.value = null
@@ -302,6 +479,11 @@ export const useAuthStore = defineStore('auth', () => {
         educations.value = []
         experiences.value = []
         skills.value = []
+        personalDetail.value = null
+        emergencyContacts.value = []
+        languages.value = []
+        passports.value = []
+        nonFormalEducations.value = []
         token.value = null
         localStorage.removeItem('token')
     }
@@ -324,6 +506,11 @@ export const useAuthStore = defineStore('auth', () => {
         educations,
         experiences,
         skills,
+        personalDetail,
+        emergencyContacts,
+        languages,
+        passports,
+        nonFormalEducations,
         // Getters
         isAuthenticated,
         currentUser,
@@ -341,6 +528,17 @@ export const useAuthStore = defineStore('auth', () => {
         deleteExperience,
         addSkill,
         deleteSkill,
+        updatePersonalDetail,
+        addEmergencyContact,
+        deleteEmergencyContact,
+        addLanguage,
+        deleteLanguage,
+        addPassport,
+        deletePassport,
+        addNonFormalEducation,
+        deleteNonFormalEducation,
+        updateEmergencyContact,
+        updatePassport,
         logout
     }
 })

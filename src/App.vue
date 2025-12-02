@@ -5,12 +5,14 @@
         <component :is="Component" />
       </transition>
     </router-view>
+    <FloatingButtons />
   </div>
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import FloatingButtons from '@/components/FloatingButtons.vue'
 
 const authStore = useAuthStore()
 

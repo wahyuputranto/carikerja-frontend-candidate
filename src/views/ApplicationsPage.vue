@@ -119,18 +119,27 @@
                     <p class="font-medium">{{ app.latest_status }}</p>
                     
                     <!-- Interview Details -->
-                    <div v-if="app.application.status === 'INTERVIEW'" class="mt-2 space-y-1 bg-white/50 p-2.5 sm:p-3 rounded border border-blue-100">
+                    <div v-if="['INTERVIEW', 'PRE_INTERVIEW'].includes(app.application.status)" class="mt-2 space-y-1 bg-white/50 p-2.5 sm:p-3 rounded border border-blue-100">
                         <p v-if="app.application.interview_date" class="flex flex-col sm:flex-row sm:items-center gap-1">
                             <span class="font-semibold text-xs sm:text-sm">Waktu:</span>
                             <span class="text-xs sm:text-sm">{{ formatDateTime(app.application.interview_date) }}</span>
                         </p>
+                        
+                        <!-- Location -->
                         <p v-if="app.application.interview_location" class="flex flex-col sm:flex-row sm:items-center gap-1">
-                            <span class="font-semibold text-xs sm:text-sm">Lokasi/Link:</span>
-                            <span v-if="isUrl(app.application.interview_location)" class="text-xs sm:text-sm">
-                                <a :href="app.application.interview_location" target="_blank" class="underline hover:text-blue-600 break-all">Join Meeting</a>
-                            </span>
-                            <span v-else class="text-xs sm:text-sm">{{ app.application.interview_location }}</span>
+                            <span class="font-semibold text-xs sm:text-sm">Lokasi:</span>
+                            <span class="text-xs sm:text-sm">{{ app.application.interview_location }}</span>
                         </p>
+
+                         <!-- Address / Link -->
+                        <p v-if="app.application.interview_address" class="flex flex-col sm:flex-row sm:items-center gap-1">
+                            <span class="font-semibold text-xs sm:text-sm">Link/Alamat:</span>
+                            <span v-if="isUrl(app.application.interview_address)" class="text-xs sm:text-sm">
+                                <a :href="app.application.interview_address" target="_blank" class="underline hover:text-blue-600 break-all">{{ app.application.interview_address }}</a>
+                            </span>
+                            <span v-else class="text-xs sm:text-sm">{{ app.application.interview_address }}</span>
+                        </p>
+
                         <p v-if="app.application.interview_notes" class="text-xs sm:text-sm">
                             <span class="font-semibold block mb-1">Catatan Interview:</span>
                             {{ app.application.interview_notes }}
@@ -222,7 +231,7 @@ const filteredApplications = computed(() => {
         const status = app.application.status
         if (activeTab.value === 'pending') return status === 'APPLIED' || status === 'REVIEW'
         if (activeTab.value === 'review') return status === 'REVIEW'
-        if (activeTab.value === 'interview') return status === 'INTERVIEW'
+        if (activeTab.value === 'interview') return status === 'INTERVIEW' || status === 'PRE_INTERVIEW'
         if (activeTab.value === 'accepted') return status === 'ACCEPTED' || status === 'OFFERING' || status === 'HIRED'
         if (activeTab.value === 'rejected') return status === 'REJECTED'
         return true
@@ -236,7 +245,7 @@ const clearFilter = () => {
 const tabs = computed(() => [
   { label: 'Semua', value: 'all', count: applications.value.length },
   { label: 'Pending', value: 'pending', count: applications.value.filter(a => a.application.status === 'APPLIED' || a.application.status === 'REVIEW').length },
-  { label: 'Interview', value: 'interview', count: applications.value.filter(a => a.application.status === 'INTERVIEW').length },
+  { label: 'Interview', value: 'interview', count: applications.value.filter(a => a.application.status === 'INTERVIEW' || a.application.status === 'PRE_INTERVIEW').length },
   { label: 'Diterima', value: 'accepted', count: applications.value.filter(a => a.application.status === 'ACCEPTED' || a.application.status === 'OFFERING' || a.application.status === 'HIRED').length },
   { label: 'Ditolak', value: 'rejected', count: applications.value.filter(a => a.application.status === 'REJECTED').length },
 ])
@@ -278,6 +287,7 @@ const getStatusBadgeClass = (status) => {
         case 'APPLIED': return 'badge-info'
         case 'REVIEW': return 'badge-warning'
         case 'INTERVIEW': return 'badge-primary'
+        case 'PRE_INTERVIEW': return 'badge-primary'
         case 'ACCEPTED': return 'badge-success'
         case 'OFFERING': return 'badge-success'
         case 'HIRED': return 'badge-success'

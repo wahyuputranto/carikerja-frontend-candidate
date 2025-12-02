@@ -73,6 +73,109 @@
         <div class="grid lg:grid-cols-3 gap-8">
           <!-- Left Column (Main) -->
           <div class="lg:col-span-2 space-y-8">
+
+            <!-- Agenda / Upcoming Interviews -->
+            <div v-if="upcomingInterviews.length > 0" class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm relative overflow-hidden">
+               <div class="absolute top-0 right-0 p-4 opacity-10">
+                  <svg class="w-32 h-32 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+               </div>
+               <div class="flex items-center justify-between mb-6 relative z-10">
+                <h2 class="text-lg font-bold text-slate-800 flex items-center">
+                  <span class="w-2 h-8 bg-blue-600 rounded-full mr-3"></span>
+                  Agenda Interview
+                </h2>
+                <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full">{{ upcomingInterviews.length }} Jadwal</span>
+              </div>
+              
+              <div class="space-y-4 relative z-10">
+                <div 
+                  v-for="(interview, index) in upcomingInterviews" 
+                  :key="index"
+                  class="bg-white border border-slate-200 rounded-xl p-4 flex flex-col sm:flex-row gap-4 hover:border-blue-300 transition-colors shadow-sm"
+                >
+                  <!-- Date Box -->
+                  <div class="flex-shrink-0 flex flex-col items-center justify-center bg-blue-50 text-blue-700 rounded-lg w-full sm:w-20 p-2 border border-blue-100">
+                    <span class="text-xs font-bold uppercase tracking-wider">{{ getMonthName(interview.application.interview_date) }}</span>
+                    <span class="text-2xl font-extrabold">{{ getDayNumber(interview.application.interview_date) }}</span>
+                    <span class="text-xs font-medium">{{ getDayName(interview.application.interview_date) }}</span>
+                  </div>
+
+                  <!-- Details -->
+                  <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h3 class="font-bold text-slate-900 text-lg">{{ interview.application.job?.title }}</h3>
+                        <p class="text-slate-600 text-sm font-medium">{{ interview.application.job?.company_name }}</p>
+                      </div>
+                      <span class="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">
+                        {{ interview.application.status }}
+                      </span>
+                    </div>
+
+                    <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-600">
+                      <div class="flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        {{ formatTime(interview.application.interview_date) }} WIB
+                      </div>
+                      <div class="flex items-center">
+                         <svg class="w-4 h-4 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        {{ interview.application.interview_location || 'Online / TBD' }}
+                      </div>
+                      
+                      <!-- Address / Link -->
+                      <div v-if="interview.application.interview_address" class="flex items-center col-span-1 sm:col-span-2 overflow-hidden">
+                         <svg class="w-4 h-4 mr-2 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                        <a v-if="interview.application.interview_address.startsWith('http')" :href="interview.application.interview_address" target="_blank" class="text-blue-600 hover:underline truncate block">
+                          {{ interview.application.interview_address }}
+                        </a>
+                        <span v-else class="truncate block">{{ interview.application.interview_address }}</span>
+                      </div>
+                    </div>
+
+                     <div v-if="interview.application.interview_notes" class="mt-3 bg-slate-50 p-2 rounded text-xs text-slate-600 border border-slate-100">
+                        <span class="font-semibold text-slate-700">Catatan:</span> {{ interview.application.interview_notes }}
+                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Announcements / Notifications -->
+            <div v-if="announcements.length > 0" class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+               <div class="flex items-center justify-between mb-6">
+                <h2 class="text-lg font-bold text-slate-800 flex items-center">
+                  <span class="w-2 h-8 bg-yellow-400 rounded-full mr-3"></span>
+                  Papan Informasi
+                </h2>
+              </div>
+              <div class="space-y-3">
+                 <div 
+                  v-for="notif in announcements" 
+                  :key="notif.id"
+                  class="p-4 rounded-xl border border-yellow-100 bg-yellow-50/30 flex items-start space-x-4"
+                >
+                  <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                     <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="font-bold text-slate-900 text-sm">{{ notif.title }}</h3>
+                    <p class="text-sm text-slate-600 mt-1">{{ notif.message }}</p>
+                    <p class="text-xs text-slate-400 mt-2">{{ formatDate(notif.created_at) }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
             
             <!-- Tasks / Action Needed -->
             <div v-if="tasks && tasks.length > 0" class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
@@ -316,43 +419,17 @@
                 </div>
               </div>
 
-              <router-link to="/profile" class="btn btn-primary w-full mt-6 py-2.5 text-sm">
-                Lengkapi Sekarang
-              </router-link>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
-              <h3 class="text-sm font-bold text-slate-800 mb-4">Aksi Cepat</h3>
-              <div class="space-y-3">
-                <router-link to="/jobs" class="flex items-center space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors group">
-                  <div class="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all">
-                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </div>
-                  <span class="text-sm font-medium text-slate-700">Cari Lowongan</span>
+              <div class="mt-6 space-y-3">
+                <router-link to="/profile" class="btn btn-primary w-full py-2.5 text-sm">
+                  Edit Profil
                 </router-link>
-
-                <router-link to="/profile" class="flex items-center space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors group">
-                  <div class="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all">
-                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                  <span class="text-sm font-medium text-slate-700">Edit Profil</span>
-                </router-link>
-
-                <router-link to="/upload-documents" class="flex items-center space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors group">
-                  <div class="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all">
-                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>
-                  </div>
-                  <span class="text-sm font-medium text-slate-700">Upload Dokumen</span>
+                <router-link to="/upload-documents" class="block w-full py-2.5 text-sm text-center border border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors font-medium">
+                  Upload Dokumen
                 </router-link>
               </div>
             </div>
+
+
 
           </div>
         </div>
@@ -367,6 +444,7 @@ import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import { useDashboardStore } from '@/stores/dashboard'
 import { useDocumentsStore } from '@/stores/documents'
+import { useNotificationStore } from '@/stores/notifications'
 import NavBar from '@/components/layout/NavBar.vue'
 
 import defaultCompanyLogo from '@/assets/default-company-logo.png'
@@ -375,10 +453,12 @@ import defaultAvatar from '@/assets/default-avatar.png'
 const authStore = useAuthStore()
 const dashboardStore = useDashboardStore()
 const documentsStore = useDocumentsStore()
+const notificationStore = useNotificationStore()
 
 const { currentUser, educations, experiences, skills } = storeToRefs(authStore)
 const { applications, profileViews, recommendations, tasks, loading: loadingDashboard } = storeToRefs(dashboardStore)
 const { documentTypes, userDocuments } = storeToRefs(documentsStore)
+const { notifications } = storeToRefs(notificationStore)
 
 const userName = computed(() => currentUser.value?.full_name || 'User')
 const userPhoto = computed(() => {
@@ -456,6 +536,47 @@ const recentApplications = computed(() => {
   return applications.value ? applications.value.slice(0, 3) : []
 })
 
+// Upcoming Interviews
+const upcomingInterviews = computed(() => {
+  if (!applications.value) return []
+  
+  // Filter for interviews with dates
+  const interviews = applications.value.filter(app => {
+    // Must have an interview date
+    if (!app.application.interview_date) return false
+    
+    // Check if date is valid
+    const date = new Date(app.application.interview_date)
+    if (isNaN(date.getTime())) return false
+
+    // Filter out rejected applications even if they had a date
+    if (app.application.status === 'REJECTED') return false
+
+    // Only show future or today's interviews
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    
+    return date >= today
+  })
+
+  // Sort by date ascending (nearest first)
+  return interviews.sort((a, b) => {
+    return new Date(a.application.interview_date) - new Date(b.application.interview_date)
+  })
+})
+
+// Announcements
+const announcements = computed(() => {
+  if (!notifications.value) return []
+  // Filter for 'ANNOUNCEMENT' or 'SCHEDULE' or generic ones
+  // For now, let's show all that are not just 'read' system notifs if we want, 
+  // but better to filter by type if backend supports it.
+  // Assuming 'ANNOUNCEMENT' type exists or we show all recent ones.
+  // Let's show top 3 recent notifications for now as "Announcements"
+  return notifications.value.slice(0, 3)
+})
+
+
 const getStatusBadgeClass = (status) => {
   switch (status) {
     case 'APPLIED': return 'bg-blue-50 text-blue-700 border border-blue-100'
@@ -476,12 +597,36 @@ const formatDate = (dateString) => {
   })
 }
 
+const formatTime = (dateString) => {
+  if (!dateString) return '-'
+  return new Date(dateString).toLocaleTimeString('id-ID', {
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+const getMonthName = (dateString) => {
+  if (!dateString) return ''
+  return new Date(dateString).toLocaleDateString('id-ID', { month: 'short' })
+}
+
+const getDayNumber = (dateString) => {
+  if (!dateString) return ''
+  return new Date(dateString).getDate()
+}
+
+const getDayName = (dateString) => {
+  if (!dateString) return ''
+  return new Date(dateString).toLocaleDateString('id-ID', { weekday: 'long' })
+}
+
 onMounted(async () => {
   await Promise.all([
     authStore.fetchUser(),
     dashboardStore.fetchDashboardData(),
     documentsStore.fetchUserDocuments(),
-    documentsStore.fetchDocumentTypes()
+    documentsStore.fetchDocumentTypes(),
+    notificationStore.fetchNotifications()
   ])
 })
 </script>
