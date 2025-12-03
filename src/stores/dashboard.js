@@ -11,38 +11,64 @@ export const useDashboardStore = defineStore('dashboard', () => {
     const error = ref(null)
 
     async function fetchDashboardData() {
+        console.log('[DASHBOARD] Fetching dashboard data...')
         loading.value = true
         error.value = null
         try {
-            // Fetch all dashboard data in parallel
-            const [appsRes, viewsRes, recsRes, tasksRes] = await Promise.all([
-                api.get('/applications'),
-                api.get('/analytics/profile-views'),
-                api.get('/jobs/recommendations'),
-                api.get('/tasks')
-            ])
-
-            if (appsRes.data.success) {
-                applications.value = appsRes.data.data || []
+            // Fetch applications
+            try {
+                const appsRes = await api.get('/applications')
+                if (appsRes.data.success) {
+                    applications.value = appsRes.data.data || []
+                    console.log('[DASHBOARD] Applications loaded:', applications.value.length)
+                }
+            } catch (err) {
+                console.error('[DASHBOARD] Error fetching applications:', err.response?.status, err.response?.data)
+                applications.value = []
             }
 
-            if (viewsRes.data.success) {
-                profileViews.value = viewsRes.data.data?.views_count || 0
+            // Fetch profile views
+            try {
+                const viewsRes = await api.get('/analytics/profile-views')
+                if (viewsRes.data.success) {
+                    profileViews.value = viewsRes.data.data?.views_count || 0
+                    console.log('[DASHBOARD] Profile views loaded:', profileViews.value)
+                }
+            } catch (err) {
+                console.error('[DASHBOARD] Error fetching profile views:', err.response?.status, err.response?.data)
+                profileViews.value = 0
             }
 
-            if (recsRes.data.success) {
-                recommendations.value = recsRes.data.data || []
+            // Fetch recommendations
+            try {
+                const recsRes = await api.get('/jobs/recommendations')
+                if (recsRes.data.success) {
+                    recommendations.value = recsRes.data.data || []
+                    console.log('[DASHBOARD] Recommendations loaded:', recommendations.value.length)
+                }
+            } catch (err) {
+                console.error('[DASHBOARD] Error fetching recommendations:', err.response?.status, err.response?.data)
+                recommendations.value = []
             }
 
-            if (tasksRes.data.success) {
-                tasks.value = tasksRes.data.data || []
+            // Fetch tasks
+            try {
+                const tasksRes = await api.get('/tasks')
+                if (tasksRes.data.success) {
+                    tasks.value = tasksRes.data.data || []
+                    console.log('[DASHBOARD] Tasks loaded:', tasks.value.length)
+                }
+            } catch (err) {
+                console.error('[DASHBOARD] Error fetching tasks:', err.response?.status, err.response?.data)
+                tasks.value = []
             }
 
         } catch (err) {
-            console.error('Error fetching dashboard data:', err)
+            console.error('[DASHBOARD] Unexpected error:', err)
             error.value = err.response?.data?.message || err.message || 'Gagal memuat data dashboard.'
         } finally {
             loading.value = false
+            console.log('[DASHBOARD] Dashboard data fetch complete')
         }
     }
 

@@ -30,14 +30,17 @@ export const useDocumentsStore = defineStore('documents', () => {
     }
 
     async function fetchUserDocuments() {
+        console.log('[DOCUMENTS] Fetching user documents...')
         loading.value = true
         try {
             const response = await api.get('/documents')
             if (response.data.success) {
                 userDocuments.value = response.data.data
+                console.log('[DOCUMENTS] User documents loaded:', userDocuments.value.length)
             }
         } catch (err) {
-            console.error('Error fetching user documents:', err)
+            console.error('[DOCUMENTS] Error fetching user documents:', err.response?.status, err.response?.data)
+            userDocuments.value = []
             // Don't set global error here to avoid blocking other UI
         } finally {
             loading.value = false

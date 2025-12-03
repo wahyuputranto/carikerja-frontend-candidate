@@ -11,14 +11,19 @@ export const useNotificationStore = defineStore('notifications', {
 
     actions: {
         async fetchNotifications() {
+            console.log('[NOTIFICATIONS] Fetching notifications...')
             this.loading = true
             try {
                 const response = await api.get('/notifications')
                 if (response.data.success) {
                     this.notifications = response.data.data || []
-                    this.unreadCount = response.data.meta.unread_count
+                    this.unreadCount = response.data.meta?.unread_count || 0
+                    console.log('[NOTIFICATIONS] Notifications loaded:', this.notifications.length)
                 }
             } catch (err) {
+                console.error('[NOTIFICATIONS] Error fetching notifications:', err.response?.status, err.response?.data)
+                this.notifications = []
+                this.unreadCount = 0
                 this.error = err.message
             } finally {
                 this.loading = false
