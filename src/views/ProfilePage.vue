@@ -270,11 +270,7 @@
                   <div class="text-slate-600 font-medium text-sm mt-1">
                     {{ edu.degree }} <span v-if="edu.major" class="text-slate-400 mx-1">•</span> {{ edu.major }}
                   </div>
-                  <div v-if="edu.gpa" class="mt-2">
-                    <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">
-                      Nilai/IPK: {{ edu.gpa }}
-                    </span>
-                  </div>
+
                 </div>
 
                 <!-- Right: Year & Action -->
@@ -320,17 +316,7 @@
                 </div>
               </div>
 
-              <!-- Row 2: Major & GPA -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
-                  <label class="label-text">Jurusan / Peminatan</label>
-                  <input v-model="eduForm.major" placeholder="Contoh: IPA, Teknik Informatika" class="input mt-1" />
-                </div>
-                <div>
-                  <label class="label-text">Nilai Akhir / IPK</label>
-                  <input v-model.number="eduForm.gpa" type="number" step="0.01" placeholder="0.00 - 4.00" class="input mt-1" />
-                </div>
-              </div>
+
               
               <!-- Row 3: Timeline & Degree -->
               <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -807,18 +793,22 @@ const eduForm = ref({
   level: '', // Added level for UI logic
   institution_name: '',
   degree: '',
-  major: '',
+  major: 'GENERAL',
   start_year: null,
   end_year: null,
   gpa: null
 })
 
 const submitEducation = async () => {
+  if (eduForm.value.start_year && eduForm.value.end_year && eduForm.value.start_year > eduForm.value.end_year) {
+    alert('Tahun mulai tidak boleh lebih besar dari tahun selesai.')
+    return
+  }
+
   const result = await authStore.addEducation(eduForm.value)
   if (result.success) {
     showAddEducation.value = false
-    showAddEducation.value = false
-    eduForm.value = { level: '', institution_name: '', degree: '', major: '', start_year: null, end_year: null, gpa: null }
+    eduForm.value = { level: '', institution_name: '', degree: '', major: 'GENERAL', start_year: null, end_year: null, gpa: null }
   } else {
     alert(result.error)
   }
