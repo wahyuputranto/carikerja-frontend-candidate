@@ -101,6 +101,14 @@
                         <input type="text" v-model="form.nik" class="input" placeholder="Nomor Induk Kependudukan" />
                     </div>
                     <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin</label>
+                        <select v-model="form.gender" class="input">
+                            <option value="">Pilih Jenis Kelamin</option>
+                            <option value="Male">Laki-laki</option>
+                            <option value="Female">Perempuan</option>
+                        </select>
+                    </div>
+                    <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Lahir</label>
                         <input type="date" v-model="form.birth_date" class="input" />
                     </div>
@@ -330,7 +338,7 @@
                 </div>
                 <div v-if="['D1', 'D2', 'D3', 'D4', 'S1', 'S2', 'S3'].includes(eduForm.level)">
                    <label class="label-text">Gelar Akademik</label>
-                   <input v-model="eduForm.degree" placeholder="Contoh: S.Kom, A.Md" class="input mt-1" />
+                   <input v-model="eduForm.degree" placeholder="Contoh: S.Par, S.E, A.Md.Par" class="input mt-1" />
                 </div>
               </div>
 
@@ -520,7 +528,7 @@
           <div v-if="showAddSkill" class="mt-6 p-4 bg-slate-50 rounded-xl border border-slate-200 animate-fade-in">
             <h3 class="font-bold mb-4">Tambah Keahlian</h3>
             <div class="space-y-4">
-              <input v-model="skillForm.skill_name" placeholder="Nama Skill (mis: Golang)" class="input" />
+              <input v-model="skillForm.skill_name" placeholder="Nama Skill (mis: Housekeeping, Cooking, Ms. Office)" class="input" />
               <select v-model="skillForm.proficiency_level" class="input">
                 <option value="">Pilih Tingkat Kemahiran</option>
                 <option value="Beginner">Beginner</option>
@@ -643,6 +651,7 @@ const form = ref({
   nik: '',
   birth_date: '',
   birth_place: '',
+  gender: '',
   address: '',
   city: '',
   province: '',
@@ -677,6 +686,8 @@ const personalDetailForm = ref({
   weight: null,
   marital_status: '',
   citizenship: '',
+  marital_status: '',
+  citizenship: '',
   religion: ''
 })
 
@@ -689,6 +700,7 @@ const initForm = () => {
       nik: user.value.nik || '',
       birth_date: user.value.birth_date ? user.value.birth_date.split('T')[0] : '',
       birth_place: user.value.birth_place || '',
+      gender: user.value.gender || '',
       address: user.value.address || '',
       city: user.value.city || '',
       province: user.value.province || '',
