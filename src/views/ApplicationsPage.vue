@@ -61,7 +61,7 @@
                       <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       </svg>
-                      <span class="truncate">{{ app.application.job?.location_id || 'Jakarta' }}</span>
+                      <span class="truncate">{{ formatLocation(app.application.job?.location) || app.application.job?.location_id || 'Jakarta' }}</span>
                     </span>
                     <span class="flex items-center" v-if="app.application.job?.salary_min">
                       <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -249,6 +249,18 @@ const tabs = computed(() => [
   { label: 'Diterima', value: 'accepted', count: applications.value.filter(a => a.application.status === 'ACCEPTED' || a.application.status === 'OFFERING' || a.application.status === 'HIRED').length },
   { label: 'Ditolak', value: 'rejected', count: applications.value.filter(a => a.application.status === 'REJECTED').length },
 ])
+
+const formatLocation = (location) => {
+    if (!location) return null
+    if (location.name) return location.name
+    
+    const parts = []
+    if (location.city) parts.push(location.city)
+    if (location.province) parts.push(location.province)
+    
+    if (parts.length > 0) return parts.join(', ')
+    return location.country || null
+}
 
 const formatDate = (dateString) => {
     if (!dateString) return '-'

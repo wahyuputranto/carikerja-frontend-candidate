@@ -70,9 +70,9 @@
               <div class="card">
                 <h3 class="text-lg font-bold mb-4">Informasi Pekerjaan</h3>
                 <div class="space-y-4">
-                  <div v-if="job.location?.name">
+                  <div v-if="formatLocation(job.location)">
                     <div class="text-sm text-slate-600 mb-1">Lokasi</div>
-                    <div class="font-semibold">{{ job.location.name }}</div>
+                    <div class="font-semibold">{{ formatLocation(job.location) }}</div>
                   </div>
                   <div v-if="job.salary_min && job.salary_max">
                     <div class="text-sm text-slate-600 mb-1">Gaji</div>
@@ -201,6 +201,18 @@ const handleApply = () => {
     // For now, redirect to application form or show modal
     router.push(`/apply/${job.value.id}`)
   }
+}
+
+const formatLocation = (location) => {
+    if (!location) return null
+    if (location.name) return location.name
+    
+    const parts = []
+    if (location.city) parts.push(location.city)
+    if (location.province) parts.push(location.province)
+    
+    if (parts.length > 0) return parts.join(', ')
+    return location.country || null
 }
 
 const formatSalary = (value) => {

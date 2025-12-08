@@ -27,19 +27,74 @@
             
             <!-- Location Filter -->
             <div class="md:col-span-3">
-              <select
-                v-model="selectedLocation"
-                class="input"
-              >
-                <option value="">Semua Lokasi</option>
-                <option 
-                  v-for="location in cityLocations" 
-                  :key="location.id" 
-                  :value="location.id"
-                >
-                  {{ location.name }}
-                </option>
-              </select>
+              <Combobox v-model="selectedLocation">
+                <div class="relative">
+                  <div class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+                    <ComboboxInput
+                      class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0 input"
+                      :displayValue="(locationId) => getLocationName(locationId)"
+                      @change="locationQuery = $event.target.value"
+                      placeholder="Semua Lokasi"
+                    />
+                    <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
+                       <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+                    </ComboboxButton>
+                  </div>
+                  <TransitionRoot
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                    @after-leave="locationQuery = ''"
+                  >
+                    <ComboboxOptions class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50">
+                      <div
+                        class="relative cursor-default select-none py-2 px-4 text-gray-700 font-semibold border-b bg-gray-50"
+                        @click="selectedLocation = ''"
+                      >
+                        Semua Lokasi
+                      </div>
+                      <div v-if="filteredLocations.length === 0 && locationQuery !== ''" class="relative cursor-default select-none py-2 px-4 text-gray-700">
+                        Nothing found.
+                      </div>
+
+                      <template v-for="group in filteredLocations" :key="group.country">
+                         <div class="sticky top-0 z-10 bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                          {{ group.country }}
+                        </div>
+                        <ComboboxOption
+                          v-for="location in group.items"
+                          as="template"
+                          :key="location.id"
+                          :value="location.id"
+                          v-slot="{ selected, active }"
+                        >
+                          <li
+                            class="relative cursor-default select-none py-2 pl-10 pr-4"
+                            :class="{
+                              'bg-emerald-600 text-white': active,
+                              'text-gray-900': !active,
+                            }"
+                          >
+                            <span
+                              class="block truncate"
+                              :class="{ 'font-medium': selected, 'font-normal': !selected }"
+                            >
+                              {{ location.city }}, {{ location.province }}
+                            </span>
+                            <span
+                              v-if="selected"
+                              class="absolute inset-y-0 left-0 flex items-center pl-3"
+                              :class="{ 'text-white': active, 'text-emerald-600': !active }"
+                            >
+                              <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                          </li>
+                        </ComboboxOption>
+                      </template>
+                    </ComboboxOptions>
+                  </TransitionRoot>
+                </div>
+              </Combobox>
             </div>
             
             <!-- Category Filter -->
@@ -136,7 +191,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                {{ job.location.name }}
+                {{ job.location.city }}, {{ job.location.province }}
               </span>
               <span class="flex items-center">
                 <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -197,6 +252,15 @@ import { storeToRefs } from 'pinia'
 import { useJobsStore } from '@/stores/jobs'
 import { useMasterStore } from '@/stores/master'
 import NavBar from '@/components/layout/NavBar.vue'
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxButton,
+  ComboboxOptions,
+  ComboboxOption,
+  TransitionRoot,
+} from '@headlessui/vue'
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 
 import defaultCompanyLogo from '@/assets/default-company-logo.png'
 
@@ -209,6 +273,7 @@ const { locations, categories } = storeToRefs(masterStore)
 
 const searchQuery = ref('')
 const selectedLocation = ref('')
+const locationQuery = ref('')
 const selectedCategory = ref('')
 const currentPage = ref(1)
 const itemsPerPage = 6
@@ -225,9 +290,25 @@ watch([searchQuery, selectedLocation, selectedCategory], () => {
   currentPage.value = 1
 })
 
-// Filter locations to only show CITY type (not COUNTRY or PROVINCE)
-const cityLocations = computed(() => {
-  return locations.value.filter(loc => loc.type === 'CITY')
+// Filter locations for Combobox
+const filteredLocations = computed(() => {
+  const filtered = locationQuery.value === ''
+    ? locations.value
+    : locations.value.filter((loc) => {
+        const text = `${loc.city}, ${loc.province}, ${loc.country}`
+        return text.toLowerCase().includes(locationQuery.value.toLowerCase())
+      })
+
+  // Group by country
+  return filtered.reduce((groups, loc) => {
+    let group = groups.find((g) => g.country === loc.country)
+    if (!group) {
+      group = { country: loc.country, items: [] }
+      groups.push(group)
+    }
+    group.items.push(loc)
+    return groups
+  }, [])
 })
 
 const filteredJobs = computed(() => {
@@ -238,7 +319,8 @@ const filteredJobs = computed(() => {
       job.title.toLowerCase().includes(searchLower) ||
       (job.description && job.description.toLowerCase().includes(searchLower)) ||
       (job.company?.name?.toLowerCase().includes(searchLower)) ||
-      (job.location?.name?.toLowerCase().includes(searchLower))
+      (job.location?.city?.toLowerCase().includes(searchLower)) ||
+      (job.location?.province?.toLowerCase().includes(searchLower))
     
     // Location filter
     const matchesLocation = !selectedLocation.value || 
@@ -298,8 +380,9 @@ const resetFilters = () => {
 }
 
 const getLocationName = (locationId) => {
+  if (!locationId) return ''
   const location = locations.value.find(loc => loc.id === locationId)
-  return location?.name || ''
+  return location ? `${location.city}, ${location.province}` : ''
 }
 
 const getCategoryName = (categoryId) => {
