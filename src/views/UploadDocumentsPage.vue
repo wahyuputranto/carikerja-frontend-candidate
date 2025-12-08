@@ -46,7 +46,10 @@
                 </div>
                 <div>
                   <h3 class="font-bold text-lg">{{ docType.name }}</h3>
-                  <p class="text-sm text-slate-600">{{ docType.description }} • Max: {{ formatFileSize(docType.max_file_size) }}</p>
+                  <div class="text-sm text-slate-600 flex items-center gap-2">
+                    <span v-if="docType.description">{{ docType.description }} •</span>
+                    <span>Max: {{ formatFileSize((docType.max_size || 5120) * 1024) }}</span>
+                  </div>
                 </div>
               </div>
               <span v-if="docType.is_mandatory" class="badge badge-error">Wajib</span>
@@ -237,8 +240,11 @@ const handleFileUpload = async (docType, event) => {
   if (!file) return
 
   // Basic validation
-  if (file.size > docType.max_file_size) {
-    alert(`Ukuran file terlalu besar. Maksimal ${formatFileSize(docType.max_file_size)}`)
+  // Basic validation
+  // max_size is in KB from backend
+  const maxSizeInBytes = (docType.max_size || 5120) * 1024 // Default 5MB if not set
+  if (file.size > maxSizeInBytes) {
+    alert(`Ukuran file terlalu besar. Maksimal ${formatFileSize(maxSizeInBytes)}`)
     return
   }
 
