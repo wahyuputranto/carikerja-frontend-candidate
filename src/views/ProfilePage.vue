@@ -369,6 +369,13 @@
             </button>
           </div>
           
+          <div class="mb-4 p-3 bg-blue-50 text-blue-700 rounded-xl text-sm md:text-base border border-blue-100 flex items-start gap-3">
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0 mt-0.5">
+               <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+             </svg>
+             <p>Harap isi data pelatihan atau pendidikan non-formal yang relevan dengan posisi yang Anda lamar.</p>
+          </div>
+          
           <div v-if="nonFormalEducations.length === 0" class="text-slate-500 text-center py-4">Belum ada data pendidikan non-formal.</div>
           <div v-else class="space-y-4">
             <div v-for="edu in nonFormalEducations" :key="edu.id" class="p-4 md:p-5 border border-slate-200 rounded-2xl hover:border-primary-300 transition-colors bg-slate-50/50 group">

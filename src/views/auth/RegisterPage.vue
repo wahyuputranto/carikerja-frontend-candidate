@@ -2,7 +2,7 @@
   <div class="min-h-screen flex items-center justify-center px-4 py-12">
     <div class="w-full max-w-2xl">
       <!-- Back Button -->
-      <router-link to="/" class="inline-flex items-center text-slate-600 hover:text-primary-600 mb-8 transition-colors">
+      <router-link to="/" class="inline-flex items-center text-slate-600 hover:text-[#008B99] mb-8 transition-colors">
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
@@ -13,8 +13,8 @@
       <div class="glass rounded-3xl p-8 md:p-10 animate-scale-in">
         <!-- Header -->
         <div class="text-center mb-8">
-          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl mb-4">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-[#008B99]/10 rounded-2xl mb-4">
+            <svg class="w-8 h-8 text-[#008B99]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
             </svg>
           </div>
@@ -175,11 +175,11 @@
                 <input
                   v-model="form.agree_terms"
                   type="checkbox"
-                  class="w-5 h-5 text-primary-600 border-slate-300 rounded focus:ring-primary-500 mt-0.5"
+                  class="w-5 h-5 text-[#008B99] border-slate-300 rounded focus:ring-[#008B99] mt-0.5"
                   required
                 />
                 <span class="text-sm text-slate-600">
-                  Saya setuju dengan <a href="#" class="text-primary-600 hover:text-primary-700 font-medium">Syarat & Ketentuan</a> dan <a href="#" class="text-primary-600 hover:text-primary-700 font-medium">Kebijakan Privasi</a>
+                  Saya setuju dengan <a href="#" class="text-[#008B99] hover:text-teal-700 font-medium">Syarat & Ketentuan</a> dan <a href="#" class="text-[#008B99] hover:text-teal-700 font-medium">Kebijakan Privasi</a>
                 </span>
               </label>
             </div>
@@ -190,7 +190,7 @@
             <button
               type="submit"
               :disabled="loading"
-              class="btn btn-primary w-full"
+              class="w-full bg-[#008B99] text-white font-bold py-3.5 rounded-xl shadow-lg hover:bg-teal-700 hover:shadow-teal-500/30 hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               <span v-if="!loading">Daftar Sekarang</span>
               <span v-else class="flex items-center justify-center">
@@ -207,7 +207,7 @@
         <!-- Login Link -->
         <p class="mt-8 text-center text-slate-600">
           Sudah punya akun?
-          <router-link to="/login" class="font-semibold text-primary-600 hover:text-primary-700">
+          <router-link to="/login" class="font-semibold text-[#008B99] hover:text-teal-700">
             Masuk di sini
           </router-link>
         </p>

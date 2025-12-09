@@ -160,7 +160,7 @@
                   </svg>
                 </div>
                 <p class="text-slate-700 font-medium mb-1">Klik untuk upload {{ docType.name }}</p>
-                <p class="text-sm text-slate-500">Format: {{ docType.allowed_mimetypes }}</p>
+                <p class="text-sm text-slate-500">Format: {{ formatAllowedTypes(docType.allowed_mimetypes) }}</p>
               </label>
             </div>
           </div>
@@ -248,6 +248,54 @@ const formatFileSize = (bytes) => {
   const sizes = ['Bytes', 'KB', 'MB', 'GB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
   return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i]
+}
+
+const formatAllowedTypes = (mimeTypes) => {
+  if (!mimeTypes) return 'Semua Format'
+  
+  // Clean up input: remove brackets and quotes if it's a JSON string
+  let types = mimeTypes
+  
+  // Try to parse if it's a JSON string array like '["image/jpeg", "image/png"]'
+  if (typeof mimeTypes === 'string' && (mimeTypes.startsWith('[') || mimeTypes.includes(','))) {
+    try {
+        // If it's a valid JSON array string
+        if (mimeTypes.startsWith('[')) {
+            const parsed = JSON.parse(mimeTypes)
+            if (Array.isArray(parsed)) {
+                types = parsed
+            }
+        } else {
+             // If it is just comma separated string like "image/jpeg,image/png"
+             types = mimeTypes.split(',')
+        }
+    } catch (e) {
+        // Fallback: just remove characters
+        types = mimeTypes.replace(/[\[\]"]/g, '').split(',')
+    }
+  }
+
+  // Ensure types is an array
+  if (!Array.isArray(types)) {
+      if (typeof types === 'string') return types // fallback
+      return '' 
+  }
+
+  // Map MIME types to friendly names
+  const mapping = {
+    'application/pdf': 'PDF',
+    'image/jpeg': 'JPEG',
+    'image/jpg': 'JPG',
+    'image/png': 'PNG',
+    'video/mp4': 'MP4'
+  }
+
+  const uniqueFormats = [...new Set(types.map(t => {
+      const cleanType = t.trim().toLowerCase()
+      return mapping[cleanType] || cleanType.split('/')[1]?.toUpperCase() || cleanType
+  }))]
+
+  return uniqueFormats.join(', ')
 }
 
 const handleFileUpload = async (docType, event) => {

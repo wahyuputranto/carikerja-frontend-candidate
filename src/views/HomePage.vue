@@ -1,174 +1,282 @@
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen bg-slate-50 font-sans antialiased text-slate-800 overflow-x-hidden">
     <NavBar />
-    
-    <section class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <div class="max-w-7xl mx-auto">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-          <div class="space-y-8 animate-slide-up">
-            <div class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full">
-              <span class="text-sm font-semibold gradient-text">✨ Platform Pencarian Kerja #1 di Indonesia</span>
-            </div>
-            
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold font-display leading-tight">
-              Temukan
-              <span class="gradient-text block">Karir Impianmu</span>
-              Dimulai Dari Sini
-            </h1>
-            
-            <p class="text-lg text-slate-600 leading-relaxed">
-              Ribuan lowongan kerja menanti. Daftar sekarang dan mulai perjalanan karirmu bersama perusahaan terbaik di Indonesia.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4">
-              <router-link v-if="!isAuthenticated" to="/register" class="btn btn-primary text-lg px-8 py-4">
-                Mulai Sekarang
-                <svg class="w-5 h-5 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </router-link>
-              
-              <router-link v-if="isAuthenticated" to="/jobs" class="btn btn-outline text-lg px-8 py-4">
-                Lihat Lowongan
-              </router-link>
-            </div>
 
-            <!-- Stats removed for simplicity -->
-          </div>
-
-          <div class="relative flex justify-center">
-            <div class="relative z-10 floating w-4/5">
-              <img 
-                :src="heroIllustration" 
-                alt="Ilustrasi Karir" 
-                class="w-full object-contain transform hover:scale-[1.02] transition-transform duration-500"
-              />
-            </div>
-
-            <div class="absolute -top-10 -right-10 w-72 h-72 bg-gradient-to-br from-primary-300 to-secondary-300 rounded-full blur-3xl opacity-20 animate-pulse-slow"></div>
-            <div class="absolute -bottom-10 -left-10 w-72 h-72 bg-gradient-to-br from-accent-300 to-primary-300 rounded-full blur-3xl opacity-20 animate-pulse-slow" style="animation-delay: 1s;"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="py-20 px-4 sm:px-6 lg:px-8 bg-white/50">
-      <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-bold font-display mb-4">
-            Kenapa Memilih <span class="gradient-text">CariKerja</span>?
-          </h2>
-          <p class="text-xl text-slate-600 max-w-2xl mx-auto">
-            Platform terlengkap dengan fitur-fitur canggih untuk membantu perjalanan karirmu
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="card group hover:shadow-xl transition-all duration-300 border-none bg-white/80 backdrop-blur-sm">
-            <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold mb-3 text-slate-800">Pencarian Mudah</h3>
-            <p class="text-slate-600 leading-relaxed">Filter lowongan berdasarkan skill, lokasi, dan gaji yang kamu inginkan.</p>
-          </div>
-
-          <div class="card group hover:shadow-xl transition-all duration-300 border-none bg-white/80 backdrop-blur-sm">
-            <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold mb-3 text-slate-800">Lamar Cepat</h3>
-            <p class="text-slate-600 leading-relaxed">Kirim lamaran hanya dengan satu klik menggunakan profilmu.</p>
-          </div>
-
-          <div class="card group hover:shadow-xl transition-all duration-300 border-none bg-white/80 backdrop-blur-sm">
-            <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold mb-3 text-slate-800">Update Langsung</h3>
-            <p class="text-slate-600 leading-relaxed">Dapatkan notifikasi status lamaranmu secara real-time.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Bottom CTA removed for simplicity -->
-
-    <footer class="bg-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-7xl mx-auto">
-        <div class="grid md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <div class="flex items-center space-x-2 mb-4">
-              <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <span class="text-xl font-bold">CariKerja</span>
-            </div>
-            <p class="text-slate-400">Platform pencarian kerja terpercaya untuk generasi muda Indonesia</p>
-          </div>
-          
-          <div>
-            <h3 class="font-semibold mb-4">Perusahaan</h3>
-            <ul class="space-y-2 text-slate-400">
-              <li><a href="#" class="hover:text-white transition-colors">Tentang Kami</a></li>
-              <li><a href="#" class="hover:text-white transition-colors">Karir</a></li>
-              <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 class="font-semibold mb-4">Bantuan</h3>
-            <ul class="space-y-2 text-slate-400">
-              <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
-              <li><a href="#" class="hover:text-white transition-colors">Kontak</a></li>
-              <li><a href="#" class="hover:text-white transition-colors">Syarat & Ketentuan</a></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 class="font-semibold mb-4">Ikuti Kami</h3>
-            <div class="flex space-x-4">
-              <a href="#" class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </a>
-              <a href="#" class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                </svg>
-              </a>
-              <a href="#" class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden z-0">
+        <!-- Background Gradient matching the reference (Yellowish/Gold to Blueish) -->
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-amber-50 -z-10"></div>
         
-        <div class="border-t border-slate-800 pt-8 text-center text-slate-400">
-          <p>&copy; 2025 CariKerja. All rights reserved.</p>
+        <!-- Subtle pattern overlay -->
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 -z-10"></div>
+
+        <div class="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative">
+            
+            <!-- Left Content -->
+            <div class="z-10 max-w-2xl relative">
+                <!-- Vertical Line Decoration -->
+                <div class="absolute -left-6 top-2 bottom-2 w-1 bg-gradient-to-b from-brand-teal to-brand-gold opacity-30 hidden lg:block"></div>
+
+                <h1 class="text-4xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight text-slate-900 mb-6 font-display">
+                    Karir Impian <br>
+                    <span class="text-teal-700">Internasional</span> <br>
+                    Menanti Anda
+                </h1>
+                
+                <p class="text-slate-700 text-lg leading-relaxed mb-8 max-w-lg font-medium">
+                    Temukan peluang kerja eksklusif di perusahaan terkemuka di berbagai negara. Mulai perjalanan global Anda dari sini.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4">
+                     <router-link v-if="!isAuthenticated" to="/register" class="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-md bg-[#008B99] px-8 font-medium text-white shadow-lg shadow-teal-500/30 transition-all duration-300 hover:bg-teal-700 hover:shadow-teal-500/50 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2">
+                        <span class="relative flex items-center gap-2 text-lg">
+                            Daftar Sekarang
+                        </span>
+                         <div class="absolute inset-0 -z-10 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+                    </router-link>
+                </div>
+            </div>
+
+            <!-- Right Content (Visual Composition) -->
+            <div class="relative h-[600px] w-full hidden lg:block">
+                <!-- Decorative SVG Lines (Gold Curves) -->
+                <!-- Decorative background elements -->
+                <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-100" viewBox="0 0 600 600" fill="none">
+                    <defs>
+                        <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#C5A668;stop-opacity:0.6" />
+                            <stop offset="100%" style="stop-color:#F59E0B;stop-opacity:0.3" />
+                        </linearGradient>
+                        <radialGradient id="glow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                            <stop offset="0%" style="stop-color:#C5A668;stop-opacity:0.2" />
+                            <stop offset="100%" style="stop-color:#C5A668;stop-opacity:0" />
+                        </radialGradient>
+                    </defs>
+
+                    <!-- Large Soft Glow -->
+                    <circle cx="300" cy="300" r="250" fill="url(#glow)" />
+
+                    <!-- Intricate Mandala-like Rings -->
+                    <circle cx="300" cy="300" r="280" stroke="#C5A668" stroke-width="2" stroke-dasharray="4 8" class="opacity-40 animate-spin-slow" />
+                    <circle cx="300" cy="300" r="220" stroke="#C5A668" stroke-width="2" stroke-dasharray="10 20" class="opacity-30" />
+                    <path d="M300 100 Q 500 200 500 300 T 300 500 T 100 300 T 300 100" stroke="#C5A668" stroke-width="1.5" fill="none" class="opacity-50" />
+                    
+                    <!-- Dynamic Offset Blobs/Curves -->
+                    <path d="M150 150 C 250 50, 450 50, 550 150 S 550 450, 450 550 S 150 550, 50 450 S 50 250, 150 150" stroke="url(#goldGradient)" stroke-width="3" fill="none" class="opacity-70 animate-pulse-border" style="animation-duration: 8s" />
+                    
+                    <!-- Scattered Particles -->
+                    <g class="animate-float-slow">
+                        <circle cx="120" cy="120" r="3" fill="#008B99" />
+                        <circle cx="480" cy="80" r="4" fill="#C5A668" />
+                        <circle cx="520" cy="480" r="3" fill="#008B99" />
+                        <circle cx="80" cy="500" r="5" fill="#C5A668" />
+                        <circle cx="300" cy="580" r="3" fill="#C5A668" />
+                    </g>
+
+
+                </svg>
+
+                <!-- Circle 1: Room/Lobby (Top Leftish) -->
+                <div class="absolute top-12 left-1/4 -translate-x-12 w-48 h-48 rounded-full border-4 border-white shadow-2xl overflow-hidden z-20 group hover:scale-110 transition-transform duration-500 animate-float-slow">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover" alt="Luxury Resort">
+                </div>
+
+                <!-- Circle 2: Chef (Top Rightish) -->
+                <div class="absolute top-24 right-8 w-52 h-52 rounded-full border-4 border-white shadow-2xl overflow-hidden z-20 group hover:scale-110 transition-transform duration-500 animate-float-slow" style="animation-delay: 2s;">
+                    <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover" alt="Professional Chef">
+                </div>
+
+                <!-- Circle 3: Service (Bottom Leftish) -->
+                <div class="absolute bottom-32 left-4 w-44 h-44 rounded-full border-4 border-white shadow-2xl overflow-hidden z-20 group hover:scale-110 transition-transform duration-500 animate-float-slow bg-slate-200" style="animation-delay: 1.5s;">
+                    <img src="https://images.unsplash.com/photo-1512061942530-e6a4e9a5cf27?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover" alt="Waiter">
+                </div>
+
+                <!-- Circle 4: Pool/Resort (Bottom Rightish) -->
+                <div class="absolute bottom-16 right-1/4 translate-x-12 w-56 h-56 rounded-full border-4 border-white shadow-2xl overflow-hidden z-20 group hover:scale-110 transition-transform duration-500 bg-slate-200 animate-float-slow" style="animation-delay: 0.5s;">
+                    <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover" alt="Resort Pool">
+                </div>
+                
+                <!-- Diamond Decor (Center-ish) -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-brand-gold rotate-45 opacity-20"></div>
+            </div>
         </div>
-      </div>
+    </section>
+
+    <!-- Features Section (Connected Flow) -->
+    <section class="pt-12 pb-24 bg-gradient-to-b from-white to-blue-50/30 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl font-bold text-slate-900 mb-4 font-display">Kenapa Memilih <span class="text-slate-900">{{ appName }}?</span></h2>
+                <p class="text-slate-500 text-lg">Platform terlengkap dengan fitur-fitur canggih untuk membantu perjalanan karirmu</p>
+            </div>
+
+            <div class="relative max-w-6xl mx-auto">
+                <!-- The Wave Connector Line -->
+                <div class="hidden md:block absolute top-[60px] left-0 w-full h-20 -z-10">
+                   <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 1000 100">
+                       <defs>
+                           <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                               <stop offset="0%" style="stop-color:#3b82f6" /> <!-- Blue -->
+                               <stop offset="50%" style="stop-color:#008B99" /> <!-- Teal -->
+                               <stop offset="100%" style="stop-color:#C5A668" /> <!-- Gold -->
+                           </linearGradient>
+                       </defs>
+                       <path d="M0,50 C250,50 250,50 500,50 C750,50 750,50 1000,50" stroke="url(#lineGradient)" stroke-width="4" fill="none" class="animate-dash" />
+                       <!-- Arrow head at end -->
+                       <path d="M990,40 L1000,50 L990,60" stroke="#C5A668" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                   </svg>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                    <!-- Feature 1 -->
+                    <div class="relative group">
+                        <div class="w-32 h-32 mx-auto bg-white rounded-full shadow-xl border-4 border-blue-100 flex items-center justify-center mb-8 group-hover:-translate-y-2 transition-transform duration-300 z-10 relative animate-float-slow">
+                            <i class="ph-duotone ph-globe text-5xl text-blue-500 group-hover:scale-110 transition-transform duration-300"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">1. Pencarian Global</h3>
+                        <p class="text-slate-700 text-sm leading-relaxed px-8 font-medium">
+                            Filter lowongan perusahaan di berbagai negara.
+                        </p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="relative group">
+                        <!-- Connecting Arrows for Tablet/Mobile if needed, hidden on Desktop due to SVG line -->
+                        <div class="w-32 h-32 mx-auto bg-white rounded-full shadow-xl border-4 border-teal-100 flex items-center justify-center mb-8 group-hover:-translate-y-2 transition-transform duration-300 z-10 relative animate-float-slow" style="animation-delay: 1.5s;">
+                            <i class="ph-duotone ph-rocket-launch text-5xl text-brand-teal group-hover:scale-110 transition-transform duration-300"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">2. Proses Lamar Efisien</h3>
+                        <p class="text-slate-700 text-sm leading-relaxed px-8 font-medium">
+                            Kirim lamaran profesional Anda dengan profil yang otomatis disesuaikan.
+                        </p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="relative group">
+                        <div class="w-32 h-32 mx-auto bg-white rounded-full shadow-xl border-4 border-amber-100 flex items-center justify-center mb-8 group-hover:-translate-y-2 transition-transform duration-300 z-10 relative animate-float-slow" style="animation-delay: 0.5s;">
+                            <i class="ph-duotone ph-bell-ringing text-5xl text-brand-gold group-hover:scale-110 transition-transform duration-300"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">3. Notifikasi Real-time</h3>
+                        <p class="text-slate-700 text-sm leading-relaxed px-8 font-medium">
+                            Pantau status lamaran di mana pun Anda berada.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (Dark Navy) -->
+    <footer class="bg-[#0F172A] text-slate-300 py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <!-- Brand -->
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center gap-2 text-white text-2xl font-bold mb-6 font-display">
+                        <i class="ph-fill ph-users-three text-white"></i>
+                        {{ appName }}
+                    </div>
+                    <p class="text-sm opacity-80 mb-6 max-w-xs">
+                        Platform pencarian kerja terpercaya untuk generasi muda Indonesia.
+                    </p>
+                </div>
+
+                <!-- Perusahaan -->
+                <div>
+                     <h4 class="text-white font-bold mb-6">Perusahaan</h4>
+                     <ul class="space-y-3 text-sm">
+                         <li><a href="#" class="hover:text-white transition">Tentang Kami</a></li>
+                         <li><a href="#" class="hover:text-white transition">Karir</a></li>
+                         <li><a href="#" class="hover:text-white transition">Blog</a></li>
+                     </ul>
+                </div>
+
+                <!-- Bantuan -->
+                <div>
+                     <h4 class="text-white font-bold mb-6">Bantuan</h4>
+                     <ul class="space-y-3 text-sm">
+                         <li><a href="#" class="hover:text-white transition">FAQ</a></li>
+                         <li><a href="#" class="hover:text-white transition">Kontak</a></li>
+                         <li><a href="#" class="hover:text-white transition">Syarat & Ketentuan</a></li>
+                     </ul>
+                </div>
+
+                <!-- Socials -->
+                <div>
+                    <h4 class="text-white font-bold mb-6">Ikuti Kami</h4>
+                    <div class="flex gap-3">
+                         <a href="#" class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-white hover:text-brand-dark transition duration-300">
+                             <i class="ph-bold ph-facebook-logo text-xl"></i>
+                         </a>
+                         <a href="#" class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-white hover:text-brand-dark transition duration-300">
+                             <i class="ph-bold ph-twitter-logo text-xl"></i>
+                         </a>
+                         <a href="#" class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-white hover:text-brand-dark transition duration-300">
+                             <i class="ph-bold ph-instagram-logo text-xl"></i>
+                         </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs opacity-60">
+                <p>&copy; {{ currentYear }} {{ appName }}. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import NavBar from '@/components/layout/NavBar.vue'
-import heroIllustration from '@/assets/hero-illustration-v3.png'
 
 const authStore = useAuthStore()
-// storeToRefs memastikan 'isAuthenticated' tetap reaktif
 const { isAuthenticated } = storeToRefs(authStore)
+
+const appName = import.meta.env.VITE_APP_NAME || 'CariKerja'
+const currentYear = ref(new Date().getFullYear())
 </script>
+
+<style scoped>
+@keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes float-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+@keyframes pulse-border {
+    0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+.animate-spin-slow {
+    animation: spin-slow 120s linear infinite;
+    transform-origin: center;
+}
+
+.animate-float-slow {
+    animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-pulse-border {
+    animation: pulse-border 2s infinite;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: -1000;
+    }
+}
+
+.animate-dash {
+    stroke-dasharray: 20 10;
+    animation: dash 20s linear infinite;
+}
+</style>

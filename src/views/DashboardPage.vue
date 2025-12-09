@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-slate-50 font-sans">
     <NavBar />
     
-    <div class="pt-8 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       
       <!-- Welcome Section -->
       <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -13,10 +13,10 @@
           <p class="text-slate-500 mt-1 text-base">Siap untuk meraih karir impianmu hari ini?</p>
         </div>
         <div class="flex items-center gap-3">
-          <router-link to="/jobs" class="btn btn-primary shadow-lg shadow-primary-600/20 px-6 py-2.5 rounded-full flex items-center gap-2 hover:-translate-y-0.5 transition-transform">
+          <button @click="handleJobSearch" class="btn btn-primary shadow-lg shadow-primary-600/20 px-6 py-2.5 rounded-full flex items-center gap-2 hover:-translate-y-0.5 transition-transform">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             Cari Lowongan
-          </router-link>
+          </button>
         </div>
       </div>
 
@@ -188,6 +188,14 @@
               <div v-if="loadingDashboard" class="flex justify-center py-12">
                   <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
               </div>
+
+              <div v-else-if="progressPercentage < 100" class="text-center py-8 px-4 bg-orange-50 rounded-xl border border-orange-100 flex flex-col items-center">
+                  <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-3">
+                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                  </div>
+                  <h3 class="font-bold text-orange-800 mb-1">Akses Terkunci</h3>
+                  <p class="text-sm text-orange-600 mb-3">Lengkapi profil Anda hingga 100% untuk melihat lamaran aktif.</p>
+              </div>
               
               <div v-else-if="recentApplications.length > 0" class="space-y-4">
                 <div 
@@ -240,6 +248,15 @@
               
               <div v-if="loadingDashboard" class="flex justify-center py-12">
                   <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+              </div>
+
+              <div v-else-if="progressPercentage < 100" class="text-center py-12 px-4 bg-slate-50 rounded-xl border border-slate-100 flex flex-col items-center">
+                   <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mb-4">
+                      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                  </div>
+                  <h3 class="font-bold text-slate-700 mb-2">Rekomendasi Terkunci</h3>
+                  <p class="text-slate-500 mb-4 max-w-xs mx-auto">Kami butuh profil lengkap Anda untuk memberikan rekomendasi pekerjaan yang paling cocok.</p>
+                  <router-link to="/profile" class="bg-[#008B99] text-white px-6 py-2 rounded-full font-medium hover:bg-teal-700 transition">Lengkapi Profil Sekarang</router-link>
               </div>
 
               <div v-else-if="recommendations.length > 0" class="grid sm:grid-cols-2 gap-4">
@@ -458,8 +475,6 @@ const isSkillsComplete = computed(() => skills.value && skills.value.length > 0)
 const profileSteps = computed(() => [
   { label: 'Informasi Dasar', complete: isBasicInfoComplete.value },
   { label: 'Pendidikan', complete: isEducationComplete.value },
-  { label: 'Pengalaman', complete: isExperienceComplete.value },
-  { label: 'Keahlian', complete: isSkillsComplete.value },
 ])
 
 const mandatoryDocTypes = computed(() => {
@@ -481,12 +496,12 @@ const isDocComplete = (typeId) => {
 
 const progressPercentage = computed(() => {
   let completedItems = 0
-  let totalItems = 4 // Basic, Edu, Exp, Skills
+  let totalItems = 2 // Basic, Edu (removed Exp & Skills from mandatory count)
 
   if (isBasicInfoComplete.value) completedItems++
   if (isEducationComplete.value) completedItems++
-  if (isExperienceComplete.value) completedItems++
-  if (isSkillsComplete.value) completedItems++
+  // Removed Exp & Skills checks
+
 
   // Add mandatory docs to calculation
   if (mandatoryDocTypes.value.length > 0) {
@@ -619,6 +634,17 @@ const handleNotificationClick = (notif) => {
     }
     
     router.push(path)
+}
+
+const handleJobSearch = () => {
+  if (progressPercentage.value < 100) {
+    // Show Alert (using simple alert for now, or SweetAlert if available but alert is safer)
+    alert("Mohon lengkapi profil Anda hingga 100% untuk mencari lowongan pekerjaan.")
+    // Optional: Scroll to profile checklist
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  } else {
+    router.push('/jobs')
+  }
 }
 
 onMounted(async () => {

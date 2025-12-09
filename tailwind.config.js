@@ -11,6 +11,12 @@ export default {
     theme: {
         extend: {
             colors: {
+                brand: {
+                    teal: '#008B99',
+                    dark: '#0F172A',
+                    gold: '#C5A668',
+                    light: '#F8FAF5',
+                },
                 primary: {
                     50: '#ecfeff',
                     100: '#cffafe',
@@ -61,6 +67,11 @@ export default {
                 'scale-in': 'scaleIn 0.3s ease-out',
                 'bounce-slow': 'bounce 2s infinite',
                 'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                'float-slow': 'float 6s ease-in-out infinite',
+                'float-medium': 'float 5s ease-in-out infinite',
+                'float-fast': 'float 4s ease-in-out infinite',
+                'fade-in-up': 'fadeInUp 1s ease-out forwards',
+                'draw': 'draw 2s ease-out forwards',
             },
             keyframes: {
                 fadeIn: {
@@ -79,6 +90,18 @@ export default {
                     '0%': { transform: 'scale(0.9)', opacity: '0' },
                     '100%': { transform: 'scale(1)', opacity: '1' },
                 },
+                float: {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-20px)' },
+                },
+                fadeInUp: {
+                    '0%': { opacity: '0', transform: 'translateY(30px)' },
+                    '100%': { opacity: '1', transform: 'translateY(0)' },
+                },
+                draw: {
+                    '0%': { strokeDasharray: '1000', strokeDashoffset: '1000' },
+                    '100%': { strokeDashoffset: '0' },
+                }
             },
             backgroundImage: {
                 'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

@@ -12,10 +12,10 @@
       <button
         v-show="showScrollTop"
         @click="scrollToTop"
-        class="btn btn-circle btn-primary shadow-lg hover:scale-110 transition-transform duration-200"
+        class="w-12 h-12 rounded-full bg-[#008B99] text-white shadow-lg shadow-teal-500/30 flex items-center justify-center hover:bg-teal-700 hover:scale-110 transition-all duration-300"
         title="Scroll to Top"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
         </svg>
       </button>
@@ -27,7 +27,7 @@
       :href="whatsappUrl"
       target="_blank"
       rel="noopener noreferrer"
-      class="btn btn-circle btn-success shadow-lg hover:scale-110 transition-transform duration-200 text-white border-none bg-[#25D366] hover:bg-[#128C7E]"
+      class="w-12 h-12 rounded-full bg-[#25D366] text-white shadow-lg flex items-center justify-center hover:bg-[#128C7E] hover:scale-110 transition-all duration-300"
       title="Hubungi Admin via WhatsApp"
     >
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
