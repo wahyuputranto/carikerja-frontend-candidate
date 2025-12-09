@@ -35,11 +35,11 @@ export const useDocumentsStore = defineStore('documents', () => {
         try {
             const response = await api.get('/documents')
             if (response.data.success) {
-                userDocuments.value = response.data.data
+                userDocuments.value = response.data.data || []
                 console.log('[DOCUMENTS] User documents loaded:', userDocuments.value.length)
             }
         } catch (err) {
-            console.error('[DOCUMENTS] Error fetching user documents:', err.response?.status, err.response?.data)
+            console.error('[DOCUMENTS] Error fetching user documents:', err.response?.status || err.code, err.response?.data || err.message)
             userDocuments.value = []
             // Don't set global error here to avoid blocking other UI
         } finally {

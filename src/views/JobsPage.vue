@@ -160,8 +160,8 @@
                 <!-- Company Logo/Icon -->
                 <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl flex-shrink-0 flex items-center justify-center overflow-hidden bg-white border-2 border-slate-200 shadow-sm">
                   <img 
-                    :src="job.company?.logo_url || defaultCompanyLogo" 
-                    :alt="job.company?.name || 'Company Logo'" 
+                    :src="defaultCompanyLogo" 
+                    alt="Company Hidden" 
                     class="w-full h-full object-contain p-2" 
                   />
                 </div>
@@ -169,7 +169,9 @@
                 <!-- Job Title & Company -->
                 <div class="flex-1 min-w-0">
                   <h3 class="text-base md:text-lg font-bold text-slate-900 mb-0.5 md:mb-1 line-clamp-1">{{ job.title }}</h3>
-                  <p class="text-xs md:text-sm text-slate-600 font-medium">{{ job.company?.name || 'Perusahaan Rahasia' }}</p>
+                  <p class="text-xs md:text-sm text-slate-400 font-medium italic">
+                    Perusahaan Dirahasiakan
+                  </p>
                 </div>
               </div>
               
@@ -186,12 +188,12 @@
                 </svg>
                 {{ formatSalary(job.salary_min) }} - {{ formatSalary(job.salary_max) }}
               </span>
-              <span class="flex items-center mr-4" v-if="job.location?.name">
+              <span class="flex items-center mr-4" v-if="job.location">
                 <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                {{ job.location.city }}, {{ job.location.province }}
+                {{ job.location.name || `${job.location.city}, ${job.location.province}` }}
               </span>
               <span class="flex items-center">
                 <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -250,6 +252,7 @@
 import { onMounted, ref, computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useJobsStore } from '@/stores/jobs'
+import { useAuthStore } from '@/stores/auth'
 import { useMasterStore } from '@/stores/master'
 import NavBar from '@/components/layout/NavBar.vue'
 import {
@@ -267,6 +270,8 @@ import defaultCompanyLogo from '@/assets/default-company-logo.png'
 const jobsStore = useJobsStore()
 const { jobs, loading, error } = storeToRefs(jobsStore)
 const { fetchJobs } = jobsStore
+const authStore = useAuthStore()
+const { isAuthenticated } = storeToRefs(authStore)
 
 const masterStore = useMasterStore()
 const { locations, categories } = storeToRefs(masterStore)

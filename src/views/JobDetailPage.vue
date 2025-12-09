@@ -28,7 +28,7 @@
               Kembali ke Lowongan
             </router-link>
             <h1 class="text-4xl font-bold font-display mb-2">{{ job.title }}</h1>
-            <p class="text-xl text-slate-600">{{ job.company?.name || 'Perusahaan Rahasia' }}</p>
+            <p class="text-xl text-slate-600">Perusahaan Dirahasiakan</p>
           </div>
 
           <div class="grid lg:grid-cols-3 gap-8">
@@ -38,10 +38,10 @@
               <div class="card">
                 <div class="flex items-center space-x-4 mb-6">
                   <div class="w-20 h-20 bg-white border-2 border-slate-200 rounded-2xl overflow-hidden flex items-center justify-center p-2 shadow-sm">
-                    <img :src="job.company?.logo_url || defaultCompanyLogo" :alt="job.company?.name || 'Company Logo'" class="w-full h-full object-contain" />
+                    <img :src="defaultCompanyLogo" alt="Company Hidden" class="w-full h-full object-contain" />
                   </div>
                   <div>
-                    <h2 class="text-2xl font-bold">{{ job.company?.name || 'Perusahaan Rahasia' }}</h2>
+                    <h2 class="text-2xl font-bold">Perusahaan Dirahasiakan</h2>
                     <p class="text-slate-600">{{ job.category?.name || 'Umum' }}</p>
                   </div>
                 </div>
@@ -245,13 +245,13 @@ const shareToFacebook = () => {
 
 const shareToTwitter = () => {
   const url = encodeURIComponent(window.location.href)
-  const text = encodeURIComponent(`${job.value.title} - ${job.value.company?.name || 'Lowongan Kerja'}`)
+  const text = encodeURIComponent(`${job.value.title} - Perusahaan Dirahasiakan`)
   window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank')
 }
 
 const shareToWhatsApp = () => {
   const url = encodeURIComponent(window.location.href)
-  const text = encodeURIComponent(`Cek lowongan ini: ${job.value.title} di ${job.value.company?.name || 'Perusahaan'}`)
+  const text = encodeURIComponent(`Cek lowongan ini: ${job.value.title} di Perusahaan Dirahasiakan`)
   window.open(`https://wa.me/?text=${text}%20${url}`, '_blank')
 }
 </script>

@@ -46,9 +46,24 @@
                 </div>
                 <div>
                   <h3 class="font-bold text-lg">{{ docType.name }}</h3>
-                  <div class="text-sm text-slate-600 flex items-center gap-2">
-                    <span v-if="docType.description">{{ docType.description }} •</span>
+                  <div class="text-sm text-slate-600 mb-2">
                     <span>Max: {{ formatFileSize((docType.max_size || 5120) * 1024) }}</span>
+                  </div>
+
+                  <!-- Info Alert & Template Button -->
+                  <div v-if="docType.notes || docType.template" class="mt-3 space-y-3">
+                    <div v-if="docType.notes" class="bg-blue-50 border border-blue-100 rounded-lg p-3 text-sm text-blue-800 flex items-start gap-2">
+                       <svg class="w-5 h-5 mt-0.5 flex-shrink-0 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                       <div class="flex-1">
+                         <span class="font-semibold block mb-0.5 text-blue-900">Keterangan:</span>
+                         <span>{{ docType.notes }}</span>
+                       </div>
+                    </div>
+                    
+                    <a v-if="docType.template" :href="docType.template" target="_blank" class="btn btn-sm btn-outline gap-2 bg-white hover:bg-slate-50 text-primary-600 border-primary-200 hover:border-primary-500">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                      Download Template
+                    </a>
                   </div>
                 </div>
               </div>
