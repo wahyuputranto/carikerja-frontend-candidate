@@ -160,14 +160,10 @@ const DashboardIcon = {
 
 // Navigation sekarang menggunakan computed property
 const navigation = computed(() => {
-  // Menu dasar yang muncul untuk semua orang (publik)
-  const items = [
-    { name: 'Beranda', path: '/', icon: HomeIcon },
-    { name: 'Lowongan Kerja', path: '/jobs', icon: BriefcaseIcon },
-  ];
+  const items = [];
 
-  // Jika user SUDAH login, tambahkan menu Dashboard
   if (isAuthenticated.value) {
+    items.push({ name: 'Lowongan Kerja', path: '/jobs', icon: BriefcaseIcon });
     items.push({ name: 'Dashboard', path: '/dashboard', icon: DashboardIcon });
   }
 

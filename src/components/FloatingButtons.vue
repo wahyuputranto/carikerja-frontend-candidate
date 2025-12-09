@@ -23,6 +23,7 @@
 
     <!-- WhatsApp Button -->
     <a
+      v-if="isAuthenticated"
       :href="whatsappUrl"
       target="_blank"
       rel="noopener noreferrer"
@@ -38,6 +39,11 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
+const { isAuthenticated } = storeToRefs(authStore)
 
 const showScrollTop = ref(false)
 const whatsappNumber = '6281234567890' // Replace with actual admin number

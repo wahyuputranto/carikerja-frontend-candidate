@@ -28,25 +28,12 @@
                 </svg>
               </router-link>
               
-              <router-link to="/jobs" class="btn btn-outline text-lg px-8 py-4">
+              <router-link v-if="isAuthenticated" to="/jobs" class="btn btn-outline text-lg px-8 py-4">
                 Lihat Lowongan
               </router-link>
             </div>
 
-            <div class="grid grid-cols-3 gap-6 pt-8">
-              <div class="text-center">
-                <div class="text-3xl font-bold gradient-text">10K+</div>
-                <div class="text-sm text-slate-600 mt-1">Lowongan Aktif</div>
-              </div>
-              <div class="text-center">
-                <div class="text-3xl font-bold gradient-text">50K+</div>
-                <div class="text-sm text-slate-600 mt-1">Kandidat</div>
-              </div>
-              <div class="text-center">
-                <div class="text-3xl font-bold gradient-text">500+</div>
-                <div class="text-sm text-slate-600 mt-1">Perusahaan</div>
-              </div>
-            </div>
+            <!-- Stats removed for simplicity -->
           </div>
 
           <div class="relative flex justify-center">
@@ -76,92 +63,41 @@
           </p>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div class="card group">
-            <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="card group hover:shadow-xl transition-all duration-300 border-none bg-white/80 backdrop-blur-sm">
+            <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
-            <h3 class="text-xl font-bold mb-2">Pencarian Cerdas</h3>
-            <p class="text-slate-600">Filter lowongan berdasarkan skill, lokasi, gaji, dan preferensi lainnya dengan mudah</p>
+            <h3 class="text-xl font-bold mb-3 text-slate-800">Pencarian Mudah</h3>
+            <p class="text-slate-600 leading-relaxed">Filter lowongan berdasarkan skill, lokasi, dan gaji yang kamu inginkan.</p>
           </div>
 
-          <div class="card group">
-            <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="card group hover:shadow-xl transition-all duration-300 border-none bg-white/80 backdrop-blur-sm">
+            <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <h3 class="text-xl font-bold mb-2">Lamar Instan</h3>
-            <p class="text-slate-600">Kirim lamaran hanya dengan satu klik menggunakan profil yang sudah kamu buat</p>
+            <h3 class="text-xl font-bold mb-3 text-slate-800">Lamar Cepat</h3>
+            <p class="text-slate-600 leading-relaxed">Kirim lamaran hanya dengan satu klik menggunakan profilmu.</p>
           </div>
 
-          <div class="card group">
-            <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="card group hover:shadow-xl transition-all duration-300 border-none bg-white/80 backdrop-blur-sm">
+            <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
             </div>
-            <h3 class="text-xl font-bold mb-2">Notifikasi Real-time</h3>
-            <p class="text-slate-600">Dapatkan update langsung untuk setiap perkembangan lamaranmu</p>
-          </div>
-
-          <div class="card group">
-            <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold mb-2">Aman & Terpercaya</h3>
-            <p class="text-slate-600">Data pribadimu dijamin aman dengan enkripsi tingkat enterprise</p>
-          </div>
-
-          <div class="card group">
-            <div class="w-14 h-14 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold mb-2">Tips Karir</h3>
-            <p class="text-slate-600">Akses artikel dan panduan untuk meningkatkan peluang diterima kerja</p>
-          </div>
-
-          <div class="card group">
-            <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold mb-2">Proses Cepat</h3>
-            <p class="text-slate-600">Sistem otomatis mempercepat proses screening dan review lamaran</p>
+            <h3 class="text-xl font-bold mb-3 text-slate-800">Update Langsung</h3>
+            <p class="text-slate-600 leading-relaxed">Dapatkan notifikasi status lamaranmu secara real-time.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section v-if="!isAuthenticated" class="py-20 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto">
-        <div class="glass rounded-3xl p-12 text-center relative overflow-hidden">
-          <div class="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-secondary-500/10 to-accent-500/10"></div>
-          
-          <div class="relative z-10">
-            <h2 class="text-4xl md:text-5xl font-bold font-display mb-6">
-              Siap Memulai Perjalanan Karirmu?
-            </h2>
-            <p class="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
-              Bergabunglah dengan ribuan kandidat lainnya yang sudah menemukan pekerjaan impian mereka
-            </p>
-            <router-link to="/register" class="btn btn-primary text-lg px-10 py-4 inline-flex items-center">
-              Daftar Gratis Sekarang
-              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Bottom CTA removed for simplicity -->
 
     <footer class="bg-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
