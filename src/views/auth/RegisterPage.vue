@@ -73,19 +73,38 @@
               </div>
             </div>
 
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-2">
-                Nomor Telepon *
-              </label>
-              <input
-                v-model="form.phone"
-                type="tel"
-                placeholder="08123456789"
-                class="input"
-                :class="{ 'input-error': errors.phone }"
-                required
-              />
-              <p v-if="errors.phone" class="mt-1 text-sm text-red-600">{{ errors.phone }}</p>
+            <!-- NIK & Phone -->
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                  Nomor KTP (NIK) *
+                </label>
+                <input
+                  v-model="form.nik"
+                  type="text"
+                  placeholder="16 digit NIK"
+                  class="input"
+                  :class="{ 'input-error': errors.nik }"
+                  maxlength="16"
+                  required
+                />
+                <p v-if="errors.nik" class="mt-1 text-sm text-red-600">{{ errors.nik }}</p>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                  Nomor Telepon *
+                </label>
+                <input
+                  v-model="form.phone"
+                  type="tel"
+                  placeholder="08123456789"
+                  class="input"
+                  :class="{ 'input-error': errors.phone }"
+                  required
+                />
+                <p v-if="errors.phone" class="mt-1 text-sm text-red-600">{{ errors.phone }}</p>
+              </div>
             </div>
 
             <div>
@@ -134,8 +153,6 @@
             </div>
 
             <!-- Preferences Info -->
-
-
             <div>
               <label class="block text-sm font-semibold text-slate-700 mb-2">
                 Minat Kategori Pekerjaan
@@ -215,36 +232,15 @@ const error = ref(null)
 const errors = ref({})
 
 const form = ref({
+  nik: '',
   name: '',
   email: '',
   phone: '',
   password: '',
   password_confirmation: '',
-  birth_date: '',
-  gender: '',
-  address: '',
-  city: '',
-  province: '',
   interested_job_category_id: '',
   agree_terms: false
 })
-
-// Location Logic
-const provinces = computed(() => {
-    const indonesia = masterStore.locations.find(l => l.type === 'COUNTRY' && l.name === 'Indonesia')
-    if (!indonesia) return []
-    return masterStore.locations.filter(l => l.type === 'PROVINCE' && l.parent_id === indonesia.id)
-})
-
-const cities = computed(() => {
-    const selectedProvince = provinces.value.find(p => p.name === form.value.province)
-    if (!selectedProvince) return []
-    return masterStore.locations.filter(l => l.parent_id === selectedProvince.id && l.type === 'CITY')
-})
-
-const handleProvinceChange = () => {
-    form.value.city = ''
-}
 
 onMounted(() => {
   masterStore.fetchAll()
@@ -252,6 +248,9 @@ onMounted(() => {
 
 const validateForm = () => {
   errors.value = {}
+  
+  if (!form.value.nik) errors.value.nik = 'NIK wajib diisi'
+  else if (!/^\d{16}$/.test(form.value.nik)) errors.value.nik = 'NIK harus 16 digit angka'
   
   if (!form.value.name) errors.value.name = 'Nama wajib diisi'
   if (!form.value.email) errors.value.email = 'Email wajib diisi'
@@ -266,8 +265,13 @@ const validateForm = () => {
     error.value = 'Anda harus menyetujui syarat & ketentuan'
     return false
   }
+
+  if (Object.keys(errors.value).length > 0) {
+    error.value = 'Mohon lengkapi semua form yang wajib diisi dengan benar'
+    return false
+  }
   
-  return Object.keys(errors.value).length === 0
+  return true
 }
 
 const handleSubmit = async () => {

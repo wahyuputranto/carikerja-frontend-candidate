@@ -82,21 +82,36 @@ const router = createRouter({
 })
 
 // Navigation guards
+
 router.beforeEach((to, from, next) => {
     console.log(`[ROUTER] Navigating from ${from.path} to ${to.path}`)
 
     const authStore = useAuthStore()
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
     const hideForAuth = to.matched.some(record => record.meta.hideForAuth)
-    const isAuthenticated = authStore.isAuthenticated
 
-    console.log(`[ROUTER] requiresAuth: ${requiresAuth}, isAuthenticated: ${isAuthenticated}, token exists: ${!!authStore.token}`)
+    // Check if token exists in localStorage directly
+    const token = localStorage.getItem('token')
+    const hasToken = !!token && token !== 'null' && token !== 'undefined'
 
-    if (requiresAuth && !isAuthenticated) {
-        console.log('[ROUTER] Redirecting to login - not authenticated')
+    // If token is missing but store thinks we're auth, sync logout
+    if (!hasToken && authStore.isAuthenticated) {
+        authStore.logout()
+    }
+
+    // Recalculate auth state logic based on token presence
+    // We trust hasToken more than store for the initial check
+    const isAuthenticated = hasToken || authStore.isAuthenticated
+
+    console.log(`[ROUTER] requiresAuth: ${requiresAuth}, hasToken: ${hasToken}`)
+
+    if (requiresAuth && !hasToken) {
+        console.log('[ROUTER] Redirecting to login - missing token in localStorage')
+        // Force logout to clean state
+        authStore.logout()
         next({ name: 'login', query: { redirect: to.fullPath } })
-    } else if (hideForAuth && isAuthenticated) {
-        console.log('[ROUTER] Redirecting to dashboard - already authenticated')
+    } else if (hideForAuth && hasToken) {
+        console.log('[ROUTER] Redirecting to dashboard - already has token')
         next({ name: 'dashboard' })
     } else {
         console.log('[ROUTER] Navigation allowed')

@@ -76,6 +76,7 @@ export const useAuthStore = defineStore('auth', () => {
                 password: userData.password,
                 name: userData.name,
                 full_name: userData.name,
+                nik: userData.nik,
                 ...(userData.interested_job_category_id && { interested_job_category_id: parseInt(userData.interested_job_category_id) })
             }
 

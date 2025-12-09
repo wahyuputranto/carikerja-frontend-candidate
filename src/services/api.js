@@ -17,9 +17,10 @@ api.interceptors.request.use(
         if (token) {
             config.headers.Authorization = `Bearer ${token}`
             console.log('[API] Authorization header set:', config.headers.Authorization?.substring(0, 30) + '...')
-        } else {
-            console.warn('[API] No token found in localStorage')
         }
+        // else {
+        //     console.log('[API] No token found in localStorage (Public request)')
+        // }
         return config
     },
     (error) => {
@@ -42,6 +43,8 @@ api.interceptors.response.use(
             // Token expired or invalid
             localStorage.removeItem('token')
             window.location.href = '/login'
+            // Return a never-resolving promise to halt execution chain
+            return new Promise(() => { })
         }
         return Promise.reject(error)
     }
