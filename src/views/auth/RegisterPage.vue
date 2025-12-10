@@ -284,7 +284,7 @@ const handleSubmit = async () => {
     const result = await authStore.register(form.value)
 
     if (result.success) {
-      router.push('/dashboard')
+      router.push('/dashboard?welcome=true')
     } else {
       error.value = result.error
     }

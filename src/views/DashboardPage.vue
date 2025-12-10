@@ -241,9 +241,9 @@
             <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col h-full">
               <div class="flex items-center justify-between mb-6">
                 <h2 class="text-lg font-bold text-slate-800">Rekomendasi Pekerjaan</h2>
-                <router-link to="/jobs" class="text-primary-600 hover:text-primary-700 text-sm font-medium hover:underline">
+                <button @click="handleJobSearch" class="text-primary-600 hover:text-primary-700 text-sm font-medium hover:underline bg-transparent border-none p-0 cursor-pointer">
                   Eksplorasi
-                </router-link>
+                </button>
               </div>
               
               <div v-if="loadingDashboard" class="flex justify-center py-12">
@@ -410,23 +410,90 @@
         </div>
       </div>
     </div>
+
+    <!-- Welcome Modal -->
+    <TransitionRoot as="template" :show="showWelcomeModal">
+      <Dialog as="div" class="relative z-50" @close="showWelcomeModal = false">
+        <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
+          <div class="fixed inset-0 bg-slate-900/75 transition-opacity backdrop-blur-sm" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leave-from="opacity-100 translate-y-0 sm:scale-100" leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+              <DialogPanel class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-slate-100">
+                
+                <!-- Confetti/Decoration Background -->
+                <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-primary-500/10 to-teal-400/10"></div>
+                
+                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 relative">
+                  <div class="sm:flex sm:items-start text-center flex-col items-center">
+                    
+                    <!-- Icon -->
+                    <div class="mx-auto flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-20 sm:w-20 mb-4 ring-8 ring-green-50">
+                      <span class="text-4xl animate-bounce">🎉</span>
+                    </div>
+
+                    <div class="mt-3 text-center sm:mt-0 sm:text-center w-full">
+                      <DialogTitle as="h3" class="text-2xl font-bold leading-6 text-slate-900 mb-2">
+                        Selamat Datang, {{ userFirstName }}!
+                      </DialogTitle>
+                      <div class="mt-2">
+                        <p class="text-sm text-slate-500 mb-4">
+                          Akun Anda telah berhasil dibuat.
+                        </p>
+                        
+                        <div class="p-4 bg-primary-50 rounded-xl border border-primary-100/50 text-left relative overflow-hidden">
+                           <!-- Decorative circle -->
+                           <div class="absolute -right-4 -top-4 w-16 h-16 bg-primary-100 rounded-full opacity-50"></div>
+
+                           <h4 class="font-bold text-primary-800 text-sm mb-1.5 flex items-center relative z-10">
+                              <svg class="w-4 h-4 mr-1.5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                              Tips Cepat Diterima Kerja
+                           </h4>
+                           <p class="text-xs text-primary-700 leading-relaxed relative z-10">
+                              Lengkapi data profil dan dokumen kamu untuk bisa melanjutkan proses berikutnya.
+                           </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-slate-50 px-4 py-3 sm:flex sm:flex-col sm:px-6 gap-2">
+                  <button type="button" class="btn btn-primary w-full flex justify-center items-center shadow-lg shadow-primary-600/20 py-2.5 rounded-xl font-bold" @click="navigateToProfile">
+                    Lengkapi Profil Sekarang
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                  </button>
+                  <button type="button" class="w-full justify-center rounded-xl bg-white px-3 py-2.5 text-sm font-semibold text-slate-600 shadow-sm ring-1 ring-inset ring-slate-200 hover:bg-slate-50 hover:text-slate-800 transition-colors" @click="showWelcomeModal = false">
+                    Nanti Saja, Masuk Dashboard
+                  </button>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
+
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, onMounted, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import { useDashboardStore } from '@/stores/dashboard'
 import { useDocumentsStore } from '@/stores/documents'
 import { useNotificationStore } from '@/stores/notifications'
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import NavBar from '@/components/layout/NavBar.vue'
 
 import defaultCompanyLogo from '@/assets/default-company-logo.png'
 import defaultAvatar from '@/assets/default-avatar.png'
 
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
 const dashboardStore = useDashboardStore()
 const documentsStore = useDocumentsStore()
@@ -647,6 +714,14 @@ const handleJobSearch = () => {
   }
 }
 
+// Welcome Modal Logic
+const showWelcomeModal = ref(false)
+
+const navigateToProfile = () => {
+  showWelcomeModal.value = false
+  router.push('/profile')
+}
+
 onMounted(async () => {
   await Promise.all([
     authStore.fetchUser(),
@@ -655,6 +730,13 @@ onMounted(async () => {
     documentsStore.fetchDocumentTypes(),
     notificationStore.fetchNotifications()
   ])
+
+  // Check for welcome query param
+  if (route.query.welcome === 'true') {
+    showWelcomeModal.value = true
+    // Cleanup URL
+    router.replace({ query: null })
+  }
 })
 </script>
 

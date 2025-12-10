@@ -90,6 +90,7 @@ import defaultAvatar from '@/assets/default-avatar.png'; // Make sure path align
 
 const authStore = useAuthStore();
 const documentsStore = useDocumentsStore();
+const router = useRouter();
 
 const { currentUser, educations, experiences, skills } = storeToRefs(authStore);
 const { documentTypes, userDocuments } = storeToRefs(documentsStore);
