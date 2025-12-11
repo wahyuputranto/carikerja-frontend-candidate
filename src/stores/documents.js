@@ -107,7 +107,17 @@ export const useDocumentsStore = defineStore('documents', () => {
         try {
             const response = await api.get(`/documents/${documentId}/download`)
             if (response.data.success) {
-                return { success: true, url: response.data.data.url }
+                let downloadUrl = response.data.data.url;
+
+                // Fix: If backend returns localhost URL (misconfig), force it to go through Nginx proxy
+                if (downloadUrl && downloadUrl.includes('localhost:9000')) {
+                    downloadUrl = downloadUrl.replace(/^https?:\/\/localhost:9000/, '');
+                    // Handle case where path doesn't start with /agency-documents if needed, 
+                    // but usually backend returns full path. 
+                    // Example: /agency-documents/candidates/...
+                }
+
+                return { success: true, url: downloadUrl }
             }
             return { success: false, error: 'Gagal mendapatkan URL dokumen' }
         } catch (err) {

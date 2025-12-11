@@ -129,7 +129,8 @@
                 <button @click="viewDocument(uploadedDocs[docType.id].id)" class="btn btn-sm btn-outline bg-white hover:bg-slate-50">
                   Lihat
                 </button>
-                <div v-if="uploadedDocs[docType.id].status === 'INVALID'">
+                <!-- Always allow re-upload to fix broken files or update docs -->
+                <div>
                    <input 
                     type="file" 
                     class="hidden" 
@@ -137,8 +138,11 @@
                     :accept="docType.allowed_mimetypes" 
                     @change="handleFileUpload(docType, $event)"
                   >
-                  <label :for="`reupload-${docType.id}`" class="btn btn-sm btn-primary cursor-pointer w-full text-center block">
-                    Upload Ulang
+                  <label :for="`reupload-${docType.id}`" 
+                    class="btn btn-sm w-full text-center block"
+                    :class="uploadedDocs[docType.id].status === 'INVALID' ? 'btn-primary' : 'btn-outline border-slate-300 text-slate-600 hover:border-primary-500 hover:text-primary-600'"
+                  >
+                    {{ uploadedDocs[docType.id].status === 'INVALID' ? 'Upload Ulang' : 'Ganti File' }}
                   </label>
                 </div>
               </div>
