@@ -38,11 +38,20 @@ api.interceptors.response.use(
     (error) => {
         console.error('[API] Response error:', error.response?.status, error.config?.url)
         if (error.response?.status === 401) {
+            // Check if it's a login attempt - if so, let the error propagate to the login component
+            // so it can display "Invalid credentials"
+            if (error.config?.url?.includes('/auth/login')) {
+                return Promise.reject(error)
+            }
+
             console.warn('[API] 401 Unauthorized - Token invalid or expired')
             console.warn('[API] Current token:', localStorage.getItem('token')?.substring(0, 30) + '...')
             // Token expired or invalid
             localStorage.removeItem('token')
-            window.location.href = '/login'
+            // Avoid redirect loops if we are already on login
+            if (!window.location.pathname.includes('/login')) {
+                window.location.href = '/login'
+            }
             // Return a never-resolving promise to halt execution chain
             return new Promise(() => { })
         }

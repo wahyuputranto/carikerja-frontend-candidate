@@ -13,10 +13,8 @@
       <div class="glass rounded-3xl p-8 md:p-10 animate-scale-in">
         <!-- Logo -->
         <div class="text-center mb-8">
-          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl mb-4">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
+          <div class="inline-flex items-center justify-center mb-6">
+            <img :src="logoZmi" alt="ZmiJobs Logo" class="h-20 w-auto" />
           </div>
           <h1 class="text-3xl font-bold font-display mb-2">Selamat Datang Kembali!</h1>
           <p class="text-slate-600">Masuk untuk melanjutkan perjalanan karirmu</p>
@@ -111,7 +109,7 @@
           <button
             type="submit"
             :disabled="loading"
-            class="btn btn-primary w-full text-lg relative transform active:scale-[0.98] transition-all"
+            class="btn w-full text-lg relative transform active:scale-[0.98] transition-all bg-[#008B99] hover:bg-[#007480] text-white border-none shadow-lg shadow-teal-500/30"
           >
             <span v-if="!loading">Masuk</span>
             <span v-else class="flex items-center justify-center">
@@ -140,6 +138,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import logoZmi from '@/assets/logo_zmi.png'
 
 const router = useRouter()
 const authStore = useAuthStore()

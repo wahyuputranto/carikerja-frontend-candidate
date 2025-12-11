@@ -55,7 +55,17 @@ export const useAuthStore = defineStore('auth', () => {
             return { success: true }
         } catch (err) {
             console.error('[AUTH] Login failed:', err.response?.data)
-            error.value = err.response?.data?.message || 'Login failed'
+            // Handle various backend error formats
+            const responseData = err.response?.data
+            if (responseData?.error) {
+                // If backend returns { error: "message" }
+                error.value = responseData.error
+            } else if (responseData?.message) {
+                // If backend returns { message: "msg" }
+                error.value = responseData.message
+            } else {
+                error.value = 'Login gagal. Periksa kembali nomor telepon dan password Anda.'
+            }
             return { success: false, error: error.value }
         } finally {
             loading.value = false

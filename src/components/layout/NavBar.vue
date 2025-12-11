@@ -3,11 +3,8 @@
     <div class="container mx-auto px-6 flex justify-between items-center">
       <!-- Logo -->
       <router-link to="/" class="flex items-center gap-2 group cursor-pointer">
-        <div class="relative">
-          <div class="absolute inset-0 bg-[#008B99] blur-lg opacity-20 rounded-full group-hover:opacity-40 transition"></div>
-          <i class="ph-fill ph-users-three text-[#008B99] text-3xl relative z-10"></i>
-        </div>
-        <span class="text-2xl font-bold text-slate-900 tracking-tight">{{ appName }}</span>
+        <img :src="logoZmi" alt="Logo" class="h-12 w-auto" />
+        <span class="text-2xl font-bold text-slate-900 tracking-tight font-display">ZmiJobs</span>
       </router-link>
 
       <!-- Mobile Menu Button -->
@@ -87,6 +84,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useDocumentsStore } from '@/stores/documents';
 import NotificationBell from '@/components/NotificationBell.vue'; // Check if this exists, likely needs generic bell or update imports
 import defaultAvatar from '@/assets/default-avatar.png'; // Make sure path aligns
+import logoZmi from '@/assets/logo_zmi.png';
 
 const authStore = useAuthStore();
 const documentsStore = useDocumentsStore();

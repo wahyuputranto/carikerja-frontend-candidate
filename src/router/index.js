@@ -63,6 +63,12 @@ const routes = [
         meta: { requiresAuth: true }
     },
     {
+        path: '/about',
+        name: 'about',
+        component: () => import('@/views/AboutPage.vue'),
+        meta: { requiresAuth: false }
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'not-found',
         component: () => import('@/views/NotFoundPage.vue')

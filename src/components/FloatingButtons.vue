@@ -23,7 +23,6 @@
 
     <!-- WhatsApp Button -->
     <a
-      v-if="isAuthenticated"
       :href="whatsappUrl"
       target="_blank"
       rel="noopener noreferrer"
@@ -37,20 +36,60 @@
   </div>
 </template>
 
+
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
+import { useJobsStore } from '@/stores/jobs'
 
+const route = useRoute()
 const authStore = useAuthStore()
-const { isAuthenticated } = storeToRefs(authStore)
+const jobsStore = useJobsStore()
+const { currentUser, personalDetail } = storeToRefs(authStore)
+const { jobs } = storeToRefs(jobsStore)
 
 const showScrollTop = ref(false)
-const whatsappNumber = '6281234567890' // Replace with actual admin number
-const whatsappMessage = 'Halo Admin, saya butuh bantuan.'
+const whatsappNumber = import.meta.env.VITE_WA_RECRUITER || '6281234567890'
 
 const whatsappUrl = computed(() => {
-  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`
+  // Get User Info
+  const name = currentUser.value?.full_name || currentUser.value?.users_name || 'Kandidat'
+  const userLocation = personalDetail.value?.city || '[Isi Kota Domisili]'
+  
+  // Get Page Context
+  const currentUrl = window.location.href
+  let contextSubject = 'Saya ingin bertanya seputar aplikasi'
+  let contextDetail = ''
+
+  // Determine context based on route
+  if (route.name === 'job-detail' || route.path.includes('/jobs/')) {
+    const jobId = route.params.id
+    const job = jobs.value.find(j => j.id === jobId)
+    const jobTitle = job?.title || 'Lowongan'
+    
+    contextSubject = 'Saya tertarik dengan lowongan'
+    contextDetail = `*${jobTitle}*`
+  } else if (route.name === 'jobs') {
+    contextSubject = 'Saya sedang mencari lowongan pekerjaan'
+  } else if (route.name === 'dashboard') {
+    contextSubject = 'Saya butuh bantuan terkait Dashboard saya'
+  }
+
+  const message = `Halo Admin, saya ${name}.
+
+${contextSubject}:
+${contextDetail}
+
+Link: ${currentUrl}
+
+Domisili: ${userLocation}
+
+Mohon informasi lebih lanjut.
+Terima kasih.`
+
+  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
 })
 
 const handleScroll = () => {

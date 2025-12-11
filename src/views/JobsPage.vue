@@ -158,12 +158,10 @@
             <div class="flex flex-col sm:flex-row sm:items-start justify-between mb-4 gap-3 sm:gap-0">
               <div class="flex items-center space-x-3 md:space-x-4 flex-1 min-w-0">
                 <!-- Company Logo/Icon -->
-                <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl flex-shrink-0 flex items-center justify-center overflow-hidden bg-white border-2 border-slate-200 shadow-sm">
-                  <img 
-                    :src="defaultCompanyLogo" 
-                    alt="Company Hidden" 
-                    class="w-full h-full object-contain p-2" 
-                  />
+                <div class="w-12 h-12 md:w-14 md:h-14 rounded-xl flex-shrink-0 flex items-center justify-center bg-slate-50 border-2 border-slate-200 shadow-sm">
+                  <svg class="w-6 h-6 md:w-7 md:h-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
                 </div>
                 
                 <!-- Job Title & Company -->
@@ -266,6 +264,7 @@ import {
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 
 import defaultCompanyLogo from '@/assets/default-company-logo.png'
+import appLogo from '@/assets/logo.png'
 
 const jobsStore = useJobsStore()
 const { jobs, loading, error } = storeToRefs(jobsStore)

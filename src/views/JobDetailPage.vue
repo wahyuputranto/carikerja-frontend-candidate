@@ -37,8 +37,10 @@
               <!-- Company Info -->
               <div class="card">
                 <div class="flex items-center space-x-4 mb-6">
-                  <div class="w-20 h-20 bg-white border-2 border-slate-200 rounded-2xl overflow-hidden flex items-center justify-center p-2 shadow-sm">
-                    <img :src="defaultCompanyLogo" alt="Company Hidden" class="w-full h-full object-contain" />
+                  <div class="w-20 h-20 bg-slate-50 border-2 border-slate-200 rounded-2xl flex items-center justify-center shadow-sm">
+                    <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
                   </div>
                   <div>
                     <h2 class="text-2xl font-bold">Perusahaan Dirahasiakan</h2>
@@ -108,6 +110,17 @@
                 {{ isApplying ? 'Memproses...' : 'Lamar Sekarang' }}
               </button>
 
+              <!-- Contact Admin Button -->
+              <button 
+                @click="contactAdmin" 
+                class="w-full mt-3 flex items-center justify-center px-4 py-3 border border-green-600 rounded-xl shadow-sm text-lg font-medium text-green-600 bg-white hover:bg-green-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              >
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                Hubungi Admin
+              </button>
+
               <!-- Share -->
               <div class="card">
                 <h3 class="text-lg font-bold mb-4">Bagikan Lowongan</h3>
@@ -146,6 +159,7 @@ import { useAuthStore } from '@/stores/auth'
 import NavBar from '@/components/layout/NavBar.vue'
 
 import defaultCompanyLogo from '@/assets/default-company-logo.png'
+import appLogo from '@/assets/logo.png'
 
 const route = useRoute()
 const router = useRouter()
@@ -201,6 +215,35 @@ const handleApply = () => {
     // For now, redirect to application form or show modal
     router.push(`/apply/${job.value.id}`)
   }
+}
+
+const contactAdmin = () => {
+  const phoneNumber = import.meta.env.VITE_WA_RECRUITER
+  if (!phoneNumber) {
+    console.error('WhatsApp number is not configured')
+    return
+  }
+
+  const jobTitle = job.value?.title || 'Lowongan'
+  const jobLink = window.location.href
+  
+  // Try to get location from auth store if available, otherwise placeholder
+  const userLocation = authStore.personalDetail?.city || '[Isi Kota Domisili]'
+  
+  const message = `Halo Admin,
+
+Saya tertarik dengan lowongan:
+*${jobTitle}*
+
+Link: ${jobLink}
+
+Domisili: ${userLocation}
+
+Mohon informasi lebih lanjut mengenai lowongan ini.
+Terima kasih.`
+
+  const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+  window.open(url, '_blank')
 }
 
 const formatLocation = (location) => {
