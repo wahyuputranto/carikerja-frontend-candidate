@@ -26,20 +26,40 @@ export const useAuthStore = defineStore('auth', () => {
     const isAuthenticated = computed(() => !!token.value)
     const currentUser = computed(() => {
         // Merge candidate data with profile data
-        return {
+        const merged = {
             ...candidate.value,
             ...user.value
         }
+
+        // Apply fixUrl to photo_url if it exists
+        if (merged.photo_url) {
+            merged.photo_url = fixUrl(merged.photo_url)
+        }
+
+        return merged
     })
 
     // Helper to fix localhost URLs from backend (MinIO)
-    const fixUrl = (url) => {
-        if (!url || typeof url !== 'string') return url;
-        if (url.includes('localhost:9000')) {
-            // Replace localhost:9000 with relative path
-            return url.replace(/^http:\/\/localhost:9000/, '');
+    const fixUrl = (urlString) => {
+        if (!urlString || typeof urlString !== 'string') return urlString;
+        try {
+            // Trim whitespace
+            urlString = urlString.trim();
+
+            // Check if it's the specific localhost:9000 (MinIO) URL
+            if (urlString.includes('localhost:9000')) {
+                // Try parsing as URL to handle it properly
+                const url = new URL(urlString);
+                // Return just the pathname and search query (e.g., /agency-documents/file.jpg?token=...)
+                return url.pathname + url.search;
+            }
+        } catch (e) {
+            // Fallback: simple string replacement if URL parsing fails
+            if (urlString.includes('localhost:9000')) {
+                return urlString.replace(/^https?:\/\/localhost:9000/, '');
+            }
         }
-        return url;
+        return urlString;
     };
 
     // Actions
@@ -55,17 +75,7 @@ export const useAuthStore = defineStore('auth', () => {
             console.log('[AUTH] Received token from backend:', authToken ? authToken.substring(0, 20) + '...' : 'null')
 
             token.value = authToken
-
-            // Fix photo_url if present
-            if (candidateData) {
-                candidate.value = {
-                    ...candidateData,
-                    photo_url: fixUrl(candidateData.photo_url)
-                }
-            } else {
-                candidate.value = candidateData
-            }
-
+            candidate.value = candidateData // Store candidate data (email, phone, full_name)
             localStorage.setItem('token', authToken)
 
             // Verify token was saved
@@ -115,17 +125,7 @@ export const useAuthStore = defineStore('auth', () => {
             const { token: authToken, candidate: candidateData } = response.data.data
 
             token.value = authToken
-
-            // Fix photo_url if present
-            if (candidateData) {
-                candidate.value = {
-                    ...candidateData,
-                    photo_url: fixUrl(candidateData.photo_url)
-                }
-            } else {
-                candidate.value = candidateData
-            }
-
+            candidate.value = candidateData // Store candidate data
             localStorage.setItem('token', authToken)
 
             console.log('[AUTH] Registration successful, token saved')
@@ -168,23 +168,9 @@ export const useAuthStore = defineStore('auth', () => {
             const data = response.data.data
 
             // New API structure includes candidate object
-            if (data.candidate) {
-                candidate.value = {
-                    ...data.candidate,
-                    photo_url: fixUrl(data.candidate.photo_url)
-                }
-            } else {
-                candidate.value = null
-            }
+            candidate.value = data.candidate || null
+            user.value = data.profile || {}
 
-            if (data.profile) {
-                user.value = {
-                    ...data.profile,
-                    photo_url: fixUrl(data.profile.photo_url)
-                }
-            } else {
-                user.value = {}
-            }
             educations.value = data.educations || []
             experiences.value = data.experiences || []
             skills.value = data.skills || []
