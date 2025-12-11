@@ -63,8 +63,16 @@ export const useDocumentsStore = defineStore('documents', () => {
 
             const { document_id, presigned_url } = initResponse.data.data
 
+            // Fix presigned URL to use relative path if it points to localhost:9000
+            // This ensures the request goes through Nginx proxy to avoid CORS
+            let uploadUrl = presigned_url;
+            if (uploadUrl && uploadUrl.includes('localhost:9000')) {
+                uploadUrl = uploadUrl.replace(/^https?:\/\/localhost:9000/, '');
+                console.log('[DOCUMENTS] Fixed upload URL:', uploadUrl);
+            }
+
             // 2. Upload file to MinIO via presigned URL
-            await axios.put(presigned_url, file, {
+            await axios.put(uploadUrl, file, {
                 headers: {
                     'Content-Type': file.type
                 }
