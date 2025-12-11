@@ -80,34 +80,35 @@
             <!-- Uploaded State -->
             <!-- Uploaded State -->
             <div v-else-if="uploadedDocs[docType.id]" 
-              class="border rounded-xl p-4 flex items-center justify-between transition-colors"
+              class="border rounded-xl p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors"
               :class="{
                 'bg-green-50 border-green-200': uploadedDocs[docType.id].status === 'VALID',
                 'bg-red-50 border-red-200': uploadedDocs[docType.id].status === 'INVALID',
                 'bg-blue-50 border-blue-200': uploadedDocs[docType.id].status === 'PENDING' || uploadedDocs[docType.id].status === 'UPLOADED'
               }"
             >
-              <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+              <div class="flex items-center space-x-3 w-full sm:w-auto overflow-hidden">
+                <div class="w-10 h-10 rounded-lg shrink-0 flex items-center justify-center"
                   :class="{
                     'bg-green-100': uploadedDocs[docType.id].status === 'VALID',
                     'bg-red-100': uploadedDocs[docType.id].status === 'INVALID',
                     'bg-blue-100': uploadedDocs[docType.id].status === 'PENDING' || uploadedDocs[docType.id].status === 'UPLOADED'
                   }"
                 >
-                  <svg v-if="uploadedDocs[docType.id].status === 'VALID'" class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                  <svg v-else-if="uploadedDocs[docType.id].status === 'INVALID'" class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                  <svg v-else class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  <svg v-if="uploadedDocs[docType.id].status === 'VALID'" class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                  <svg v-else-if="uploadedDocs[docType.id].status === 'INVALID'" class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                  <svg v-else class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
-                <div>
-                  <p class="font-medium"
+                <div class="min-w-0 flex-1">
+                  <p class="font-medium truncate text-sm"
+                    :title="uploadedDocs[docType.id].name"
                     :class="{
                       'text-green-900': uploadedDocs[docType.id].status === 'VALID',
                       'text-red-900': uploadedDocs[docType.id].status === 'INVALID',
                       'text-blue-900': uploadedDocs[docType.id].status === 'PENDING' || uploadedDocs[docType.id].status === 'UPLOADED'
                     }"
                   >{{ uploadedDocs[docType.id].name }}</p>
-                  <p class="text-sm"
+                  <p class="text-xs"
                     :class="{
                       'text-green-700': uploadedDocs[docType.id].status === 'VALID',
                       'text-red-700': uploadedDocs[docType.id].status === 'INVALID',
@@ -120,17 +121,17 @@
                       'Menunggu Verifikasi' 
                     }}
                   </p>
-                  <p v-if="uploadedDocs[docType.id].status === 'INVALID' && uploadedDocs[docType.id].rejection_note" class="text-xs text-red-600 mt-1 font-medium">
+                  <p v-if="uploadedDocs[docType.id].status === 'INVALID' && uploadedDocs[docType.id].rejection_note" class="text-xs text-red-600 mt-0.5 font-medium truncate">
                     Alasan: {{ uploadedDocs[docType.id].rejection_note }}
                   </p>
                 </div>
               </div>
-              <div class="flex flex-col space-y-2">
-                <button @click="viewDocument(uploadedDocs[docType.id].id)" class="btn btn-sm btn-outline bg-white hover:bg-slate-50">
+              <div class="flex flex-row space-x-2 w-full sm:w-auto shrink-0">
+                <button @click="viewDocument(uploadedDocs[docType.id].id)" class="btn btn-sm btn-outline bg-white hover:bg-slate-50 flex-1 sm:flex-none">
                   Lihat
                 </button>
                 <!-- Always allow re-upload to fix broken files or update docs -->
-                <div>
+                <div class="flex-1 sm:flex-none">
                    <input 
                     type="file" 
                     class="hidden" 
@@ -142,7 +143,7 @@
                     class="btn btn-sm w-full text-center block"
                     :class="uploadedDocs[docType.id].status === 'INVALID' ? 'btn-primary' : 'btn-outline border-slate-300 text-slate-600 hover:border-primary-500 hover:text-primary-600'"
                   >
-                    {{ uploadedDocs[docType.id].status === 'INVALID' ? 'Upload Ulang' : 'Ganti File' }}
+                    {{ uploadedDocs[docType.id].status === 'INVALID' ? 'Re-Upload' : 'Ganti' }}
                   </label>
                 </div>
               </div>
