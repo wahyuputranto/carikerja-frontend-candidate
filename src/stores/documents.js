@@ -63,11 +63,16 @@ export const useDocumentsStore = defineStore('documents', () => {
 
             const { document_id, presigned_url } = initResponse.data.data
 
-            // Fix presigned URL to use relative path if it points to localhost:9000
-            // This ensures the request goes through Nginx proxy to avoid CORS
+            // Fix presigned URL to use relative path if it points to localhost:9000 OR production domain
+            // This ensures the request goes through Nginx/Vite proxy to avoid CORS
             let uploadUrl = presigned_url;
-            if (uploadUrl && uploadUrl.includes('localhost:9000')) {
-                uploadUrl = uploadUrl.replace(/^https?:\/\/localhost:9000/, '');
+            if (uploadUrl) {
+                if (uploadUrl.includes('localhost:9000')) {
+                    uploadUrl = uploadUrl.replace(/^https?:\/\/localhost:9000/, '');
+                } else if (uploadUrl.includes('zmijobs.com')) {
+                    uploadUrl = uploadUrl.replace(/^https?:\/\/(www\.)?zmijobs\.com/, '');
+                }
+
                 console.log('[DOCUMENTS] Fixed upload URL:', uploadUrl);
             }
 

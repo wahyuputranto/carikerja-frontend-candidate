@@ -48,8 +48,8 @@ export const useAuthStore = defineStore('auth', () => {
         try {
             urlString = urlString.trim();
 
-            // Check for various internal network patterns (localhost, port 9000, minio hostname)
-            if (urlString.includes('localhost') || urlString.includes(':9000') || urlString.includes('minio')) {
+            // Check for various internal network patterns (localhost, port 9000, minio hostname) or production domain leak
+            if (urlString.includes('localhost') || urlString.includes(':9000') || urlString.includes('minio') || urlString.includes('zmijobs.com')) {
                 const url = new URL(urlString);
                 // Return just the pathname and search query
                 const fixed = url.pathname + url.search;
