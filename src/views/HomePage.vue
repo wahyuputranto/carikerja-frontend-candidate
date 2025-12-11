@@ -18,13 +18,13 @@
                 <div class="absolute -left-6 top-2 bottom-2 w-1 bg-gradient-to-b from-brand-teal to-brand-gold opacity-30 hidden lg:block"></div>
 
                 <h1 class="text-4xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight text-slate-900 mb-6 font-display">
-                    Karir Impian <br>
-                    <span class="text-teal-700">Internasional</span> <br>
-                    Menanti Anda
+                    Jelajahi Dunia<br>
+                    <span class="text-teal-700">Lewat</span> <br>
+                    Karier Impianmu
                 </h1>
                 
                 <p class="text-slate-700 text-lg leading-relaxed mb-8 max-w-lg font-medium">
-                    "Connecting Talent with Opportunity"
+                   Temukan peluang kerja di hotel & kapal pesiar terbaik dunia.
                 </p>
                 
                 <div class="flex flex-col sm:flex-row gap-4">
