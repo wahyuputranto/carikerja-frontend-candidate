@@ -12,6 +12,14 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      '/agency-documents': {
+        target: 'http://localhost:9000',
+        changeOrigin: true,
+      },
+      '/api/offering-letter': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
       '/api': {
         target: 'http://localhost:9090',
         changeOrigin: true,

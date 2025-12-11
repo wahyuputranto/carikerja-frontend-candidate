@@ -318,11 +318,14 @@ const getStepColorClass = (status) => {
 
 const downloadOfferingLetter = async (filePath) => {
     try {
-        // Call Laravel backend to get temporary MinIO URL
-        const response = await fetch('http://localhost:8000/api/offering-letter/download', {
+        // Call backend to get temporary MinIO URL
+        // Using relative path to support production (via Nginx/Ingress) and dev (via Vite proxy if configured)
+        const response = await fetch('/api/offering-letter/download', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                // Add Authorization header if token exists
+                ...(localStorage.getItem('token') ? { 'Authorization': `Bearer ${localStorage.getItem('token')}` } : {})
             },
             body: JSON.stringify({ file_path: filePath })
         })

@@ -32,6 +32,16 @@ export const useAuthStore = defineStore('auth', () => {
         }
     })
 
+    // Helper to fix localhost URLs from backend (MinIO)
+    const fixUrl = (url) => {
+        if (!url || typeof url !== 'string') return url;
+        if (url.includes('localhost:9000')) {
+            // Replace localhost:9000 with relative path
+            return url.replace(/^http:\/\/localhost:9000/, '');
+        }
+        return url;
+    };
+
     // Actions
     async function login(credentials) {
         console.log('[AUTH] Login attempt for phone:', credentials.phone)
@@ -45,7 +55,17 @@ export const useAuthStore = defineStore('auth', () => {
             console.log('[AUTH] Received token from backend:', authToken ? authToken.substring(0, 20) + '...' : 'null')
 
             token.value = authToken
-            candidate.value = candidateData // Store candidate data (email, phone, full_name)
+
+            // Fix photo_url if present
+            if (candidateData) {
+                candidate.value = {
+                    ...candidateData,
+                    photo_url: fixUrl(candidateData.photo_url)
+                }
+            } else {
+                candidate.value = candidateData
+            }
+
             localStorage.setItem('token', authToken)
 
             // Verify token was saved
@@ -95,7 +115,17 @@ export const useAuthStore = defineStore('auth', () => {
             const { token: authToken, candidate: candidateData } = response.data.data
 
             token.value = authToken
-            candidate.value = candidateData // Store candidate data
+
+            // Fix photo_url if present
+            if (candidateData) {
+                candidate.value = {
+                    ...candidateData,
+                    photo_url: fixUrl(candidateData.photo_url)
+                }
+            } else {
+                candidate.value = candidateData
+            }
+
             localStorage.setItem('token', authToken)
 
             console.log('[AUTH] Registration successful, token saved')
@@ -138,8 +168,23 @@ export const useAuthStore = defineStore('auth', () => {
             const data = response.data.data
 
             // New API structure includes candidate object
-            candidate.value = data.candidate || null
-            user.value = data.profile || {}
+            if (data.candidate) {
+                candidate.value = {
+                    ...data.candidate,
+                    photo_url: fixUrl(data.candidate.photo_url)
+                }
+            } else {
+                candidate.value = null
+            }
+
+            if (data.profile) {
+                user.value = {
+                    ...data.profile,
+                    photo_url: fixUrl(data.profile.photo_url)
+                }
+            } else {
+                user.value = {}
+            }
             educations.value = data.educations || []
             experiences.value = data.experiences || []
             skills.value = data.skills || []
