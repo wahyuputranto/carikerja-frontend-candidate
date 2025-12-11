@@ -40,23 +40,27 @@ export const useAuthStore = defineStore('auth', () => {
     })
 
     // Helper to fix localhost URLs from backend (MinIO)
+    // Helper to fix localhost URLs from backend (MinIO)
     const fixUrl = (urlString) => {
         if (!urlString || typeof urlString !== 'string') return urlString;
+
+        const originalUrl = urlString;
         try {
-            // Trim whitespace
             urlString = urlString.trim();
 
-            // Check if it's the specific localhost:9000 (MinIO) URL
-            if (urlString.includes('localhost:9000')) {
-                // Try parsing as URL to handle it properly
+            // Check for various internal network patterns (localhost, port 9000, minio hostname)
+            if (urlString.includes('localhost') || urlString.includes(':9000') || urlString.includes('minio')) {
                 const url = new URL(urlString);
-                // Return just the pathname and search query (e.g., /agency-documents/file.jpg?token=...)
-                return url.pathname + url.search;
+                // Return just the pathname and search query
+                const fixed = url.pathname + url.search;
+                console.log(`[AUTH] fixUrl: Mapped '${originalUrl}' -> '${fixed}'`);
+                return fixed;
             }
         } catch (e) {
-            // Fallback: simple string replacement if URL parsing fails
-            if (urlString.includes('localhost:9000')) {
-                return urlString.replace(/^https?:\/\/localhost:9000/, '');
+            console.error('[AUTH] fixUrl error:', e);
+            // Fallback regex
+            if (urlString.includes('localhost')) {
+                return urlString.replace(/^https?:\/\/[^\/]+/, '');
             }
         }
         return urlString;
