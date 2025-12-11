@@ -6,7 +6,6 @@
                 <div class="col-span-1 md:col-span-1">
                     <div class="flex items-center gap-2 text-white text-2xl font-bold mb-6 font-display">
                         <img :src="logoZmi" alt="Logo" class="h-12 w-auto brightness-0 invert" />
-                        ZmiJobs
                     </div>
                     <p class="text-sm opacity-80 mb-6 max-w-xs">
                         Platform pencarian kerja terpercaya untuk generasi muda Indonesia.

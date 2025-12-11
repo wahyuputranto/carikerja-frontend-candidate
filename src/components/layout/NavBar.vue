@@ -4,7 +4,7 @@
       <!-- Logo -->
       <router-link to="/" class="flex items-center gap-2 group cursor-pointer">
         <img :src="logoZmi" alt="Logo" class="h-12 w-auto" />
-        <span class="text-2xl font-bold text-slate-900 tracking-tight font-display">ZmiJobs</span>
+        <!-- <span class="text-2xl font-bold text-slate-900 tracking-tight font-display">ZmiJobs</span> -->
       </router-link>
 
       <!-- Mobile Menu Button -->
