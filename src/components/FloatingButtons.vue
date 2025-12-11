@@ -23,6 +23,7 @@
 
     <!-- WhatsApp Button -->
     <a
+      v-if="isAuthenticated"
       :href="whatsappUrl"
       target="_blank"
       rel="noopener noreferrer"
@@ -47,7 +48,7 @@ import { useJobsStore } from '@/stores/jobs'
 const route = useRoute()
 const authStore = useAuthStore()
 const jobsStore = useJobsStore()
-const { currentUser, personalDetail } = storeToRefs(authStore)
+const { currentUser, personalDetail, isAuthenticated } = storeToRefs(authStore)
 const { jobs } = storeToRefs(jobsStore)
 
 const showScrollTop = ref(false)
