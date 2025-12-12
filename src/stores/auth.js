@@ -379,10 +379,8 @@ export const useAuthStore = defineStore('auth', () => {
         console.log('[AUTH] Adding emergency contact:', contactData)
         try {
             const response = await api.post('/profile/emergency-contact', contactData)
-            if (response.data.success) {
-                await fetchUser()
-                return { success: true }
-            }
+            await fetchUser()
+            return { success: true }
         } catch (err) {
             console.error('[AUTH] Add emergency contact error:', err.response?.data)
             return { success: false, error: err.response?.data?.message || 'Gagal menambah kontak darurat' }
@@ -407,10 +405,8 @@ export const useAuthStore = defineStore('auth', () => {
         console.log('[AUTH] Updating emergency contact:', id, contactData)
         try {
             const response = await api.put(`/profile/emergency-contact/${id}`, contactData)
-            if (response.data.success) {
-                await fetchUser()
-                return { success: true }
-            }
+            await fetchUser()
+            return { success: true }
         } catch (err) {
             console.error('[AUTH] Update emergency contact error:', err.response?.data)
             return { success: false, error: err.response?.data?.message || 'Gagal memperbarui kontak darurat' }
@@ -451,10 +447,8 @@ export const useAuthStore = defineStore('auth', () => {
         console.log('[AUTH] Adding passport:', passportData)
         try {
             const response = await api.post('/profile/passport', passportData)
-            if (response.data.success) {
-                await fetchUser()
-                return { success: true }
-            }
+            await fetchUser()
+            return { success: true }
         } catch (err) {
             console.error('[AUTH] Add passport error:', err.response?.data)
             return { success: false, error: err.response?.data?.message || 'Gagal menambah paspor' }
@@ -479,10 +473,8 @@ export const useAuthStore = defineStore('auth', () => {
         console.log('[AUTH] Updating passport:', id, passportData)
         try {
             const response = await api.put(`/profile/passport/${id}`, passportData)
-            if (response.data.success) {
-                await fetchUser()
-                return { success: true }
-            }
+            await fetchUser()
+            return { success: true }
         } catch (err) {
             console.error('[AUTH] Update passport error:', err.response?.data)
             return { success: false, error: err.response?.data?.message || 'Gagal memperbarui paspor' }

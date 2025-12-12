@@ -166,22 +166,7 @@
                 </div>
             </div>
 
-            <div class="flex justify-end gap-3 mt-6">
-              <button class="btn btn-sm btn-square btn-outline" @click="resetForm" title="Reset">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                </svg>
-              </button>
-              <button class="btn btn-sm btn-square btn-primary" @click="saveProfile" :disabled="loading || uploadingPhoto" title="Simpan Perubahan">
-                <svg v-if="loading || uploadingPhoto" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                </svg>
-              </button>
-            </div>
+
           </div>
         </div>
 
@@ -206,15 +191,10 @@
             </div>
             <label class="text-xs text-slate-500">Dikeluarkan Oleh</label>
             <input v-model="passportForm.issued_by" placeholder="Dikeluarkan Oleh" class="input" />
-            <div class="flex justify-end gap-2">
+            <div class="flex justify-start gap-2">
               <button v-if="editingPassportId" @click="deletePassport(editingPassportId)" class="btn btn-sm btn-square btn-outline btn-error" title="Hapus">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                </svg>
-              </button>
-              <button @click="submitPassport" class="btn btn-sm btn-square btn-primary" title="Simpan">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                 </svg>
               </button>
             </div>
@@ -242,19 +222,25 @@
             </div>
             <label class="text-xs text-slate-500">Alamat</label>
             <textarea v-model="emergencyContactForm.address" placeholder="Alamat" class="input" rows="2"></textarea>
-            <div class="flex justify-end gap-2">
+            <div class="flex justify-start gap-2">
               <button v-if="editingEmergencyContactId" @click="deleteEmergencyContact(editingEmergencyContactId)" class="btn btn-sm btn-square btn-outline btn-error" title="Hapus">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                 </svg>
               </button>
-              <button @click="submitEmergencyContact" class="btn btn-sm btn-square btn-primary" title="Simpan">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                </svg>
-              </button>
             </div>
           </div>
+        </div>
+
+        <!-- Action Buttons Section -->
+        <div class="glass rounded-xl md:rounded-3xl p-3 md:p-8 flex justify-end gap-2 md:gap-3 sticky bottom-4 z-10 shadow-xl border-t border-white/20">
+              <button class="btn btn-primary w-full md:w-auto md:min-w-[150px] transition-all duration-300 transform active:scale-95 hover:shadow-lg !bg-[#00786F] !border-[#00786F] hover:!bg-[#005f56]" @click="saveProfile" :disabled="isSaving || loading || uploadingPhoto" title="Simpan semua perubahan">
+                <span v-if="isSaving || loading || uploadingPhoto" class="loading loading-spinner loading-sm mr-2"></span>
+                <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 animate-bounce-short">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+                {{ isSaving || loading || uploadingPhoto ? 'Menyimpan...' : 'Simpan' }}
+              </button>
         </div>
 
         <!-- Education Section -->
@@ -698,62 +684,79 @@ const personalDetailForm = ref({
   religion: ''
 })
 
-const initForm = () => {
-  if (user.value) {
-    form.value = {
-      full_name: user.value.full_name || '',
-      email: user.value.email || '',
-      phone: user.value.phone || '',
-      nik: user.value.nik || '',
-      birth_date: user.value.birth_date ? user.value.birth_date.split('T')[0] : '',
-      birth_place: user.value.birth_place || '',
-      gender: user.value.gender || '',
-      address: user.value.address || '',
-      city: user.value.city || '',
-      province: user.value.province || '',
-      postal_code: user.value.postal_code || '',
-      about_me: user.value.about_me || ''
-    }
-  }
-  if (personalDetail.value) {
-    personalDetailForm.value = {
-      fathers_name: personalDetail.value.fathers_name || '',
-      mothers_name: personalDetail.value.mothers_name || '',
-      height: personalDetail.value.height || null,
-      weight: personalDetail.value.weight || null,
-      marital_status: personalDetail.value.marital_status || '',
-      citizenship: personalDetail.value.citizenship || '',
-      religion: personalDetail.value.religion || ''
-    }
-  }
-  if (passports.value && passports.value.length > 0) {
-      const p = passports.value[0]
-      passportForm.value = {
-          passport_number: p.passport_number || '',
-          issue_date: p.issue_date ? p.issue_date.split('T')[0] : '',
-          expiry_date: p.expiry_date ? p.expiry_date.split('T')[0] : '',
-          issued_by: p.issued_by || ''
-      }
-      editingPassportId.value = p.id
-  } else {
-      passportForm.value = { passport_number: '', issue_date: '', expiry_date: '', issued_by: '' }
-      editingPassportId.value = null
-  }
 
-  if (emergencyContacts.value && emergencyContacts.value.length > 0) {
-      const ec = emergencyContacts.value[0]
-      emergencyContactForm.value = {
-          name: ec.name || '',
-          contact_number: ec.contact_number || '',
-          relation: ec.relation || '',
-          address: ec.address || ''
-      }
-      editingEmergencyContactId.value = ec.id
-  } else {
-      emergencyContactForm.value = { name: '', contact_number: '', relation: '', address: '' }
-      editingEmergencyContactId.value = null
-  }
+const initBasicForm = () => {
+    if (user.value) {
+        form.value = {
+            full_name: user.value.full_name || '',
+            email: user.value.email || '',
+            phone: user.value.phone || '',
+            nik: user.value.nik || '',
+            birth_date: user.value.birth_date ? user.value.birth_date.split('T')[0] : '',
+            birth_place: user.value.birth_place || '',
+            gender: user.value.gender || '',
+            address: user.value.address || '',
+            city: user.value.city || '',
+            province: user.value.province || '',
+            postal_code: user.value.postal_code || '',
+            about_me: user.value.about_me || ''
+        }
+    }
 }
+
+const initPersonalDetailForm = () => {
+    if (personalDetail.value) {
+        personalDetailForm.value = {
+            fathers_name: personalDetail.value.fathers_name || '',
+            mothers_name: personalDetail.value.mothers_name || '',
+            height: personalDetail.value.height || null,
+            weight: personalDetail.value.weight || null,
+            marital_status: personalDetail.value.marital_status || '',
+            citizenship: personalDetail.value.citizenship || '',
+            religion: personalDetail.value.religion || ''
+        }
+    }
+}
+
+const initPassportForm = () => {
+    if (passports.value && passports.value.length > 0) {
+        const p = passports.value[0]
+        passportForm.value = {
+            passport_number: p.passport_number || '',
+            issue_date: p.issue_date ? p.issue_date.split('T')[0] : '',
+            expiry_date: p.expiry_date ? p.expiry_date.split('T')[0] : '',
+            issued_by: p.issued_by || ''
+        }
+        editingPassportId.value = p.id
+    } else {
+        passportForm.value = { passport_number: '', issue_date: '', expiry_date: '', issued_by: '' }
+        editingPassportId.value = null
+    }
+}
+
+const initEmergencyContactForm = () => {
+    if (emergencyContacts.value && emergencyContacts.value.length > 0) {
+        const ec = emergencyContacts.value[0]
+        emergencyContactForm.value = {
+            name: ec.name || '',
+            contact_number: ec.contact_number || '',
+            relation: ec.relation || '',
+            address: ec.address || ''
+        }
+        editingEmergencyContactId.value = ec.id
+    } else {
+        emergencyContactForm.value = { name: '', contact_number: '', relation: '', address: '' }
+        editingEmergencyContactId.value = null
+    }
+}
+
+const initAllForms = () => {
+    initBasicForm()
+    initPersonalDetailForm()
+    initPassportForm()
+    initEmergencyContactForm()
+}
+
 
 onMounted(async () => {
   console.log('ProfilePage mounted, fetching user...')
@@ -763,17 +766,36 @@ onMounted(async () => {
         masterStore.fetchLocations()
     ])
     console.log('User fetched successfully:', user.value)
+    initAllForms()
   } catch (e) {
     console.error('Error fetching user in ProfilePage:', e)
   }
 })
 
-watch([user, personalDetail, passports, emergencyContacts], () => {
-  initForm()
+const isSaving = ref(false)
+
+watch(user, () => {
+    if (isSaving.value) return
+    initBasicForm()
+}, { deep: true })
+
+watch(personalDetail, () => {
+    if (isSaving.value) return
+    initPersonalDetailForm()
+}, { deep: true })
+
+watch(passports, () => {
+    if (isSaving.value) return
+    initPassportForm()
+}, { deep: true })
+
+watch(emergencyContacts, () => {
+   if (isSaving.value) return
+   initEmergencyContactForm()
 }, { deep: true })
 
 const resetForm = () => {
-  initForm()
+  initAllForms()
   photoPreview.value = null
   photoFile.value = null
 }
@@ -781,28 +803,66 @@ const resetForm = () => {
 const saveProfile = async () => {
   if (!user.value) return
   
-  const payload = {
-      ...form.value,
-      birth_date: form.value.birth_date ? new Date(form.value.birth_date).toISOString() : null
-  }
+  isSaving.value = true
+  try {
+      // 1. Update Basic Profile
+      const payload = {
+          ...form.value,
+          birth_date: form.value.birth_date ? new Date(form.value.birth_date).toISOString() : null
+      }
+      const result = await authStore.updateProfile(payload)
+      if (!result.success) throw new Error(result.error || 'Gagal memperbarui profil dasar')
 
-  const result = await authStore.updateProfile(payload)
-  if (result.success) {
-    // Also save personal details
-    const personalPayload = {
-        ...personalDetailForm.value,
-        height: personalDetailForm.value.height ? parseInt(personalDetailForm.value.height) : null,
-        weight: personalDetailForm.value.weight ? parseInt(personalDetailForm.value.weight) : null
-    }
-    const personalResult = await authStore.updatePersonalDetail(personalPayload)
-    
-    if (personalResult.success) {
-        alert('Profil berhasil diperbarui!')
-    } else {
-        alert('Profil dasar diperbarui, tetapi gagal memperbarui detail pribadi: ' + personalResult.error)
-    }
-  } else {
-    alert(result.error || 'Gagal memperbarui profil')
+      // 2. Update Personal Detail
+      const personalPayload = {
+          ...personalDetailForm.value,
+          height: personalDetailForm.value.height ? parseInt(personalDetailForm.value.height) : null,
+          weight: personalDetailForm.value.weight ? parseInt(personalDetailForm.value.weight) : null
+      }
+      const personalResult = await authStore.updatePersonalDetail(personalPayload)
+      if (!personalResult.success) throw new Error(personalResult.error || 'Gagal memperbarui detail pribadi')
+
+      // 3. Update/Create Passport
+      // Use a distinct copy to ensure we use what was submitted, not what might be reset
+      const passportData = { ...passportForm.value }
+      if (passportData.passport_number) {
+          const passportPayload = {
+              ...passportData,
+              issue_date: passportData.issue_date ? new Date(passportData.issue_date).toISOString() : null,
+              expiry_date: passportData.expiry_date ? new Date(passportData.expiry_date).toISOString() : null
+          }
+          
+          let passResult;
+          if (editingPassportId.value) {
+              passResult = await authStore.updatePassport(editingPassportId.value, passportPayload)
+          } else {
+              passResult = await authStore.addPassport(passportPayload)
+          }
+          if (!passResult.success) throw new Error(passResult.error || 'Gagal menyimpan paspor')
+      }
+
+      // 4. Update/Create Emergency Contact
+      const ecData = { ...emergencyContactForm.value }
+      if (ecData.name) {
+          let ecResult;
+          if (editingEmergencyContactId.value) {
+              ecResult = await authStore.updateEmergencyContact(editingEmergencyContactId.value, ecData)
+          } else {
+              ecResult = await authStore.addEmergencyContact(ecData)
+          }
+          if (!ecResult.success) throw new Error(ecResult.error || 'Gagal menyimpan kontak darurat')
+      }
+
+      alert('Profil berhasil diperbarui!')
+      // Refresh to get new IDs etc
+      await authStore.fetchUser()
+      // Re-init forms with fresh data
+      isSaving.value = false // release lock before init
+      initAllForms()
+      
+  } catch (e) {
+      alert(e.message)
+      isSaving.value = false
   }
 }
 
@@ -894,33 +954,6 @@ const emergencyContactForm = ref({
   address: ''
 })
 
-const editEmergencyContact = (contact) => {
-    emergencyContactForm.value = { ...contact }
-    editingEmergencyContactId.value = contact.id
-    showAddEmergencyContact.value = true
-}
-
-const cancelEmergencyContact = () => {
-    showAddEmergencyContact.value = false
-    editingEmergencyContactId.value = null
-    emergencyContactForm.value = { name: '', contact_number: '', relation: '', address: '' }
-}
-
-const submitEmergencyContact = async () => {
-  let result;
-  if (editingEmergencyContactId.value) {
-      result = await authStore.updateEmergencyContact(editingEmergencyContactId.value, emergencyContactForm.value)
-  } else {
-      result = await authStore.addEmergencyContact(emergencyContactForm.value)
-  }
-  
-  if (result.success) {
-    alert('Kontak darurat berhasil disimpan')
-  } else {
-    alert(result.error)
-  }
-}
-
 const deleteEmergencyContact = async (id) => {
     if(confirm('Apakah Anda yakin ingin menghapus kontak darurat ini?')) {
         const result = await authStore.deleteEmergencyContact(id)
@@ -945,43 +978,6 @@ const passportForm = ref({
   expiry_date: '',
   issued_by: ''
 })
-
-const editPassport = (passport) => {
-    passportForm.value = {
-        ...passport,
-        issue_date: passport.issue_date ? passport.issue_date.split('T')[0] : '',
-        expiry_date: passport.expiry_date ? passport.expiry_date.split('T')[0] : ''
-    }
-    editingPassportId.value = passport.id
-    showAddPassport.value = true
-}
-
-const cancelPassport = () => {
-    showAddPassport.value = false
-    editingPassportId.value = null
-    passportForm.value = { passport_number: '', issue_date: '', expiry_date: '', issued_by: '' }
-}
-
-const submitPassport = async () => {
-  const payload = {
-      ...passportForm.value,
-      issue_date: passportForm.value.issue_date ? new Date(passportForm.value.issue_date).toISOString() : null,
-      expiry_date: passportForm.value.expiry_date ? new Date(passportForm.value.expiry_date).toISOString() : null
-  }
-  
-  let result;
-  if (editingPassportId.value) {
-      result = await authStore.updatePassport(editingPassportId.value, payload)
-  } else {
-      result = await authStore.addPassport(payload)
-  }
-
-  if (result.success) {
-    alert('Paspor berhasil disimpan')
-  } else {
-    alert(result.error)
-  }
-}
 
 const deletePassport = async (id) => {
     if(confirm('Apakah Anda yakin ingin menghapus paspor ini?')) {

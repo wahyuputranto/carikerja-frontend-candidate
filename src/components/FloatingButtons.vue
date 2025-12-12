@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed bottom-6 right-6 flex flex-col gap-4 z-50">
+  <div class="fixed bottom-24 right-4 md:bottom-8 md:right-8 flex flex-col gap-4 z-50">
     <!-- Scroll Up Button -->
     <transition
       enter-active-class="transition duration-300 ease-out"
