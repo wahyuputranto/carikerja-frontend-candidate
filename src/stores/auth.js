@@ -68,7 +68,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     // Actions
     async function login(credentials) {
-        console.log('[AUTH] Login attempt for phone:', credentials.phone)
+        console.log('[AUTH] Login attempt for:', credentials.identifier)
         loading.value = true
         error.value = null
 
