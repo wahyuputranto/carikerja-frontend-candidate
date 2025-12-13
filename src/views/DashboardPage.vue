@@ -71,7 +71,7 @@
              <div class="flex items-center justify-between mb-4">
               <h2 class="text-xl font-bold text-slate-900 flex items-center">
                 <span class="w-1.5 h-6 bg-blue-600 rounded-full mr-3"></span>
-                Agenda Interview
+                Agenda Anda
               </h2>
               <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">{{ upcomingInterviews.length }} Upcoming</span>
             </div>
@@ -1002,37 +1002,24 @@ const progressPercentage = computed(() => {
 
 // Recent applications (limit to 3)
 const recentApplications = computed(() => {
-  return applications.value ? applications.value.slice(0, 3) : []
+    // Filter out Pre-Interview sessions from the display list
+    const validApps = applications.value?.filter(app => 
+        app.application.job?.title !== 'Pre-Interview Session' && 
+        app.application.status !== 'PRE_INTERVIEW'
+    ) || []
+    return validApps.slice(0, 3)
 })
 
-// Upcoming Interviews
 const upcomingInterviews = computed(() => {
-  if (!applications.value) return []
-  
-  // Filter for interviews with dates
-  const interviews = applications.value.filter(app => {
-    // Must have an interview date
-    if (!app.application.interview_date) return false
-    
-    // Check if date is valid
-    const date = new Date(app.application.interview_date)
-    if (isNaN(date.getTime())) return false
-
-    // Filter out rejected or completed (PASSED/FAILED) applications
-    const status = app.application.status
-    if (status === 'REJECTED' || status === 'PASSED' || status === 'FAILED') return false
-
-    // Only show future or today's interviews
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    
-    return date >= today
-  })
-
-  // Sort by date ascending (nearest first)
-  return interviews.sort((a, b) => {
-    return new Date(a.application.interview_date) - new Date(b.application.interview_date)
-  })
+    // Show Pre-Interviews in Agenda
+    return applications.value?.filter(app => {
+         if (!app.application.interview_date) return false
+         const date = new Date(app.application.interview_date)
+         if (isNaN(date.getTime())) return false
+         
+         // Show future interviews including Pre-Interview
+         return date > new Date() && ['INTERVIEW', 'OFFERING', 'PRE_INTERVIEW'].includes(app.application.status)
+    }).sort((a, b) => new Date(a.application.interview_date) - new Date(b.application.interview_date)) || []
 })
 
 // Announcements
