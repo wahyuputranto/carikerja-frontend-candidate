@@ -21,62 +21,50 @@
       </div>
 
 
-      <!-- Stats Overview -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
-        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-all group cursor-default">
-          <div class="flex flex-col gap-3">
-             <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-             </div>
-             <div>
-               <div class="text-2xl font-bold text-slate-900">{{ activeApplicationsCount }}</div>
-               <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Lamaran Aktif</div>
-             </div>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-all group cursor-default">
-          <div class="flex flex-col gap-3">
-             <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-             </div>
-             <div>
-               <div class="text-2xl font-bold text-slate-900">{{ acceptedApplicationsCount }}</div>
-               <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Diterima</div>
-             </div>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-all group cursor-default">
-           <div class="flex flex-col gap-3">
-             <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 group-hover:scale-110 transition-transform">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-             </div>
-             <div>
-               <div class="text-2xl font-bold text-slate-900">{{ profileViewsCount }}</div>
-               <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Profil Dilihat</div>
-             </div>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-all group cursor-default">
-           <div class="flex flex-col gap-3">
-             <div class="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600 group-hover:scale-110 transition-transform">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-             </div>
-             <div>
-               <div class="text-2xl font-bold text-slate-900">{{ progressPercentage }}%</div>
-               <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Kelengkapan Profil</div>
-             </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Main Content Grid -->
       <div class="grid lg:grid-cols-3 gap-8">
         
         <!-- Left Content (2 Columns) -->
         <div class="lg:col-span-2 space-y-8">
+
+          <!-- Stats Overview -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-all group cursor-default">
+              <div class="flex flex-col gap-3">
+                 <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                 </div>
+                 <div>
+                   <div class="text-2xl font-bold text-slate-900">{{ activeApplicationsCount }}</div>
+                   <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Lamaran Aktif</div>
+                 </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-all group cursor-default">
+              <div class="flex flex-col gap-3">
+                 <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                 </div>
+                 <div>
+                   <div class="text-2xl font-bold text-slate-900">{{ acceptedApplicationsCount }}</div>
+                   <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Diterima</div>
+                 </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-all group cursor-default">
+               <div class="flex flex-col gap-3">
+                 <div class="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                 </div>
+                 <div>
+                   <div class="text-2xl font-bold text-slate-900">{{ progressPercentage }}%</div>
+                   <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Kelengkapan Profil</div>
+                 </div>
+              </div>
+            </div>
+          </div>
 
           <!-- Agenda / Upcoming Interviews -->
           <div v-if="upcomingInterviews.length > 0" class="animate-fade-in-up">
@@ -173,7 +161,199 @@
               </div>
             </div>
           </div>
+ 
+           <!-- Mobile Only Profile Section -->
+           <div class="space-y-6 lg:hidden">
+              <!-- Compact Profile Card -->
+              <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm text-center">
+                 <div class="relative inline-block mb-3">
+                   <img 
+                    :src="userPhoto" 
+                    alt="Profile" 
+                    class="w-24 h-24 rounded-full object-cover border-4 border-slate-50 shadow-sm mx-auto"
+                  />
+                 </div>
+                 <h3 class="text-lg font-bold text-slate-900">{{ userName }}</h3>
+                 <p class="text-sm text-slate-500 mb-3">{{ currentUser?.email }}</p>
 
+                 <!-- Hiring Status Badge -->
+                 <div v-if="currentUser?.hiring_status" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide"
+                    :class="getHiringStatusClass(currentUser.hiring_status)">
+                    <span class="w-1.5 h-1.5 rounded-full mr-2" :class="getHiringStatusDotClass(currentUser.hiring_status)"></span>
+                    {{ getHiringStatusLabel(currentUser.hiring_status) }}
+                 </div>
+              </div>
+
+              <!-- Status & Docs -->
+              <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="text-base font-bold text-slate-800">Status Profil</h3>
+                  <span class="text-sm font-black text-primary-600">{{ progressPercentage }}%</span>
+                </div>
+                
+                <div class="w-full bg-slate-100 rounded-full h-2 mb-6 overflow-hidden">
+                  <div class="bg-gradient-to-r from-primary-500 to-emerald-400 h-2 rounded-full transition-all duration-1000 ease-out" :style="{ width: progressPercentage + '%' }"></div>
+                </div>
+
+                <nav class="space-y-4">
+                  <!-- Profile Steps -->
+                  <div v-for="(item, idx) in profileSteps" :key="idx" class="flex items-center group">
+                    <div class="flex-shrink-0 mr-3">
+                       <div v-if="item.complete" class="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center ring-2 ring-white">
+                        <svg class="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      </div>
+                      <div v-else class="w-5 h-5 rounded-full bg-red-50 flex items-center justify-center ring-2 ring-white">
+                        <svg class="w-3 h-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                      </div>
+                    </div>
+                    <div class="flex-1 flex items-center justify-between">
+                      <p class="text-sm font-medium" :class="item.complete ? 'text-slate-700' : 'text-red-500'">{{ item.label }}</p>
+                      <span v-if="!item.complete" class="text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full animate-pulse">Lengkapi</span>
+                    </div>
+                  </div>
+                  
+                  <div v-if="mandatoryDocTypes.length > 0" class="pt-2 border-t border-slate-100 mt-2">
+                     <div class="mb-4">
+                        <router-link to="/profile" class="flex items-center justify-center w-full py-2 px-4 bg-white border border-slate-200 shadow-sm text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 hover:text-primary-600 hover:border-primary-200 transition-all group">
+                          <svg class="w-4 h-4 mr-2 text-slate-400 group-hover:text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                          Update Profil
+                        </router-link>
+                     </div>
+
+                     <!-- CV Upload Section (Mobile) -->
+                     <div v-if="cvDocType" class="mb-6 bg-slate-50 rounded-xl border border-dashed border-slate-300 p-4">
+                        <div class="flex items-center justify-between mb-2">
+                             <span class="text-sm font-bold text-slate-700">Curriculum Vitae (CV)</span>
+                             <span class="badge text-[10px] px-2 py-0.5 rounded-full font-bold uppercase" 
+                                 :class="{
+                                   'bg-green-100 text-green-700': getDocStatus(cvDocType.id) === 'VALID',
+                                   'bg-yellow-100 text-yellow-700': ['PENDING', 'UPLOADED'].includes(getDocStatus(cvDocType.id)),
+                                   'bg-red-50 text-red-700': !['VALID', 'PENDING', 'UPLOADED'].includes(getDocStatus(cvDocType.id))
+                                 }">
+                                 {{ getDocStatus(cvDocType.id) === 'VALID' ? 'Approved' : (['PENDING', 'UPLOADED'].includes(getDocStatus(cvDocType.id)) ? 'Review' : 'Wajib') }}
+                             </span>
+                        </div>
+                        
+                        <div v-if="getDocStatus(cvDocType.id) === 'VALID'" class="text-center">
+                             <p class="text-xs text-green-600 font-medium flex items-center justify-center mb-2">
+                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                 CV Telah Disetujui
+                             </p>
+                             <button @click="viewDocument(cvDocType.id)" class="text-xs text-blue-600 underline hover:text-blue-800">
+                                 Lihat CV
+                             </button>
+                        </div>
+
+                        <!-- Case 2: PENDING / UPLOADED (Under Review) -->
+                        <div v-else-if="['PENDING', 'UPLOADED'].includes(getDocStatus(cvDocType.id))" class="text-center">
+                             <p class="text-xs text-yellow-600 font-medium flex items-center justify-center mb-2">
+                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                 Menunggu Review Admin
+                             </p>
+                             <button @click="viewDocument(cvDocType.id)" class="text-xs text-blue-600 underline hover:text-blue-800">
+                                 Lihat File CV
+                             </button>
+                             
+                             <!-- Optional Re-upload link if user made a mistake -->
+                             <div class="mt-2">
+                                <label for="upload-cv-dashboard-mobile" class="text-[10px] text-slate-400 cursor-pointer hover:text-slate-600 hover:underline">
+                                   Ingin ganti file?
+                                </label>
+                                 <input 
+                                    type="file" 
+                                    class="hidden" 
+                                    id="upload-cv-dashboard-mobile" 
+                                    accept="application/pdf"
+                                    @change="handleCvUpload"
+                                  >
+                             </div>
+                        </div>
+
+                        <!-- Case 3: MISSING or INVALID (Show Upload Button) -->
+                        <div v-else class="text-center">
+                             <div v-if="uploadingCv" class="py-2">
+                                <div class="inline-block animate-spin rounded-full h-5 w-5 border-2 border-primary-500 border-t-transparent"></div>
+                             </div>
+                             <div v-else>
+                                 <div class="relative">
+                                     <input 
+                                        type="file" 
+                                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                        id="upload-cv-dashboard-mobile" 
+                                        accept="application/pdf"
+                                        @change="handleCvUpload"
+                                      >
+                                      <label for="upload-cv-dashboard-mobile" class="btn btn-sm btn-primary w-full shadow-sm pointer-events-none">
+                                          Upload CV Sekarang
+                                      </label>
+                                 </div>
+                                 <p v-if="getDocStatus(cvDocType.id) === 'INVALID'" class="text-[10px] text-red-500 mt-2 font-medium">
+                                     Ditolak: {{ getRejectionReason(cvDocType.id) }} (Upload Ulang)
+                                 </p>
+                             </div>
+                        </div>
+                     </div>
+                     
+                     <div v-if="isDocsUnlocked">
+                         <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Dokumen Wajib</p>
+                         <div v-for="docType in filteredMandatoryDocs" :key="docType.id" class="flex items-center mb-2 last:mb-0">
+                            <div class="flex-shrink-0 mr-3">
+                              <!-- VALID: Green Check -->
+                              <div v-if="getDocStatus(docType.id) === 'VALID'" class="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
+                                <svg class="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                              </div>
+                              
+                              <!-- PENDING/UPLOADED: Yellow/Blue Review -->
+                              <div v-else-if="['PENDING', 'UPLOADED'].includes(getDocStatus(docType.id))" class="w-5 h-5 rounded-full bg-yellow-100 flex items-center justify-center" title="Sedang Direview">
+                                <svg class="w-3 h-3 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                              </div>
+
+                              <!-- MISSING / INVALID: Red Warning -->
+                              <div v-else class="w-5 h-5 rounded-full bg-red-50 flex items-center justify-center">
+                                <svg class="w-3 h-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                              </div>
+                            </div>
+                            
+                            <div class="flex-1 flex items-center justify-between">
+                               <div class="flex items-center">
+                                  <span class="text-sm font-medium" 
+                                    :class="{
+                                      'text-slate-700': getDocStatus(docType.id) === 'VALID',
+                                      'text-yellow-600': ['PENDING', 'UPLOADED'].includes(getDocStatus(docType.id)),
+                                      'text-red-500': !['VALID', 'PENDING', 'UPLOADED'].includes(getDocStatus(docType.id))
+                                    }">
+                                    {{ docType.name }}
+                                  </span>
+                               </div>
+                               <!-- Blinking Warning Text -->
+                               <span v-if="!['VALID', 'PENDING', 'UPLOADED'].includes(getDocStatus(docType.id))" class="text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full animate-pulse">Upload</span>
+                            </div>
+                         </div>
+        
+                        <div class="mt-6">
+                          <router-link to="/upload-documents" class="flex items-center justify-center w-full py-2.5 text-sm border-2 border-dashed border-slate-200 text-slate-500 rounded-xl hover:border-primary-400 hover:text-primary-600 transition-all font-medium">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                            Upload Dokumen Wajib
+                          </router-link>
+                        </div>
+                     </div>
+
+                     <!-- Locked State -->
+                     <div v-else class="text-center py-8 px-4 bg-slate-50 rounded-xl border border-dashed border-slate-300">
+                        <div class="w-10 h-10 bg-slate-200 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-600 text-sm mb-2">Dokumen Wajib Terkunci</h3>
+                        <p class="text-xs text-slate-500 max-w-[200px] mx-auto leading-relaxed">
+                            {{ (!isBasicInfoComplete || !isEducationComplete) ? 'Lengkapi data diri dan pendidikan Anda.' : (isDocsUnlocked ? '' : 'Menunggu CV disetujui.') }}
+                        </p>
+                     </div>
+                  </div>
+                </nav>
+              </div>
+           </div>
+
+          <!-- Applications & Recommendations Grid -->
           <!-- Applications & Recommendations Grid -->
           <div class="grid md:grid-cols-1 gap-8">
             <!-- Recent Applications -->
@@ -307,7 +487,7 @@
         </div>
 
         <!-- Right Content (Sidebar) -->
-        <div class="space-y-6">
+        <div class="space-y-6 hidden lg:block">
           
           <!-- Compact Profile Card -->
           <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm text-center">
@@ -319,7 +499,14 @@
               />
              </div>
              <h3 class="text-lg font-bold text-slate-900">{{ userName }}</h3>
-             <p class="text-sm text-slate-500">{{ currentUser?.email }}</p>
+             <p class="text-sm text-slate-500 mb-3">{{ currentUser?.email }}</p>
+             
+             <!-- Hiring Status Badge -->
+             <div v-if="currentUser?.hiring_status" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide"
+                :class="getHiringStatusClass(currentUser.hiring_status)">
+                <span class="w-1.5 h-1.5 rounded-full mr-2" :class="getHiringStatusDotClass(currentUser.hiring_status)"></span>
+                {{ getHiringStatusLabel(currentUser.hiring_status) }}
+             </div>
           </div>
 
           <!-- Profile Completion Checklist -->
@@ -360,51 +547,137 @@
                       Update Profil
                     </router-link>
                  </div>
-                 
-                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Dokumen Wajib</p>
-                 <div v-for="docType in mandatoryDocTypes" :key="docType.id" class="flex items-center mb-2 last:mb-0">
-                    <div class="flex-shrink-0 mr-3">
-                      <!-- VALID: Green Check -->
-                      <div v-if="getDocStatus(docType.id) === 'VALID'" class="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
-                        <svg class="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                      </div>
-                      
-                      <!-- PENDING/UPLOADED: Yellow/Blue Review -->
-                      <div v-else-if="['PENDING', 'UPLOADED'].includes(getDocStatus(docType.id))" class="w-5 h-5 rounded-full bg-yellow-100 flex items-center justify-center" title="Sedang Direview">
-                        <svg class="w-3 h-3 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                      </div>
 
-                      <!-- MISSING / INVALID: Red Warning -->
-                      <div v-else class="w-5 h-5 rounded-full bg-red-50 flex items-center justify-center">
-                        <svg class="w-3 h-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                      </div>
+                 <!-- CV Upload Section -->
+                 <div v-if="cvDocType" class="mb-6 bg-slate-50 rounded-xl border border-dashed border-slate-300 p-4">
+                    <div class="flex items-center justify-between mb-2">
+                         <span class="text-sm font-bold text-slate-700">Curriculum Vitae (CV)</span>
+                         <span class="badge text-[10px] px-2 py-0.5 rounded-full font-bold uppercase" 
+                             :class="{
+                               'bg-green-100 text-green-700': getDocStatus(cvDocType.id) === 'VALID',
+                               'bg-yellow-100 text-yellow-700': ['PENDING', 'UPLOADED'].includes(getDocStatus(cvDocType.id)),
+                               'bg-red-50 text-red-700': !['VALID', 'PENDING', 'UPLOADED'].includes(getDocStatus(cvDocType.id))
+                             }">
+                             {{ getDocStatus(cvDocType.id) === 'VALID' ? 'Approved' : (['PENDING', 'UPLOADED'].includes(getDocStatus(cvDocType.id)) ? 'Review' : 'Wajib') }}
+                         </span>
                     </div>
                     
-                    <div class="flex-1 flex items-center justify-between">
-                       <div class="flex items-center">
-                          <span class="text-sm font-medium" 
-                            :class="{
-                              'text-slate-700': getDocStatus(docType.id) === 'VALID',
-                              'text-yellow-600': ['PENDING', 'UPLOADED'].includes(getDocStatus(docType.id)),
-                              'text-red-500': !['VALID', 'PENDING', 'UPLOADED'].includes(getDocStatus(docType.id))
-                            }">
-                            {{ docType.name }}
-                          </span>
-                          <span v-if="['PENDING', 'UPLOADED'].includes(getDocStatus(docType.id))" class="text-[10px] ml-2 bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded border border-yellow-200 animate-pulse">Review</span>
-                       </div>
-                       <!-- Blinking Warning Text -->
-                       <span v-if="!['VALID', 'PENDING', 'UPLOADED'].includes(getDocStatus(docType.id))" class="text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full animate-pulse">Upload</span>
+                    <div v-if="getDocStatus(cvDocType.id) === 'VALID'" class="text-center">
+                         <p class="text-xs text-green-600 font-medium flex items-center justify-center mb-2">
+                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                             CV Telah Disetujui
+                         </p>
+                         <button @click="viewDocument(cvDocType.id)" class="text-xs text-blue-600 underline hover:text-blue-800">
+                             Lihat CV
+                         </button>
                     </div>
+
+                    <!-- Case 2: PENDING / UPLOADED (Under Review) -->
+                    <div v-else-if="['PENDING', 'UPLOADED'].includes(getDocStatus(cvDocType.id))" class="text-center">
+                         <p class="text-xs text-yellow-600 font-medium flex items-center justify-center mb-2">
+                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                             Menunggu Review Admin
+                         </p>
+                         <button @click="viewDocument(cvDocType.id)" class="text-xs text-blue-600 underline hover:text-blue-800">
+                             Lihat File CV
+                         </button>
+                         
+                         <!-- Optional Re-upload link -->
+                         <div class="mt-2">
+                            <label for="upload-cv-dashboard-desktop" class="text-[10px] text-slate-400 cursor-pointer hover:text-slate-600 hover:underline">
+                               Ingin ganti file?
+                            </label>
+                             <input 
+                                type="file" 
+                                class="hidden" 
+                                id="upload-cv-dashboard-desktop" 
+                                accept="application/pdf"
+                                @change="handleCvUpload"
+                              >
+                         </div>
+                    </div>
+
+                    <!-- Case 3: MISSING or INVALID (Show Upload Button) -->
+                    <div v-else class="text-center">
+                         <div v-if="uploadingCv" class="py-2">
+                            <div class="inline-block animate-spin rounded-full h-5 w-5 border-2 border-primary-500 border-t-transparent"></div>
+                         </div>
+                         <div v-else>
+                             <input 
+                                type="file" 
+                                class="hidden" 
+                                id="upload-cv-dashboard" 
+                                accept="application/pdf"
+                                @change="handleCvUpload"
+                              >
+                             <label for="upload-cv-dashboard" class="btn btn-sm btn-primary w-full shadow-sm">
+                                 Upload CV Sekarang
+                             </label>
+                             <p v-if="getDocStatus(cvDocType.id) === 'INVALID'" class="text-[10px] text-red-500 mt-2 font-medium">
+                                 Ditolak: {{ getRejectionReason(cvDocType.id) }} (Upload Ulang)
+                             </p>
+                         </div>
+                    </div>
+                 </div>
+                 
+                 <div v-if="isDocsUnlocked">
+                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Dokumen Wajib</p>
+                     <div v-for="docType in filteredMandatoryDocs" :key="docType.id" class="flex items-center mb-2 last:mb-0">
+                        <div class="flex-shrink-0 mr-3">
+                          <!-- VALID: Green Check -->
+                          <div v-if="getDocStatus(docType.id) === 'VALID'" class="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
+                            <svg class="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                          </div>
+                          
+                          <!-- PENDING/UPLOADED: Yellow/Blue Review -->
+                          <div v-else-if="['PENDING', 'UPLOADED'].includes(getDocStatus(docType.id))" class="w-5 h-5 rounded-full bg-yellow-100 flex items-center justify-center" title="Sedang Direview">
+                            <svg class="w-3 h-3 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          </div>
+
+                          <!-- MISSING / INVALID: Red Warning -->
+                          <div v-else class="w-5 h-5 rounded-full bg-red-50 flex items-center justify-center">
+                            <svg class="w-3 h-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                          </div>
+                        </div>
+                        
+                        <div class="flex-1 flex items-center justify-between">
+                           <div class="flex items-center">
+                              <span class="text-sm font-medium" 
+                                :class="{
+                                  'text-slate-700': getDocStatus(docType.id) === 'VALID',
+                                  'text-yellow-600': ['PENDING', 'UPLOADED'].includes(getDocStatus(docType.id)),
+                                  'text-red-500': !['VALID', 'PENDING', 'UPLOADED'].includes(getDocStatus(docType.id))
+                                }">
+                                {{ docType.name }}
+                              </span>
+                              <span v-if="['PENDING', 'UPLOADED'].includes(getDocStatus(docType.id))" class="text-[10px] ml-2 bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded border border-yellow-200 animate-pulse">Review</span>
+                           </div>
+                           <!-- Blinking Warning Text -->
+                           <span v-if="!['VALID', 'PENDING', 'UPLOADED'].includes(getDocStatus(docType.id))" class="text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full animate-pulse">Upload</span>
+                        </div>
+                     </div>
+    
+                    <div class="mt-6">
+                      <router-link to="/upload-documents" class="flex items-center justify-center w-full py-2.5 text-sm border-2 border-dashed border-slate-200 text-slate-500 rounded-xl hover:border-primary-400 hover:text-primary-600 transition-all font-medium">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                        Upload Dokumen Wajib
+                      </router-link>
+                    </div>
+                 </div>
+
+                 <!-- Locked State -->
+                 <div v-else class="text-center py-8 px-4 bg-slate-50 rounded-xl border border-dashed border-slate-300">
+                    <div class="w-10 h-10 bg-slate-200 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                    </div>
+                    <h3 class="font-bold text-slate-600 text-sm mb-2">Dokumen Wajib Terkunci</h3>
+                    <p class="text-xs text-slate-500 max-w-[200px] mx-auto leading-relaxed">
+                        {{ lockedText }}
+                    </p>
                  </div>
               </div>
             </nav>
 
-            <div class="mt-6">
-              <router-link to="/upload-documents" class="flex items-center justify-center w-full py-2.5 text-sm border-2 border-dashed border-slate-200 text-slate-500 rounded-xl hover:border-primary-400 hover:text-primary-600 transition-all font-medium">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                Upload Dokumen Wajib
-              </router-link>
-            </div>
           </div>
 
         </div>
@@ -440,20 +713,42 @@
                       </DialogTitle>
                       <div class="mt-2">
                         <p class="text-sm text-slate-500 mb-4">
-                          Akun Anda telah berhasil dibuat.
+                          Akun Anda telah berhasil dibuat. Ikuti langkah berikut untuk memulai karir Anda:
                         </p>
                         
-                        <div class="p-4 bg-primary-50 rounded-xl border border-primary-100/50 text-left relative overflow-hidden">
-                           <!-- Decorative circle -->
-                           <div class="absolute -right-4 -top-4 w-16 h-16 bg-primary-100 rounded-full opacity-50"></div>
+                        <div class="p-4 bg-white rounded-xl border border-slate-200 text-left space-y-4 shadow-sm">
+                           <!-- Step 1 -->
+                           <div class="flex gap-3">
+                              <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">1</div>
+                              <div>
+                                 <h4 class="font-bold text-slate-800 text-sm">Lengkapi Profil & Upload CV</h4>
+                                 <p class="text-xs text-slate-500 leading-relaxed mt-0.5">
+                                    Isi data diri, pendidikan, dan upload CV pribadi Anda. Dokumen lain akan terkunci hingga CV disetujui Admin.
+                                 </p>
+                              </div>
+                           </div>
 
-                           <h4 class="font-bold text-primary-800 text-sm mb-1.5 flex items-center relative z-10">
-                              <svg class="w-4 h-4 mr-1.5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                              Tips Cepat Diterima Kerja
-                           </h4>
-                           <p class="text-xs text-primary-700 leading-relaxed relative z-10">
-                              Lengkapi data profil dan dokumen kamu untuk bisa melanjutkan proses berikutnya.
-                           </p>
+                           <!-- Step 2 -->
+                           <div class="flex gap-3">
+                              <div class="flex-shrink-0 w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm">2</div>
+                              <div>
+                                 <h4 class="font-bold text-slate-800 text-sm">Pra-Screening Agensi</h4>
+                                 <p class="text-xs text-slate-500 leading-relaxed mt-0.5">
+                                    Admin akan mereview profile Anda dan melakukan pre-interview.
+                                 </p>
+                              </div>
+                           </div>
+
+                           <!-- Step 3 -->
+                           <div class="flex gap-3">
+                              <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold text-sm">3</div>
+                              <div>
+                                 <h4 class="font-bold text-slate-800 text-sm">Upload Dokumen Wajib</h4>
+                                 <p class="text-xs text-slate-500 leading-relaxed mt-0.5">
+                                    Lengkapi dokumen pendukung lainnya (KTP, Ijazah, dll) untuk siap melamar kerja.
+                                 </p>
+                              </div>
+                           </div>
                         </div>
                       </div>
                     </div>
@@ -520,7 +815,7 @@ const greeting = computed(() => {
 
 // Computed stats
 const activeApplicationsCount = computed(() => {
-  return applications.value ? applications.value.filter(app => app.application.status !== 'REJECTED' && app.application.status !== 'HIRED').length : 0
+  return applications.value ? applications.value.filter(app => app.application.status !== 'REJECTED' && app.application.status !== 'HIRED' && app.application.status !== 'PRE_INTERVIEW').length : 0
 })
 
 const acceptedApplicationsCount = computed(() => {
@@ -547,6 +842,127 @@ const profileSteps = computed(() => [
 const mandatoryDocTypes = computed(() => {
   return documentTypes.value ? documentTypes.value.filter(d => d.is_mandatory) : []
 })
+
+// Special CV Logic
+const cvDocType = computed(() => {
+    return documentTypes.value ? documentTypes.value.find(d => d.slug === 'cv' || d.slug === 'curriculum-vitae') : null
+})
+
+const isCvApproved = computed(() => {
+    if (!cvDocType.value) return false
+    return getDocStatus(cvDocType.value.id) === 'VALID'
+})
+
+const filteredMandatoryDocs = computed(() => {
+    // Exclude CV from the mandatory list since it has its own section
+    return mandatoryDocTypes.value.filter(d => d.slug !== 'cv' && d.slug !== 'curriculum-vitae')
+})
+
+const isDocsUnlocked = computed(() => {
+  return isBasicInfoComplete.value && 
+         isEducationComplete.value && 
+         isCvApproved.value &&
+         applications.value?.some(app => app.application.status === 'PASSED')
+})
+
+const lockedText = computed(() => {
+    if (!isBasicInfoComplete.value || !isEducationComplete.value) return 'Lengkapi data diri dan pendidikan Anda.'
+    if (!isCvApproved.value) return 'Menunggu CV disetujui.'
+    return 'Menunggu Hasil Pre-Interview.'
+})
+
+const uploadingCv = ref(false)
+
+const normalizeStatus = (status) => {
+    if (!status) return ''
+    return status.toString().toUpperCase().replace(/ /g, '_')
+}
+
+const getHiringStatusClass = (status) => {
+    const s = normalizeStatus(status)
+    switch (s) {
+        case 'AVAILABLE': return 'bg-blue-50 text-blue-700 border border-blue-100' // Menunggu Verified
+        case 'READY_TO_HIRE': return 'bg-emerald-50 text-emerald-700 border border-emerald-100' // Verified
+        case 'NOT_AVAILABLE': return 'bg-red-50 text-red-700 border border-red-100' // Unverified
+        case 'HIRED': return 'bg-green-50 text-green-700 border border-green-200' // Hired/Sudah Bekerja
+        default: return 'bg-slate-50 text-slate-600'
+    }
+}
+
+const getHiringStatusDotClass = (status) => {
+    const s = normalizeStatus(status)
+    switch (s) {
+        case 'AVAILABLE': return 'bg-blue-500'
+        case 'READY_TO_HIRE': return 'bg-emerald-500'
+        case 'NOT_AVAILABLE': return 'bg-red-500'
+        case 'HIRED': return 'bg-green-600'
+        default: return 'bg-slate-400'
+    }
+}
+
+const getHiringStatusLabel = (status) => {
+    const s = normalizeStatus(status)
+    switch (s) {
+        case 'AVAILABLE': return 'Menunggu Verifikasi'
+        case 'READY_TO_HIRE': return 'Verified'
+        case 'NOT_AVAILABLE': return 'Unverified'
+        case 'HIRED': return 'Sudah Bekerja'
+        default: return status
+    }
+}
+
+const handleCvUpload = async (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+
+    if (!cvDocType.value) return
+
+    // Validation
+    if (file.size > 5 * 1024 * 1024) {
+        alert("Ukuran file terlalu besar (Max 5MB)")
+        return
+    }
+
+    uploadingCv.value = true
+    try {
+        const result = await documentsStore.uploadDocument(file, cvDocType.value.id)
+        if (result.success) {
+            // Refresh to get status
+             await documentsStore.fetchUserDocuments()
+             // Maybe show success toast
+        } else {
+            alert(result.error || "Gagal upload CV")
+            console.error(result.error)
+        }
+    } catch (e) {
+        alert("Terjadi kesalahan saat upload")
+        console.error(e)
+    } finally {
+        uploadingCv.value = false
+        // Reset input
+        event.target.value = ''
+    }
+}
+
+const viewDocument = async (docTypeId) => {
+    // Find doc id
+    if (!userDocuments.value) return
+    const doc = userDocuments.value.find(d => d.document_type_id === docTypeId)
+    if (!doc) return
+
+    const result = await documentsStore.downloadDocument(doc.id)
+     if (result.success) {
+        window.open(result.url, '_blank')
+      } else {
+        alert(result.error)
+      }
+}
+
+const getRejectionReason = (typeId) => {
+  if (!userDocuments.value) return ''
+  const doc = userDocuments.value.find(d => d.document_type_id === typeId)
+  return doc ? doc.rejection_note : ''
+}
 
 const getDocStatus = (typeId) => {
   if (!userDocuments.value) return 'MISSING'
@@ -602,8 +1018,9 @@ const upcomingInterviews = computed(() => {
     const date = new Date(app.application.interview_date)
     if (isNaN(date.getTime())) return false
 
-    // Filter out rejected applications even if they had a date
-    if (app.application.status === 'REJECTED') return false
+    // Filter out rejected or completed (PASSED/FAILED) applications
+    const status = app.application.status
+    if (status === 'REJECTED' || status === 'PASSED' || status === 'FAILED') return false
 
     // Only show future or today's interviews
     const today = new Date()
@@ -622,7 +1039,14 @@ const upcomingInterviews = computed(() => {
 const announcements = computed(() => {
   if (!notifications.value) return []
   // Filter out "Approved" notifications as per user request
-  const filtered = notifications.value.filter(n => !n.title.toLowerCase().includes('approved'))
+  // Filter out "Approved" notifications and "Interview Scheduled" (keep Results)
+  const filtered = notifications.value.filter(n => {
+      const t = n.title.toLowerCase()
+      // Hide 'Approved' (User request)
+      // Hide 'Interview Scheduled' (Already in Agenda)
+      // Show 'Interview Result'
+      return !t.includes('approved') && !(t.includes('interview') && t.includes('scheduled'))
+  })
   return filtered.slice(0, 3)
 })
 

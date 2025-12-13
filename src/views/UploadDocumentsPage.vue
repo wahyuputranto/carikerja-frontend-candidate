@@ -71,13 +71,32 @@
               <span v-else class="badge badge-warning">Opsional</span>
             </div>
 
+            <!-- Locked State -->
+            <div v-if="isDocLocked(docType)" class="border-2 border-slate-200 border-dashed bg-slate-50 rounded-xl p-8 text-center relative overflow-hidden">
+                <div class="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-[1px] z-10 cursor-not-allowed">
+                    <div class="text-center p-4 bg-white/90 rounded-xl shadow-sm border border-slate-200">
+                        <svg class="w-8 h-8 text-slate-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                        <p class="font-medium text-slate-700">Terkunci</p>
+                        <p class="text-xs text-slate-500 mt-1 max-w-[200px]">{{ getLockReason(docType) }}</p>
+                    </div>
+                </div>
+                 <!-- Placeholder visuals behind lock -->
+                <div class="opacity-30 flex flex-col items-center">
+                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                    </div>
+                    <p class="text-slate-700 font-medium mb-1">{{ docType.name }}</p>
+                </div>
+            </div>
+
             <!-- Upload State -->
-            <div v-if="uploading[docType.id]" class="border-2 border-slate-200 rounded-xl p-8 text-center">
+            <div v-else-if="uploading[docType.id]" class="border-2 border-slate-200 rounded-xl p-8 text-center">
                 <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary-500 border-t-transparent mb-2"></div>
                 <p class="text-slate-600">Mengupload {{ docType.name }}...</p>
             </div>
 
-            <!-- Uploaded State -->
             <!-- Uploaded State -->
             <div v-else-if="uploadedDocs[docType.id]" 
               class="border rounded-xl p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors"
@@ -190,15 +209,19 @@ import { ref, computed, onMounted, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 import { useDocumentsStore } from '@/stores/documents'
+import { useAuthStore } from '@/stores/auth' // Import AuthStore
 import NavBar from '@/components/layout/NavBar.vue'
 
 const route = useRoute()
 const documentsStore = useDocumentsStore()
+const authStore = useAuthStore() // Use AuthStore
+
 const { documentTypes, userDocuments, loading } = storeToRefs(documentsStore)
+const { currentUser } = storeToRefs(authStore) // Get currentUser
 const { fetchDocumentTypes, fetchUserDocuments, uploadDocument, downloadDocument } = documentsStore
 
 const uploading = ref({})
-// Map userDocuments array to object keyed by document_type_id
+
 // Map userDocuments array to object keyed by document_type_id
 const uploadedDocs = computed(() => {
   const docs = {}
@@ -217,12 +240,52 @@ const uploadedDocs = computed(() => {
   return docs
 })
 
+// Logic for Document Locking
+const cvDocType = computed(() => documentTypes.value.find(d => d.slug === 'cv'))
+
+const isCvApproved = computed(() => {
+  if (!cvDocType.value) return false
+  const cvDoc = uploadedDocs.value[cvDocType.value.id]
+  return cvDoc && cvDoc.status === 'VALID'
+})
+
+// Assumption: Screening is passed if hiring_status is NOT 'NOT_AVAILABLE' (or 'INITIAL' if that was used).
+// If default is 'AVAILABLE', this check passes immediately for new users unless backend sets them to 'NOT_AVAILABLE'.
+// We check for 'NOT_AVAILABLE' to be safe against the request's implication of a "Screening" phase.
+const isScreeningPassed = computed(() => {
+  const status = currentUser.value?.hiring_status
+  // Add other statuses that might imply "Not yet screened" if known.
+  return status && status !== 'NOT_AVAILABLE'
+})
+
+const isDocLocked = (docType) => {
+  // 1. CV is never locked (unless we implemented a specific rule, but usually it's the key)
+  if (docType.slug === 'cv') return false
+
+  // 2. If CV is NOT approved, everything else is locked
+  if (!isCvApproved.value) return true
+
+  // 3. If CV is Approved, check Screening Status
+  if (!isScreeningPassed.value) return true
+
+  // 4. Otherwise, unlocked
+  return false
+}
+
+const getLockReason = (docType) => {
+    if (docType.slug === 'cv') return null
+    if (!isCvApproved.value) return 'Upload & Approval CV diperlukan'
+    if (!isScreeningPassed.value) return 'Menunggu Hasil Screening'
+    return null
+}
+
 const focusedDoc = ref(null)
 
 onMounted(async () => {
   await Promise.all([
     fetchDocumentTypes(),
-    fetchUserDocuments()
+    fetchUserDocuments(),
+    authStore.fetchUser() // Ensure user data is fresh for status check
   ])
   
   // Check for focus param
@@ -258,35 +321,28 @@ const formatFileSize = (bytes) => {
 const formatAllowedTypes = (mimeTypes) => {
   if (!mimeTypes) return 'Semua Format'
   
-  // Clean up input: remove brackets and quotes if it's a JSON string
   let types = mimeTypes
   
-  // Try to parse if it's a JSON string array like '["image/jpeg", "image/png"]'
   if (typeof mimeTypes === 'string' && (mimeTypes.startsWith('[') || mimeTypes.includes(','))) {
     try {
-        // If it's a valid JSON array string
         if (mimeTypes.startsWith('[')) {
             const parsed = JSON.parse(mimeTypes)
             if (Array.isArray(parsed)) {
                 types = parsed
             }
         } else {
-             // If it is just comma separated string like "image/jpeg,image/png"
              types = mimeTypes.split(',')
         }
     } catch (e) {
-        // Fallback: just remove characters
         types = mimeTypes.replace(/[\[\]"]/g, '').split(',')
     }
   }
 
-  // Ensure types is an array
   if (!Array.isArray(types)) {
-      if (typeof types === 'string') return types // fallback
+      if (typeof types === 'string') return types 
       return '' 
   }
 
-  // Map MIME types to friendly names
   const mapping = {
     'application/pdf': 'PDF',
     'image/jpeg': 'JPEG',
@@ -304,13 +360,14 @@ const formatAllowedTypes = (mimeTypes) => {
 }
 
 const handleFileUpload = async (docType, event) => {
+  // Prevent upload if locked (double check)
+  if (isDocLocked(docType)) return
+
   const file = event.target.files[0]
   if (!file) return
 
-  // Basic validation
-  // Basic validation
   // max_size is in KB from backend
-  const maxSizeInBytes = (docType.max_size || 5120) * 1024 // Default 5MB if not set
+  const maxSizeInBytes = (docType.max_size || 5120) * 1024 
   if (file.size > maxSizeInBytes) {
     alert(`Ukuran file terlalu besar. Maksimal ${formatFileSize(maxSizeInBytes)}`)
     return
