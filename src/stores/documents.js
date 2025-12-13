@@ -19,7 +19,17 @@ export const useDocumentsStore = defineStore('documents', () => {
         try {
             const response = await api.get('/master/documents')
             if (response.data.success) {
-                documentTypes.value = response.data.data
+                // Fix template URLs if they are misconfigured (localhost/zmijobs.com)
+                documentTypes.value = response.data.data.map(doc => {
+                    if (doc.template) {
+                         if (doc.template.includes('localhost:9000')) {
+                             doc.template = doc.template.replace(/^https?:\/\/localhost:9000/, '');
+                         } else if (doc.template.includes('zmijobs.com')) {
+                             doc.template = doc.template.replace(/^https?:\/\/(www\.)?zmijobs\.com/, '');
+                         }
+                    }
+                    return doc;
+                });
             }
         } catch (err) {
             console.error('Error fetching document types:', err)
