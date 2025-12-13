@@ -31,7 +31,7 @@
 
         <div v-else class="space-y-6">
           <div 
-            v-for="docType in documentTypes" 
+            v-for="docType in documentTypes.filter(d => d.slug !== 'cv' && !d.name.toLowerCase().includes('curriculum vitae'))" 
             :key="docType.id" 
             :id="`doc-${docType.slug}`"
             class="card transition-all duration-500"

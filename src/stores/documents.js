@@ -20,20 +20,16 @@ export const useDocumentsStore = defineStore('documents', () => {
             const response = await api.get('/master/documents')
             if (response.data.success) {
                 // Fix template URLs if they are misconfigured (localhost/zmijobs.com)
-                // Also filter out CV (slug usually 'cv') because it's handled separately
-                const rawDocs = response.data.data || [];
-                documentTypes.value = rawDocs
-                    .filter(doc => doc.slug !== 'cv' && !doc.name.toLowerCase().includes('curriculum vitae'))
-                    .map(doc => {
-                        if (doc.template) {
-                            if (doc.template.includes('localhost:9000')) {
-                                doc.template = doc.template.replace(/^https?:\/\/localhost:9000/, '');
-                            } else if (doc.template.includes('zmijobs.com')) {
-                                doc.template = doc.template.replace(/^https?:\/\/(www\.)?zmijobs\.com/, '');
-                            }
+                documentTypes.value = (response.data.data || []).map(doc => {
+                    if (doc.template) {
+                        if (doc.template.includes('localhost:9000')) {
+                            doc.template = doc.template.replace(/^https?:\/\/localhost:9000/, '');
+                        } else if (doc.template.includes('zmijobs.com')) {
+                            doc.template = doc.template.replace(/^https?:\/\/(www\.)?zmijobs\.com/, '');
                         }
-                        return doc;
-                    });
+                    }
+                    return doc;
+                });
             }
         } catch (err) {
             console.error('Error fetching document types:', err)
